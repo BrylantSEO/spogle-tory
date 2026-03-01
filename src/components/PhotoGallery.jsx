@@ -33,7 +33,7 @@ const FALLBACK_PHOTOS = [
   },
 ];
 
-export default function PhotoGallery() {
+export default function PhotoGallery({ onAskAbout }) {
   const [photos, setPhotos] = useState(FALLBACK_PHOTOS);
   const [lightbox, setLightbox] = useState(null);
   const [activeHotpoint, setActiveHotpoint] = useState(null);
