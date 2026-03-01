@@ -257,8 +257,14 @@ export default function AdminGallery() {
 
               {/* Alt */}
               <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>TYTUŁ / OPIS</label>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>TYTUŁ (SEO / alt)</label>
                 <input className="admin-input" value={editing.alt} onChange={e => setEditing(p => ({ ...p, alt: e.target.value }))} placeholder="np. Tor przeszkód na pikniku firmowym" />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>OPIS WIDOCZNY W GALERII</label>
+                <input className="admin-input" value={editing.description || ""} onChange={e => setEditing(p => ({ ...p, description: e.target.value }))} placeholder="np. Tor na imprezie szkolnej w Wilanowie" />
               </div>
 
               {/* Total meters */}
