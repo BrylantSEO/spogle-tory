@@ -481,9 +481,19 @@ export default function Home() {
                   set={preset}
                   isActive={activePreset === preset.id}
                   onSelect={() => applyPreset(preset)}
+                  onDetail={() => setPresetLightbox(preset)}
                 />
               ))}
             </div>
+
+            {presetLightbox && (
+              <SetLightbox
+                set={presetLightbox}
+                isActive={activePreset === presetLightbox.id}
+                onSelect={() => applyPreset(presetLightbox)}
+                onClose={() => setPresetLightbox(null)}
+              />
+            )}
 
             {/* Modal */}
             {modalSegment && (
