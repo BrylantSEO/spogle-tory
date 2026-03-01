@@ -1,9 +1,13 @@
-const IMAGE_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a427948d06a13b9d41df7c/899d344a4_Gemini_Generated_Image_gbbnbdgbbn bdgbbn.png";
-
-// fix spaces in URL
-const IMG = IMAGE_URL.replace(/ /g, "%20");
+const SEGMENT_IMAGES = {
+  tor12: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-12m-warszawa.jpg",
+  tor20: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
+  tor27: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-27m-warszawa.jpg",
+  tor28: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-28m-warszawa.jpg",
+  giga: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
+};
 
 export default function SegmentModal({ segment, onClose, onToggle, selected }) {
+  const imgSrc = segment.image || SEGMENT_IMAGES[segment.id] || "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg";
   return (
     <div
       onClick={onClose}
