@@ -146,33 +146,38 @@ function useMobile() {
 export default function Home() {
   const [selected, setSelected] = useState(new Set());
   const [selectedSlides, setSelectedSlides] = useState(new Set());
+  const [activePreset, setActivePreset] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
   const isMobile = useMobile();
 
+  const applyPreset = (preset) => {
+    if (activePreset === preset.id) {
+      // deselect
+      setActivePreset(null);
+      setSelected(new Set());
+      setSelectedSlides(new Set());
+    } else {
+      setActivePreset(preset.id);
+      setSelected(new Set(preset.segmentIds));
+      setSelectedSlides(new Set(preset.slideIds));
+    }
+    setShowForm(false);
+  };
+
   const toggleSegment = (id) => {
+    setActivePreset(null);
     setSelected(prev => {
       const next = new Set(prev);
-      if (id === "giga") {
-        if (next.has("giga")) {
-          // deselect giga and all other segments
-          next.clear();
-        } else {
-          // select giga + all individual segments
-          SEGMENTS.forEach(s => next.add(s.id));
-        }
-      } else {
-        // If giga is selected, deselect it (user is customizing manually)
-        next.delete("giga");
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
-      }
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
     setShowForm(false);
   };
 
   const toggleSlide = (id) => {
+    setActivePreset(null);
     setSelectedSlides(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -184,26 +189,30 @@ export default function Home() {
 
   const selectedSegments = SEGMENTS.filter(s => selected.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => selectedSlides.has(s.id));
-  const hasGiga = selected.has("giga");
-  const segmentMeters = hasGiga ? 108 : selectedSegments.filter(s => s.id !== "giga").reduce((sum, s) => sum + s.meters, 0);
+  const hasSelection = selected.size > 0 || selectedSlides.size > 0;
+
+  // If active preset, use preset data for display
+  const activePresetData = activePreset ? PRESETS.find(p => p.id === activePreset) : null;
+
+  const segmentMeters = selectedSegments.reduce((sum, s) => sum + s.meters, 0);
   const slideMeters = selectedSlideItems.reduce((sum, s) => sum + (s.meters || 0), 0);
-  const totalMeters = segmentMeters + slideMeters;
-  const totalPrice = selectedSegments.filter(s => s.price && s.id !== "giga").reduce((sum, s) => sum + s.price, 0)
+  const totalMeters = activePresetData ? activePresetData.meters : segmentMeters + slideMeters;
+  const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0)
     + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
 
   const powerValues = selectedSegments.map(s => {
     if (s.power.includes("–")) return 15;
     return parseInt(s.power);
   });
-  const totalPower = powerValues.length > 0 ? powerValues.reduce((a, b) => a + b, 0) + "A" : "0A";
+  const totalPower = activePresetData ? activePresetData.power : (powerValues.length > 0 ? powerValues.reduce((a, b) => a + b, 0) + "A" : "0A");
 
-  const estimatedPrice = hasGiga
-    ? "Wycena indywidualna"
+  const estimatedPrice = activePresetData
+    ? activePresetData.priceLabel
     : totalPrice > 0
     ? `od ${totalPrice} zł`
     : "od 0 zł";
 
-  const hasSelection = selected.size > 0;
+  const hasSelection2 = hasSelection || !!activePreset;
 
   return (
     <div
