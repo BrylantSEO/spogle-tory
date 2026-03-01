@@ -522,7 +522,10 @@ export default function Home() {
       </div>
 
       {/* Gallery */}
-      <PhotoGallery />
+      <PhotoGallery onAskAbout={(photo) => {
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }} />
 
       {/* Always-visible bottom bar */}
       <SummaryBar
