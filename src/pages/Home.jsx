@@ -462,28 +462,6 @@ export default function Home() {
 
             {/* padding for fixed bottom bar */}
             <div style={{ height: "64px" }} />
-
-            {/* Inline form */}
-            {showForm && !isMobile && (
-              <QuoteForm
-                selectedSegments={selectedSegments}
-                totalMeters={totalMeters}
-                estimatedPrice={estimatedPrice}
-                totalPower={totalPower}
-                onClose={() => setShowForm(false)}
-              />
-            )}
-
-            {/* Mobile: form above bottom bar */}
-            {isMobile && showForm && (
-              <QuoteForm
-                selectedSegments={selectedSegments}
-                totalMeters={totalMeters}
-                estimatedPrice={estimatedPrice}
-                totalPower={totalPower}
-                onClose={() => setShowForm(false)}
-              />
-            )}
           </div>
         </div>
 
