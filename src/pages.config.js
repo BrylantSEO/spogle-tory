@@ -49,12 +49,14 @@
  */
 import AdminGallery from './pages/AdminGallery';
 import Home from './pages/Home';
+import AdminSegments from './pages/AdminSegments';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminGallery": AdminGallery,
     "Home": Home,
+    "AdminSegments": AdminSegments,
 }
 
 export const pagesConfig = {
