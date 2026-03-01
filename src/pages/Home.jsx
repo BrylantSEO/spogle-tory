@@ -396,17 +396,8 @@ export default function Home() {
               />
             )}
 
-            {/* Summary bar */}
-            {!isMobile && (
-              <SummaryBar
-                totalMeters={totalMeters}
-                totalPower={totalPower}
-                estimatedPrice={estimatedPrice}
-                hasSelection={hasSelection}
-                onSubmit={() => setShowForm(v => !v)}
-                isMobile={false}
-              />
-            )}
+            {/* padding for fixed bottom bar */}
+            <div style={{ height: "64px" }} />
 
             {/* Inline form */}
             {showForm && !isMobile && (
