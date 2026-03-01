@@ -1,6 +1,7 @@
 export default function SegmentCard({ segment, selected, onToggle }) {
   const isGiga = segment.id === "giga";
 
+
   return (
     <div
       onClick={onToggle}
