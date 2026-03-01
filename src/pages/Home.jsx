@@ -448,30 +448,31 @@ export default function Home() {
             </div>
 
             {/* Preset sets section */}
-            <div
-              style={{
-                color: "rgba(255,255,255,0.3)",
-                fontSize: "11px",
-                fontWeight: 700,
-                letterSpacing: "2.5px",
-                fontFamily: "sans-serif",
-                marginBottom: "6px",
-                marginTop: "36px",
-              }}
-            >
-              LUB WYBIERZ GOTOWY SET
+            <div style={{ marginTop: "44px", marginBottom: "18px" }}>
+              <div
+                style={{
+                  color: "#FF5C00",
+                  fontSize: "22px",
+                  fontWeight: 900,
+                  letterSpacing: "-0.3px",
+                  fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif",
+                  textTransform: "uppercase",
+                  marginBottom: "4px",
+                }}
+              >
+                Lub wybierz gotowy set
+              </div>
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.3)",
+                  fontSize: "12px",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
+              </div>
             </div>
-            <div
-              style={{
-                color: "rgba(255,255,255,0.2)",
-                fontSize: "11px",
-                fontFamily: "sans-serif",
-                marginBottom: "14px",
-              }}
-            >
-              Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
-            </div>
-            <div className="segment-grid">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
               {PRESETS.map(preset => (
                 <SetCard
                   key={preset.id}
