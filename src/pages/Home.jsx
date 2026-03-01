@@ -369,6 +369,9 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Gallery */}
+      <PhotoGallery />
+
       {/* Mobile sticky bottom bar */}
       {isMobile && (
         <SummaryBar
