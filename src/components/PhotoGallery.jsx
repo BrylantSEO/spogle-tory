@@ -222,6 +222,11 @@ export default function PhotoGallery() {
                   </span>
                 )}
               </div>
+              {currentPhoto.description && (
+                <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "14px", fontFamily: "sans-serif", fontStyle: "italic", textAlign: "center", maxWidth: "500px" }}>
+                  {currentPhoto.description}
+                </div>
+              )}
               <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
                 {lightbox + 1} / {photos.length}
                 {(currentPhoto.hotpoints || []).length > 0 && (
