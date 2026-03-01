@@ -76,8 +76,18 @@ export default function Home() {
   const toggleSegment = (id) => {
     setSelected(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (id === "giga") {
+        if (next.has("giga")) {
+          // deselect giga only
+          next.delete("giga");
+        } else {
+          // select giga + all others
+          SEGMENTS.forEach(s => next.add(s.id));
+        }
+      } else {
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+      }
       return next;
     });
     setShowForm(false);
