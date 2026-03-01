@@ -227,6 +227,40 @@ export default function PhotoGallery({ onAskAbout }) {
                   {currentPhoto.description}
                 </div>
               )}
+
+              {/* Price + CTA */}
+              {(currentPhoto.price_label || onAskAbout) && (
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+                  {currentPhoto.price_label && (
+                    <div style={{ color: "#FF5C00", fontSize: "18px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "-0.3px" }}>
+                      {currentPhoto.price_label}
+                    </div>
+                  )}
+                  {onAskAbout && (
+                    <button
+                      onClick={e => { e.stopPropagation(); setLightbox(null); onAskAbout(currentPhoto); }}
+                      style={{
+                        background: "#FF5C00",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "10px 20px",
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        fontFamily: "sans-serif",
+                        cursor: "pointer",
+                        letterSpacing: "0.3px",
+                        transition: "opacity 0.15s",
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+                      onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                    >
+                      Zapytaj o rezerwację →
+                    </button>
+                  )}
+                </div>
+              )}
+
               <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
                 {lightbox + 1} / {photos.length}
                 {(currentPhoto.hotpoints || []).length > 0 && (
