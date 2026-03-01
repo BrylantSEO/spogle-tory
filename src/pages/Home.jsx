@@ -493,7 +493,7 @@ export default function Home() {
         totalMeters={totalMeters}
         totalPower={totalPower}
         estimatedPrice={estimatedPrice}
-        hasSelection={hasSelection}
+        hasSelection={hasSelection2}
         onSubmit={() => setShowForm(v => !v)}
         isMobile={isMobile}
       />
