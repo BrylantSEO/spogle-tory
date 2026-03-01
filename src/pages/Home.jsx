@@ -5,6 +5,7 @@ import SetCard from "../components/SetCard";
 import SetLightbox from "../components/SetLightbox";
 import SummaryBar from "../components/SummaryBar";
 import QuoteForm from "../components/QuoteForm";
+import QuoteFormLightbox from "../components/QuoteFormLightbox";
 import SegmentModal from "../components/SegmentModal";
 import PhotoGallery from "../components/PhotoGallery";
 
