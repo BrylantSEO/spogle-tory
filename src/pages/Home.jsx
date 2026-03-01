@@ -139,8 +139,10 @@ export default function Home() {
   const selectedSegments = SEGMENTS.filter(s => selected.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => selectedSlides.has(s.id));
   const hasGiga = selected.has("giga");
-  const totalMeters = selectedSegments.reduce((sum, s) => sum + s.meters, 0);
-  const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0)
+  const segmentMeters = hasGiga ? 108 : selectedSegments.filter(s => s.id !== "giga").reduce((sum, s) => sum + s.meters, 0);
+  const slideMeters = selectedSlideItems.reduce((sum, s) => sum + (s.meters || 0), 0);
+  const totalMeters = segmentMeters + slideMeters;
+  const totalPrice = selectedSegments.filter(s => s.price && s.id !== "giga").reduce((sum, s) => sum + s.price, 0)
     + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
 
   const powerValues = selectedSegments.map(s => {
