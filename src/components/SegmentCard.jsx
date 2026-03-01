@@ -38,7 +38,7 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
       {/* Photo */}
       <div style={{ position: "relative", height: isGiga ? "160px" : "110px", overflow: "hidden" }}>
         <img
-          src={IMG}
+          src={imgSrc}
           alt={segment.name}
           style={{
             width: "100%",
