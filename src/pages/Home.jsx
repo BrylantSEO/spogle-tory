@@ -316,9 +316,20 @@ export default function Home() {
                   segment={segment}
                   selected={selected.has(segment.id)}
                   onToggle={() => toggleSegment(segment.id)}
+                  onOpenDetail={() => setModalSegment(segment)}
                 />
               ))}
             </div>
+
+            {/* Modal */}
+            {modalSegment && (
+              <SegmentModal
+                segment={modalSegment}
+                selected={selected.has(modalSegment.id)}
+                onToggle={() => toggleSegment(modalSegment.id)}
+                onClose={() => setModalSegment(null)}
+              />
+            )}
 
             {/* Summary bar */}
             {!isMobile && (
