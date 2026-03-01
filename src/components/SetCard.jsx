@@ -1,4 +1,4 @@
-export default function SetCard({ set, isActive, onSelect }) {
+export default function SetCard({ set, isActive, onSelect, onDetail }) {
   return (
     <div
       onClick={onSelect}
