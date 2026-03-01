@@ -360,6 +360,32 @@ export default function Home() {
               ))}
             </div>
 
+            {/* Slides section */}
+            <div
+              style={{
+                color: "rgba(255,255,255,0.3)",
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "2.5px",
+                fontFamily: "sans-serif",
+                marginBottom: "16px",
+                marginTop: "28px",
+              }}
+            >
+              DODAJ ZJEŻDŻALNIĘ (OPCJONALNIE)
+            </div>
+            <div className="segment-grid">
+              {SLIDES.map(slide => (
+                <SegmentCard
+                  key={slide.id}
+                  segment={{ ...slide, meters: 0 }}
+                  selected={selectedSlides.has(slide.id)}
+                  onToggle={() => toggleSlide(slide.id)}
+                  onOpenDetail={() => setModalSegment({ ...slide, meters: 0 })}
+                />
+              ))}
+            </div>
+
             {/* Modal */}
             {modalSegment && (
               <SegmentModal
