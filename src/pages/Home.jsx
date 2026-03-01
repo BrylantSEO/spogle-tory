@@ -427,17 +427,15 @@ export default function Home() {
       {/* Gallery */}
       <PhotoGallery />
 
-      {/* Mobile sticky bottom bar */}
-      {isMobile && (
-        <SummaryBar
-          totalMeters={totalMeters}
-          totalPower={totalPower}
-          estimatedPrice={estimatedPrice}
-          hasSelection={hasSelection}
-          onSubmit={() => setShowForm(v => !v)}
-          isMobile={true}
-        />
-      )}
+      {/* Always-visible bottom bar */}
+      <SummaryBar
+        totalMeters={totalMeters}
+        totalPower={totalPower}
+        estimatedPrice={estimatedPrice}
+        hasSelection={hasSelection}
+        onSubmit={() => setShowForm(v => !v)}
+        isMobile={isMobile}
+      />
     </div>
   );
 }
