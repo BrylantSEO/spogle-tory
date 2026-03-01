@@ -60,6 +60,31 @@ const SEGMENTS = [
   },
 ];
 
+const SLIDES = [
+  {
+    id: "atomic-drop",
+    name: "Atomic Drop",
+    shortName: "Giga zjeżdżalnia",
+    description: "Gigantyczna dmuchana zjeżdżalnia, 13m dł × 7m wys. — dwa tory zjazdowe",
+    power: "8A",
+    price: 1800,
+    priceLabel: "od 1800 zł netto",
+    badge: "NOWOŚĆ",
+    image: "https://www.spogle.pl/wp-content/uploads/2025/02/IMG_1031-scaled.jpg",
+  },
+  {
+    id: "duo",
+    name: "Zjeżdżalnia DUO",
+    shortName: "Giga DUO",
+    description: "Ogromna zjeżdżalnia z dwoma torami jazdy i linami do wspinania, 9m dł × 6m wys.",
+    power: "8A",
+    price: 1800,
+    priceLabel: "od 1800 zł netto",
+    badge: "NOWOŚĆ",
+    image: "https://www.spogle.pl/wp-content/uploads/2025/02/zjezdzalnia-dmuchana-duo.jpg",
+  },
+];
+
 function useMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
