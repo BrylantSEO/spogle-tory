@@ -273,6 +273,12 @@ export default function AdminGallery() {
                 <input className="admin-input" value={editing.total_meters || ""} onChange={e => setEditing(p => ({ ...p, total_meters: e.target.value }))} placeholder="np. 97m" style={{ maxWidth: "160px" }} />
               </div>
 
+              {/* Price label */}
+              <div>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>CENA SETU (OPCJONALNIE)</label>
+                <input className="admin-input" value={editing.price_label || ""} onChange={e => setEditing(p => ({ ...p, price_label: e.target.value }))} placeholder="np. od 2 897 zł lub Wycena indywidualna" />
+              </div>
+
               {/* Sort order */}
               <div>
                 <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>KOLEJNOŚĆ</label>
