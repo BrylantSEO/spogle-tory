@@ -32,6 +32,16 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
           </div>
         )}
 
+        {/* Detail button */}
+        {onDetail && (
+          <button
+            onClick={e => { e.stopPropagation(); onDetail(); }}
+            style={{ position: "absolute", top: "10px", right: "38px", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "5px", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "4px 8px", cursor: "pointer", fontFamily: "sans-serif", letterSpacing: "0.3px" }}
+          >
+            Szczegóły
+          </button>
+        )}
+
         {/* Checkbox */}
         <div style={{ position: "absolute", top: "10px", right: "10px", width: "22px", height: "22px", borderRadius: "5px", border: isActive ? "none" : "2px solid rgba(255,255,255,0.4)", background: isActive ? "#FF5C00" : "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s ease" }}>
           {isActive && <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4L4.2 7.5L10 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
