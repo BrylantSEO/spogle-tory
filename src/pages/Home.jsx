@@ -122,10 +122,22 @@ export default function Home() {
     setShowForm(false);
   };
 
+  const toggleSlide = (id) => {
+    setSelectedSlides(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+    setShowForm(false);
+  };
+
   const selectedSegments = SEGMENTS.filter(s => selected.has(s.id));
+  const selectedSlideItems = SLIDES.filter(s => selectedSlides.has(s.id));
   const hasGiga = selected.has("giga");
   const totalMeters = selectedSegments.reduce((sum, s) => sum + s.meters, 0);
-  const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
+  const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0)
+    + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
 
   const powerValues = selectedSegments.map(s => {
     if (s.power.includes("–")) return 15;
