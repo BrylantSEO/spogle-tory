@@ -3,6 +3,7 @@ import SpogleHeader from "../components/SpogleHeader";
 import SegmentCard from "../components/SegmentCard";
 import SummaryBar from "../components/SummaryBar";
 import QuoteForm from "../components/QuoteForm";
+import SegmentModal from "../components/SegmentModal";
 
 const SEGMENTS = [
   {
