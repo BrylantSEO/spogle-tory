@@ -1,7 +1,15 @@
-const IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a427948d06a13b9d41df7c/899d344a4_Gemini_Generated_Image_gbbnbdgbbnbdgbbn.png";
+const SEGMENT_IMAGES = {
+  tor12: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a427948d06a13b9d41df7c/524050344_Gemini_Generated_Image_oxv3s3oxv3s3oxv3.png",
+  tor20: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
+  tor27: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-27m-warszawa.jpg",
+  tor28: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-28m-warszawa.jpg",
+  giga: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
+};
+const DEFAULT_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a427948d06a13b9d41df7c/899d344a4_Gemini_Generated_Image_gbbnbdgbbnbdgbbn.png";
 
 export default function SegmentCard({ segment, selected, onToggle, onOpenDetail }) {
   const isGiga = segment.id === "giga";
+  const imgSrc = segment.image || SEGMENT_IMAGES[segment.id] || DEFAULT_IMG;
 
   return (
     <div
