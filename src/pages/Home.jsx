@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SpogleHeader from "../components/SpogleHeader";
 import SegmentCard from "../components/SegmentCard";
+import SetCard from "../components/SetCard";
 import SummaryBar from "../components/SummaryBar";
 import QuoteForm from "../components/QuoteForm";
 import SegmentModal from "../components/SegmentModal";
@@ -47,16 +48,48 @@ const SEGMENTS = [
     price: 1099,
     icon: "large",
   },
+];
+
+// Preset sets — hardcoded prices
+const PRESETS = [
   {
-    id: "giga",
-    name: "Giga Tor 108m",
-    shortName: "Gigant (cały zestaw)",
-    meters: 108,
-    description: "Kompletny zestaw wszystkich segmentów — największy w Polsce",
-    power: "10–15A",
-    price: null,
+    id: "legia",
+    name: "Set LEGIA",
+    meters: 75,
+    power: "40–45A",
+    priceLabel: "od 2 897 zł",
+    badge: "POPULARNY",
+    badgeColor: "#1a6b2a",
+    image: "https://www.spogle.pl/wp-content/uploads/2025/06/Tor-na-tle-legii.jpg",
+    components: ["Tor 20m", "Tor 27m", "Tor 28m"],
+    segmentIds: ["tor20", "tor27", "tor28"],
+    slideIds: [],
+  },
+  {
+    id: "tor4u",
+    name: "Set Tor4U",
+    meters: 95,
+    power: "56–61A",
+    priceLabel: "od 4 697 zł",
+    badge: "POLECAMY",
+    badgeColor: "#1a4a8a",
+    image: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
+    components: ["Tor 20m", "Tor 27m", "Tor 28m", "Atomic Drop", "Zjeżdżalnia DUO"],
+    segmentIds: ["tor20", "tor27", "tor28"],
+    slideIds: ["atomic-drop", "duo"],
+  },
+  {
+    id: "gigant",
+    name: "Tor Gigant",
+    meters: 128,
+    power: "71–76A",
     priceLabel: "Wycena indywidualna",
-    icon: "giga",
+    badge: "NAJWIĘKSZY W POLSCE",
+    badgeColor: "#FF5C00",
+    image: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
+    components: ["Tor 12m", "Tor 20m", "Tor 27m", "Tor 28m", "Atomic Drop", "Zjeżdżalnia DUO"],
+    segmentIds: ["tor12", "tor20", "tor27", "tor28"],
+    slideIds: ["atomic-drop", "duo"],
   },
 ];
 
