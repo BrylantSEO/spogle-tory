@@ -218,8 +218,49 @@ export default function PhotoGallery() {
                 boxShadow: "0 24px 80px rgba(0,0,0,0.7)",
               }}
             />
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", fontFamily: "sans-serif" }}>
-              {lightbox + 1} / {PHOTOS.length} · {PHOTOS[lightbox].alt}
+            {/* Segment tags */}
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+            >
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center" }}>
+                {PHOTOS[lightbox].segments.map(seg => (
+                  <span
+                    key={seg}
+                    style={{
+                      background: "rgba(255,92,0,0.18)",
+                      border: "1px solid rgba(255,92,0,0.5)",
+                      color: "#FF5C00",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      fontFamily: "sans-serif",
+                      letterSpacing: "0.5px",
+                      padding: "3px 10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {seg}
+                  </span>
+                ))}
+                <span
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    color: "rgba(255,255,255,0.6)",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    fontFamily: "sans-serif",
+                    letterSpacing: "0.5px",
+                    padding: "3px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Łącznie: {PHOTOS[lightbox].totalMeters}
+                </span>
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
+                {lightbox + 1} / {PHOTOS.length}
+              </div>
             </div>
           </div>
 
