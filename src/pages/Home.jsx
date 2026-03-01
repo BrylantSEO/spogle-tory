@@ -486,8 +486,11 @@ export default function Home() {
           </div>
         </div>
 
-        {/* PRESET SETS — full width */}
-        <div style={{ padding: isMobile ? "0 16px 48px" : "0 48px 64px", marginTop: "8px" }}>
+      </div>
+
+      {/* PRESET SETS — full width, outside hero */}
+      <div style={{ background: "#0f0f0f", padding: isMobile ? "0 16px 48px" : "0 48px 64px" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div style={{ marginBottom: "18px" }}>
             <div style={{ color: "#FF5C00", fontSize: "22px", fontWeight: 900, letterSpacing: "-0.3px", fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", textTransform: "uppercase", marginBottom: "4px" }}>
               Lub wybierz gotowy set
