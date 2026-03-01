@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import SpogleHeader from "../components/SpogleHeader";
 import SegmentCard from "../components/SegmentCard";
 import SetCard from "../components/SetCard";
+import SetLightbox from "../components/SetLightbox";
 import SummaryBar from "../components/SummaryBar";
 import QuoteForm from "../components/QuoteForm";
 import SegmentModal from "../components/SegmentModal";
