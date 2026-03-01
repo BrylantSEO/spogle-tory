@@ -109,14 +109,14 @@ export default function Home() {
       const next = new Set(prev);
       if (id === "giga") {
         if (next.has("giga")) {
-          next.delete("giga");
-        } else {
-          // Clear everything, select only giga
+          // deselect giga and all other segments
           next.clear();
-          next.add("giga");
+        } else {
+          // select giga + all individual segments
+          SEGMENTS.forEach(s => next.add(s.id));
         }
       } else {
-        // If giga is selected, deselect it first
+        // If giga is selected, deselect it (user is customizing manually)
         next.delete("giga");
         if (next.has(id)) next.delete(id);
         else next.add(id);
