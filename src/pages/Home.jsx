@@ -449,52 +449,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Preset sets section */}
-            <div style={{ marginTop: "44px", marginBottom: "18px" }}>
-              <div
-                style={{
-                  color: "#FF5C00",
-                  fontSize: "22px",
-                  fontWeight: 900,
-                  letterSpacing: "-0.3px",
-                  fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif",
-                  textTransform: "uppercase",
-                  marginBottom: "4px",
-                }}
-              >
-                Lub wybierz gotowy set
-              </div>
-              <div
-                style={{
-                  color: "rgba(255,255,255,0.3)",
-                  fontSize: "12px",
-                  fontFamily: "sans-serif",
-                }}
-              >
-                Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
-              </div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
-              {PRESETS.map(preset => (
-                <SetCard
-                  key={preset.id}
-                  set={preset}
-                  isActive={activePreset === preset.id}
-                  onSelect={() => applyPreset(preset)}
-                  onDetail={() => setPresetLightbox(preset)}
-                />
-              ))}
-            </div>
-
-            {presetLightbox && (
-              <SetLightbox
-                set={presetLightbox}
-                isActive={activePreset === presetLightbox.id}
-                onSelect={() => applyPreset(presetLightbox)}
-                onClose={() => setPresetLightbox(null)}
-              />
-            )}
-
             {/* Modal */}
             {modalSegment && (
               <SegmentModal
@@ -530,6 +484,38 @@ export default function Home() {
               />
             )}
           </div>
+        </div>
+
+        {/* PRESET SETS — full width */}
+        <div style={{ padding: isMobile ? "0 16px 48px" : "0 48px 64px", marginTop: "8px" }}>
+          <div style={{ marginBottom: "18px" }}>
+            <div style={{ color: "#FF5C00", fontSize: "22px", fontWeight: 900, letterSpacing: "-0.3px", fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", textTransform: "uppercase", marginBottom: "4px" }}>
+              Lub wybierz gotowy set
+            </div>
+            <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
+              Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "10px" }}>
+            {PRESETS.map(preset => (
+              <SetCard
+                key={preset.id}
+                set={preset}
+                isActive={activePreset === preset.id}
+                onSelect={() => applyPreset(preset)}
+                onDetail={() => setPresetLightbox(preset)}
+              />
+            ))}
+          </div>
+
+          {presetLightbox && (
+            <SetLightbox
+              set={presetLightbox}
+              isActive={activePreset === presetLightbox.id}
+              onSelect={() => applyPreset(presetLightbox)}
+              onClose={() => setPresetLightbox(null)}
+            />
+          )}
         </div>
       </div>
 
