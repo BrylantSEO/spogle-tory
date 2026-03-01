@@ -38,7 +38,7 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
         {/* Image */}
         <div style={{ position: "relative" }}>
           <img
-            src={IMG}
+            src={imgSrc}
             alt={segment.name}
             style={{
               width: "100%",
