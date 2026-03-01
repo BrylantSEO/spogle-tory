@@ -315,12 +315,12 @@ export default function Home() {
             <h1
               style={{
                 fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif",
-                fontSize: isMobile ? "52px" : "72px",
+                fontSize: isMobile ? "64px" : "96px",
                 fontWeight: 900,
                 lineHeight: 0.95,
                 letterSpacing: "-1px",
                 color: "#fff",
-                marginBottom: "20px",
+                marginBottom: "24px",
                 textTransform: "uppercase",
               }}
             >
@@ -333,11 +333,11 @@ export default function Home() {
             <p
               style={{
                 color: "rgba(255,255,255,0.5)",
-                fontSize: "15px",
+                fontSize: "17px",
                 lineHeight: 1.6,
                 fontFamily: "sans-serif",
                 marginBottom: "36px",
-                maxWidth: "340px",
+                maxWidth: "360px",
               }}
             >
               Wybierz segmenty, które chcesz połączyć.{" "}
