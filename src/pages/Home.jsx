@@ -97,6 +97,7 @@ function useMobile() {
 
 export default function Home() {
   const [selected, setSelected] = useState(new Set());
+  const [selectedSlides, setSelectedSlides] = useState(new Set());
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
   const isMobile = useMobile();
