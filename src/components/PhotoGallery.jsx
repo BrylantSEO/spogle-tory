@@ -4,18 +4,26 @@ const PHOTOS = [
   {
     src: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
     alt: "Tor przeszkód 97m",
+    segments: ["Tor 12m", "Tor 20m", "Tor 27m", "Tor 28m"],
+    totalMeters: "97m",
   },
   {
     src: "https://www.spogle.pl/wp-content/uploads/2025/06/2.png",
     alt: "Tor przeszkód",
+    segments: ["Tor 12m", "Tor 20m", "Tor 28m"],
+    totalMeters: "60m",
   },
   {
     src: "https://www.spogle.pl/wp-content/uploads/2025/06/Tor-na-tle-legii.jpg",
     alt: "Tor na tle Legii",
+    segments: ["Tor 20m", "Tor 28m"],
+    totalMeters: "48m",
   },
   {
     src: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
     alt: "Tor przeszkód 20m Warszawa",
+    segments: ["Tor 20m"],
+    totalMeters: "20m",
   },
 ];
 
