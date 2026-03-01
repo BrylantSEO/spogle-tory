@@ -439,10 +439,45 @@ export default function Home() {
               {SLIDES.map(slide => (
                 <SegmentCard
                   key={slide.id}
-                  segment={{ ...slide, meters: 0 }}
+                  segment={slide}
                   selected={selectedSlides.has(slide.id)}
                   onToggle={() => toggleSlide(slide.id)}
-                  onOpenDetail={() => setModalSegment({ ...slide, meters: 0 })}
+                  onOpenDetail={() => setModalSegment(slide)}
+                />
+              ))}
+            </div>
+
+            {/* Preset sets section */}
+            <div
+              style={{
+                color: "rgba(255,255,255,0.3)",
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "2.5px",
+                fontFamily: "sans-serif",
+                marginBottom: "6px",
+                marginTop: "36px",
+              }}
+            >
+              LUB WYBIERZ GOTOWY SET
+            </div>
+            <div
+              style={{
+                color: "rgba(255,255,255,0.2)",
+                fontSize: "11px",
+                fontFamily: "sans-serif",
+                marginBottom: "14px",
+              }}
+            >
+              Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
+            </div>
+            <div className="segment-grid">
+              {PRESETS.map(preset => (
+                <SetCard
+                  key={preset.id}
+                  set={preset}
+                  isActive={activePreset === preset.id}
+                  onSelect={() => applyPreset(preset)}
                 />
               ))}
             </div>
