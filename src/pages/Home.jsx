@@ -93,6 +93,19 @@ const PRESETS = [
   },
 ];
 
+// Giga segment (kept separately since it's now a preset)
+const GIGA_SEGMENT = {
+  id: "giga",
+  name: "Giga Tor 108m",
+  shortName: "Gigant (cały zestaw)",
+  meters: 108,
+  description: "Kompletny zestaw wszystkich segmentów — największy w Polsce",
+  power: "10–15A",
+  price: null,
+  priceLabel: "Wycena indywidualna",
+  icon: "giga",
+};
+
 const SLIDES = [
   {
     id: "atomic-drop",
