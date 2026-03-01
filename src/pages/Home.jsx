@@ -504,8 +504,21 @@ export default function Home() {
       {/* Gallery */}
       <PhotoGallery onAskAbout={(photo) => {
         setShowForm(true);
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }} />
+
+      {/* Quote Form Lightbox */}
+      {showForm && (
+        <QuoteFormLightbox
+          initialSegments={selectedSegments}
+          initialSlides={selectedSlideItems}
+          totalMeters={totalMeters}
+          estimatedPrice={estimatedPrice}
+          totalPower={totalPower}
+          onClose={() => setShowForm(false)}
+          SEGMENTS={SEGMENTS}
+          SLIDES={SLIDES}
+        />
+      )}
 
       {/* Always-visible bottom bar */}
       <SummaryBar
