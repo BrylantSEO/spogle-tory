@@ -148,6 +148,7 @@ export default function Home() {
   const [selected, setSelected] = useState(new Set());
   const [selectedSlides, setSelectedSlides] = useState(new Set());
   const [activePreset, setActivePreset] = useState(null);
+  const [presetLightbox, setPresetLightbox] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
   const isMobile = useMobile();
