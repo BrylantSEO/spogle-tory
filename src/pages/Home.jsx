@@ -160,6 +160,37 @@ export default function Home() {
   const firedScrollRef = useRef(new Set());
   const firedValueRef = useRef(new Set());
 
+  // ViewContent on mount
+  useEffect(() => {
+    fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+  }, []);
+
+  // Scroll depth
+  useEffect(() => {
+    const thresholds = [25, 50, 75, 90];
+    const onScroll = () => {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+      const pct = (scrolled / total) * 100;
+      thresholds.forEach(t => {
+        if (pct >= t && !firedScrollRef.current.has(t)) {
+          firedScrollRef.current.add(t);
+          fbq('trackCustom', `ScrollDepth${t}`);
+        }
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Time on page
+  useEffect(() => {
+    const t1 = setTimeout(() => fbq('trackCustom', 'TimeOnPage30s'), 30000);
+    const t2 = setTimeout(() => fbq('trackCustom', 'TimeOnPage60s'), 60000);
+    const t3 = setTimeout(() => fbq('trackCustom', 'TimeOnPage120s'), 120000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, []);
+
   const applyPreset = (preset) => {
     if (activePreset === preset.id) {
       fbq('trackCustom', 'PresetDeselected', { preset_id: preset.id });
