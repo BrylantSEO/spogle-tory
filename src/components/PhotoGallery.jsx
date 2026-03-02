@@ -319,6 +319,16 @@ export default function PhotoGallery({ onAskAbout }) {
           >›</button>
         </div>
       )}
+
+      {/* Hotpoint segment modal — renders on top of everything */}
+      {hotpointSegmentModal && (
+        <SegmentModal
+          segment={hotpointSegmentModal}
+          selected={false}
+          onToggle={() => {}}
+          onClose={() => setHotpointSegmentModal(null)}
+        />
+      )}
     </section>
   );
 }
