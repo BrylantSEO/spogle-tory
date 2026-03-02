@@ -114,6 +114,9 @@ export async function initSession() {
     // silently fail — tracking must never break the app
   }
 
+  // Honeypot trap
+  injectHoneypot();
+
   // End session on unload
   window.addEventListener("beforeunload", endSession);
 }
