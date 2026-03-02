@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SpogleHeader from "../components/SpogleHeader";
 import SegmentCard from "../components/SegmentCard";
 import SetCard from "../components/SetCard";
