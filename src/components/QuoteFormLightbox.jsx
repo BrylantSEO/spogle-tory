@@ -124,7 +124,7 @@ export default function QuoteFormLightbox({
 
   return (
     <div
-      onClick={onClose}
+      onClick={() => { fbq('trackCustom', 'FormAbandoned'); onClose(); }}
       style={{
         position: "fixed", inset: 0, zIndex: 600,
         background: "rgba(0,0,0,0.93)",
@@ -148,7 +148,7 @@ export default function QuoteFormLightbox({
       >
         {/* Close */}
         <button
-          onClick={onClose}
+          onClick={() => { fbq('trackCustom', 'FormAbandoned'); onClose(); }}
           style={{ position: "absolute", top: "16px", right: "16px", background: "rgba(255,255,255,0.1)", border: "none", borderRadius: "50%", width: "32px", height: "32px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
         >×</button>
 
