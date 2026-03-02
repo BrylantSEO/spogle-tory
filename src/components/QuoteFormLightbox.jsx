@@ -276,6 +276,7 @@ export default function QuoteFormLightbox({
                 placeholder="Jan"
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
+                onFocus={() => { if (!nameFocusedRef.current) { nameFocusedRef.current = true; fbq('trackCustom', 'FormFieldFocused'); } }}
                 required
               />
             </div>
