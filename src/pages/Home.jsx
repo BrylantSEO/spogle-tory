@@ -157,6 +157,8 @@ export default function Home() {
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
   const isMobile = useMobile();
+  const firedScrollRef = useRef(new Set());
+  const firedValueRef = useRef(new Set());
 
   const applyPreset = (preset) => {
     if (activePreset === preset.id) {
