@@ -162,11 +162,12 @@ export default function Home() {
 
   const applyPreset = (preset) => {
     if (activePreset === preset.id) {
-      // deselect
+      fbq('trackCustom', 'PresetDeselected', { preset_id: preset.id });
       setActivePreset(null);
       setSelected(new Set());
       setSelectedSlides(new Set());
     } else {
+      fbq('trackCustom', 'PresetSelected', { preset_id: preset.id, meters: preset.meters });
       setActivePreset(preset.id);
       setSelected(new Set(preset.segmentIds));
       setSelectedSlides(new Set(preset.slideIds));
@@ -178,8 +179,13 @@ export default function Home() {
     setActivePreset(null);
     setSelected(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        fbq('trackCustom', 'SegmentDeselected', { segment_id: id });
+        next.delete(id);
+      } else {
+        fbq('trackCustom', 'SegmentSelected', { segment_id: id });
+        next.add(id);
+      }
       return next;
     });
     setShowForm(false);
@@ -189,8 +195,13 @@ export default function Home() {
     setActivePreset(null);
     setSelectedSlides(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        fbq('trackCustom', 'SlideDeselected', { slide_id: id });
+        next.delete(id);
+      } else {
+        fbq('trackCustom', 'SlideSelected', { slide_id: id });
+        next.add(id);
+      }
       return next;
     });
     setShowForm(false);
