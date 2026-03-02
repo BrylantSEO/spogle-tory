@@ -42,6 +42,23 @@ function applyBotReason(reason) {
   session.bot_reason = session.bot_reason
     ? session.bot_reason + ", " + reason
     : reason;
+  window.__spogle_is_bot = true;
+}
+
+function injectHoneypot() {
+  const trap = document.createElement("div");
+  trap.setAttribute("style", "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;");
+  trap.setAttribute("aria-hidden", "true");
+  trap.setAttribute("tabindex", "-1");
+  const link = document.createElement("a");
+  link.href = "#";
+  link.textContent = "Kliknij tutaj";
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    applyBotReason("honeypot");
+  });
+  trap.appendChild(link);
+  document.body.appendChild(trap);
 }
 
 function getScrollPct() {

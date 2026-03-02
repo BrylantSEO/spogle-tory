@@ -147,7 +147,7 @@ function useMobile() {
 }
 
 function fbq(...args) {
-  if (typeof window.fbq === 'function') window.fbq(...args);
+  if (typeof window.fbq === 'function' && !window.__spogle_is_bot) window.fbq(...args);
 }
 
 export default function Home() {
