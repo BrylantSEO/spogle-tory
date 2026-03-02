@@ -543,7 +543,7 @@ export default function Home() {
                 set={preset}
                 isActive={activePreset === preset.id}
                 onSelect={() => applyPreset(preset)}
-                onDetail={() => setPresetLightbox(preset)}
+                onDetail={() => { setPresetLightbox(preset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); }}
               />
             ))}
           </div>
@@ -584,7 +584,11 @@ export default function Home() {
         totalPower={totalPower}
         estimatedPrice={estimatedPrice}
         hasSelection={hasSelection2}
-        onSubmit={() => setShowForm(v => !v)}
+        onSubmit={() => {
+          fbq('track', 'InitiateCheckout');
+          fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          setShowForm(v => !v);
+        }}
         isMobile={isMobile}
       />
     </div>
