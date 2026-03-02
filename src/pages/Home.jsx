@@ -145,6 +145,10 @@ function useMobile() {
   return isMobile;
 }
 
+function fbq(...args) {
+  if (typeof window.fbq === 'function') window.fbq(...args);
+}
+
 export default function Home() {
   const [selected, setSelected] = useState(new Set());
   const [selectedSlides, setSelectedSlides] = useState(new Set());
