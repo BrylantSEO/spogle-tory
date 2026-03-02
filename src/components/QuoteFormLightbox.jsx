@@ -20,6 +20,7 @@ export default function QuoteFormLightbox({
   const [form, setForm] = useState({ name: "", phone: "", event_date: "", location: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const nameFocusedRef = useRef(false);
 
   const selectedSegments = SEGMENTS.filter(s => formSegments.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => formSlides.has(s.id));
@@ -43,6 +44,7 @@ export default function QuoteFormLightbox({
     });
     setLoading(false);
     setSubmitted(true);
+    fbq('track', 'Lead');
   };
 
   const inputStyle = {
