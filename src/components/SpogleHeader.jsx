@@ -1,3 +1,5 @@
+import { trackClick } from "./internalTracker";
+
 export default function SpogleHeader() {
   return (
     <header

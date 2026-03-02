@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { initSession, trackClick, session as trackerSession } from "../components/internalTracker";
 import SpogleHeader from "../components/SpogleHeader";
 import SegmentCard from "../components/SegmentCard";
 import SetCard from "../components/SetCard";
