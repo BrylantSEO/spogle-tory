@@ -51,7 +51,7 @@ export default function SpogleHeader() {
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
         <a
           href="tel:+48573177098"
-          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); }}
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
           style={{
             color: "rgba(255,255,255,0.75)",
             textDecoration: "none",

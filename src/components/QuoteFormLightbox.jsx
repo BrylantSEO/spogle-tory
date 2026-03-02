@@ -46,6 +46,8 @@ export default function QuoteFormLightbox({
     setLoading(false);
     setSubmitted(true);
     fbq('track', 'Lead');
+    trackClick('FormSubmitted', { total_meters: calculatedMeters, estimated_price: displayPrice });
+    trackerSession.form_submitted = true;
   };
 
   const inputStyle = {
