@@ -263,6 +263,16 @@ export default function Home() {
     ? `od ${totalPrice} zł`
     : "od 0 zł";
 
+  // Configurator value threshold
+  useEffect(() => {
+    [2000, 4000].forEach(threshold => {
+      if (totalPrice >= threshold && !firedValueRef.current.has(threshold)) {
+        firedValueRef.current.add(threshold);
+        fbq('trackCustom', 'ConfiguratorHighValue', { threshold });
+      }
+    });
+  }, [totalPrice]);
+
   const hasSelection2 = hasSelection || !!activePreset;
 
   return (
