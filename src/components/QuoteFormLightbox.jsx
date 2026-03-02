@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
+
+function fbq(...args) {
+  if (typeof window.fbq === 'function') window.fbq(...args);
+}
 
 export default function QuoteFormLightbox({
   initialSegments,
