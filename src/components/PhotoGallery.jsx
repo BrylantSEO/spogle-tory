@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import SegmentModal from "./SegmentModal";
 
 // Fallback hardcoded photos if DB is empty
 const FALLBACK_PHOTOS = [
