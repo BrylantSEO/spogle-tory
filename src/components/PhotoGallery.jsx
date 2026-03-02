@@ -205,19 +205,47 @@ export default function PhotoGallery({ onAskAbout }) {
                 style={{ maxWidth: "90vw", maxHeight: "65vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", display: "block" }}
               />
               {/* Hotpoints */}
-              {(currentPhoto.hotpoints || []).map((hp, i) => (
-                <div
-                  key={i}
-                  className="hotpoint-pin"
-                  style={{ left: `${hp.x}%`, top: `${hp.y}%` }}
-                  onClick={e => { e.stopPropagation(); setActiveHotpoint(activeHotpoint === i ? null : i); }}
-                >
-                  {i + 1}
-                  {activeHotpoint === i && (
-                    <div className="hotpoint-tooltip">{hp.label}</div>
-                  )}
-                </div>
-              ))}
+              {(currentPhoto.hotpoints || []).map((hp, i) => {
+                const segmentObj = SEGMENT_BY_NAME[hp.label];
+                return (
+                  <div
+                    key={i}
+                    className="hotpoint-pin"
+                    style={{ left: `${hp.x}%`, top: `${hp.y}%` }}
+                    onClick={e => { e.stopPropagation(); setActiveHotpoint(activeHotpoint === i ? null : i); }}
+                  >
+                    {i + 1}
+                    {activeHotpoint === i && (
+                      <div
+                        className="hotpoint-tooltip"
+                        style={{ pointerEvents: "auto", display: "flex", alignItems: "center", gap: "8px", whiteSpace: "nowrap" }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <span>{hp.label}</span>
+                        {segmentObj && (
+                          <button
+                            onClick={e => { e.stopPropagation(); setHotpointSegmentModal(segmentObj); }}
+                            style={{
+                              background: "#FF5C00",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "4px",
+                              padding: "2px 8px",
+                              fontSize: "11px",
+                              fontWeight: 700,
+                              fontFamily: "sans-serif",
+                              cursor: "pointer",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            Szczegóły →
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Segment tags */}
