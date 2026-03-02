@@ -477,7 +477,7 @@ export default function Home() {
                   segment={segment}
                   selected={selected.has(segment.id)}
                   onToggle={() => toggleSegment(segment.id)}
-                  onOpenDetail={() => setModalSegment(segment)}
+                  onOpenDetail={() => { setModalSegment(segment); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); }}
                 />
               ))}
             </div>
@@ -503,7 +503,7 @@ export default function Home() {
                   segment={slide}
                   selected={selectedSlides.has(slide.id)}
                   onToggle={() => toggleSlide(slide.id)}
-                  onOpenDetail={() => setModalSegment(slide)}
+                  onOpenDetail={() => { setModalSegment(slide); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); }}
                 />
               ))}
             </div>
