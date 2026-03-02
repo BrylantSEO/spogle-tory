@@ -34,10 +34,21 @@ const FALLBACK_PHOTOS = [
   },
 ];
 
+// Mapping label names to segment objects for the modal
+const SEGMENT_BY_NAME = {
+  "Tor 12m": { id: "tor12", name: "Tor 12m", meters: 12, power: "15A", price: 599, description: "Idealna opcja na mniejsze eventy i place zabaw" },
+  "Tor 20m": { id: "tor20", name: "Tor 20m", meters: 20, power: "15A", price: 799, description: "Świetny wybór na festyny i firmowe pikniki" },
+  "Tor 27m": { id: "tor27", name: "Tor 27m", meters: 27, power: "10–15A", price: 999, description: "Unikalny układ z zakrętem — idealna dla większych obszarów" },
+  "Tor 28m": { id: "tor28", name: "Tor 28m", meters: 28, power: "15A", price: 1099, description: "Maksimum zabawy na dużych eventach plenerowych" },
+  "Atomic Drop": { id: "atomic-drop", name: "Atomic Drop", meters: 11, power: "8A", price: 1800, description: "Gigantyczna dmuchana zjeżdżalnia, 11m dł × 7m wys. — dwa tory zjazdowe" },
+  "Zjeżdżalnia DUO": { id: "duo", name: "Zjeżdżalnia DUO", meters: 9, power: "8A", price: 1800, description: "Ogromna zjeżdżalnia z dwoma torami jazdy i linami do wspinania" },
+};
+
 export default function PhotoGallery({ onAskAbout }) {
   const [photos, setPhotos] = useState(FALLBACK_PHOTOS);
   const [lightbox, setLightbox] = useState(null);
   const [activeHotpoint, setActiveHotpoint] = useState(null);
+  const [hotpointSegmentModal, setHotpointSegmentModal] = useState(null);
 
   useEffect(() => {
     base44.entities.GalleryPhoto.list("sort_order", 200).then(data => {
