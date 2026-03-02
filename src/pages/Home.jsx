@@ -161,8 +161,9 @@ export default function Home() {
   const firedScrollRef = useRef(new Set());
   const firedValueRef = useRef(new Set());
 
-  // ViewContent on mount
+  // Init session + ViewContent on mount
   useEffect(() => {
+    initSession();
     fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
   }, []);
 
@@ -195,11 +196,13 @@ export default function Home() {
   const applyPreset = (preset) => {
     if (activePreset === preset.id) {
       fbq('trackCustom', 'PresetDeselected', { preset_id: preset.id });
+      trackClick('PresetDeselected', { preset_id: preset.id });
       setActivePreset(null);
       setSelected(new Set());
       setSelectedSlides(new Set());
     } else {
       fbq('trackCustom', 'PresetSelected', { preset_id: preset.id, meters: preset.meters });
+      trackClick('PresetSelected', { preset_id: preset.id, meters: preset.meters });
       setActivePreset(preset.id);
       setSelected(new Set(preset.segmentIds));
       setSelectedSlides(new Set(preset.slideIds));
@@ -213,9 +216,11 @@ export default function Home() {
       const next = new Set(prev);
       if (next.has(id)) {
         fbq('trackCustom', 'SegmentDeselected', { segment_id: id });
+        trackClick('SegmentDeselected', { segment_id: id });
         next.delete(id);
       } else {
         fbq('trackCustom', 'SegmentSelected', { segment_id: id });
+        trackClick('SegmentSelected', { segment_id: id });
         next.add(id);
       }
       return next;
@@ -229,9 +234,11 @@ export default function Home() {
       const next = new Set(prev);
       if (next.has(id)) {
         fbq('trackCustom', 'SlideDeselected', { slide_id: id });
+        trackClick('SlideDeselected', { slide_id: id });
         next.delete(id);
       } else {
         fbq('trackCustom', 'SlideSelected', { slide_id: id });
+        trackClick('SlideSelected', { slide_id: id });
         next.add(id);
       }
       return next;
@@ -478,7 +485,7 @@ export default function Home() {
                   segment={segment}
                   selected={selected.has(segment.id)}
                   onToggle={() => toggleSegment(segment.id)}
-                  onOpenDetail={() => { setModalSegment(segment); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); }}
+                  onOpenDetail={() => { setModalSegment(segment); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); trackClick('SegmentDetailOpened', { segment_id: segment.id }); }}
                 />
               ))}
             </div>
@@ -504,7 +511,7 @@ export default function Home() {
                   segment={slide}
                   selected={selectedSlides.has(slide.id)}
                   onToggle={() => toggleSlide(slide.id)}
-                  onOpenDetail={() => { setModalSegment(slide); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); }}
+                  onOpenDetail={() => { setModalSegment(slide); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); trackClick('SegmentDetailOpened', { segment_id: slide.id }); }}
                 />
               ))}
             </div>
@@ -544,7 +551,7 @@ export default function Home() {
                 set={preset}
                 isActive={activePreset === preset.id}
                 onSelect={() => applyPreset(preset)}
-                onDetail={() => { setPresetLightbox(preset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); }}
+                onDetail={() => { setPresetLightbox(preset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); trackClick('SetDetailOpened', { preset_id: preset.id }); }}
               />
             ))}
           </div>
@@ -588,6 +595,8 @@ export default function Home() {
         onSubmit={() => {
           fbq('track', 'InitiateCheckout');
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          trackClick('FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          trackerSession.form_opened = true;
           setShowForm(v => !v);
         }}
         isMobile={isMobile}
