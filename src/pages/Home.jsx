@@ -18,7 +18,7 @@ const SEGMENTS = [
     meters: 12,
     description: "Idealna opcja na mniejsze eventy i place zabaw",
     power: "15A",
-    price: 599,
+    price: 1200,
     icon: "short",
   },
   {
@@ -28,7 +28,7 @@ const SEGMENTS = [
     meters: 20,
     description: "Świetny wybór na festyny i firmowe pikniki",
     power: "15A",
-    price: 799,
+    price: 1700,
     icon: "medium",
   },
   {
@@ -38,7 +38,7 @@ const SEGMENTS = [
     meters: 27,
     description: "Unikalny układ z zakrętem — idealna dla większych obszarów",
     power: "10–15A",
-    price: 999,
+    price: 2200,
     icon: "lshape",
   },
   {
@@ -48,7 +48,7 @@ const SEGMENTS = [
     meters: 28,
     description: "Maksimum zabawy na dużych eventach plenerowych",
     power: "15A",
-    price: 1099,
+    price: 2700,
     icon: "large",
   },
 ];

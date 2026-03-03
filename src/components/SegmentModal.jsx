@@ -1,6 +1,19 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 
+function toEmbedUrl(url) {
+  if (!url) return null;
+  // already embed
+  if (url.includes("youtube.com/embed/")) return url;
+  // watch url
+  const m = url.match(/[?&]v=([^&]+)/);
+  if (m) return `https://www.youtube.com/embed/${m[1]}`;
+  // youtu.be
+  const m2 = url.match(/youtu\.be\/([^?&]+)/);
+  if (m2) return `https://www.youtube.com/embed/${m2[1]}`;
+  return url;
+}
+
 const SEGMENT_IMAGES = {
   tor20: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
   tor27: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-27m-warszawa.jpg",
@@ -96,6 +109,25 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
             </>
           )}
         </div>
+
+        {/* Promo video */}
+        {promoVideo && (
+          <div style={{ padding: "12px 16px 0" }}>
+            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 700, letterSpacing: "1.2px", fontFamily: "sans-serif", marginBottom: "8px" }}>
+              FILM PROMOCYJNY
+            </div>
+            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "10px", overflow: "hidden", background: "#000" }}>
+              <iframe
+                src={promoVideo}
+                title="Film promocyjny"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Gallery thumbnails */}
         {galleryImages.length > 1 && (

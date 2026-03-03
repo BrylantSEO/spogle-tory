@@ -49,16 +49,16 @@
  */
 import AdminGallery from './pages/AdminGallery';
 import AdminSegments from './pages/AdminSegments';
-import Home from './pages/Home';
 import Analityka from './pages/Analityka';
+import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminGallery": AdminGallery,
     "AdminSegments": AdminSegments,
-    "Home": Home,
     "Analityka": Analityka,
+    "Home": Home,
 }
 
 export const pagesConfig = {
