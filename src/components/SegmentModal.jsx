@@ -34,9 +34,13 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
 
   const coverImg = dbData?.cover_image || segment.image || SEGMENT_IMAGES[segment.id] || null;
   const promoVideo = dbData?.promo_video_url ? toEmbedUrl(dbData.promo_video_url) : null;
-  const galleryImages = dbData?.gallery_images?.length > 0 ? dbData.gallery_images : [coverImg];
+  const baseImages = dbData?.gallery_images?.length > 0 ? dbData.gallery_images : (coverImg ? [coverImg] : []);
+  // Add video as last "slide" if present
+  const galleryItems = promoVideo
+    ? [...baseImages, { type: "video", url: promoVideo }]
+    : baseImages.map(url => ({ type: "image", url }));
   const description = dbData?.description || segment.description;
-  const displayedImg = galleryImages[galleryIdx] || coverImg;
+  const currentItem = galleryItems[galleryIdx] || { type: "image", url: coverImg };
 
   const prices = dbData ? [
     { h: 3, v: dbData.price_3h },
