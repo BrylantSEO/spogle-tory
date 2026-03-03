@@ -257,6 +257,18 @@ export default function AdminSegments() {
                 </div>
               </div>
 
+              {/* Promo video */}
+              <div>
+                <label style={labelStyle}>FILM PROMOCYJNY (YouTube URL)</label>
+                <input
+                  style={inputStyle}
+                  value={form.promo_video_url || ""}
+                  onChange={e => setForm(f => ({ ...f, promo_video_url: e.target.value }))}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", marginTop: "4px" }}>Będzie wyświetlany w modalu szczegółów toru.</div>
+              </div>
+
               {/* Prices */}
               <div>
                 <label style={labelStyle}>CENNIK (zł netto)</label>
