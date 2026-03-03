@@ -30,7 +30,7 @@ export default function AdminGallery() {
   };
 
   const startNew = () => {
-    setEditing({ src: "", alt: "", segments: [], total_meters: "", hotpoints: [], sort_order: photos.length });
+    setEditing({ src: "", video_url: "", alt: "", segments: [], total_meters: "", hotpoints: [], sort_order: photos.length });
     setHotpointMode(false);
     setShowForm(true);
   };
@@ -251,8 +251,15 @@ export default function AdminGallery() {
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {/* URL */}
               <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>URL ZDJĘCIA</label>
-                <input className="admin-input" value={editing.src} onChange={e => setEditing(p => ({ ...p, src: e.target.value }))} placeholder="https://..." />
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>URL ZDJĘCIA (opcjonalne jeśli dodajesz film)</label>
+                <input className="admin-input" value={editing.src || ""} onChange={e => setEditing(p => ({ ...p, src: e.target.value }))} placeholder="https://..." />
+              </div>
+
+              {/* Video URL */}
+              <div>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "1px", marginBottom: "6px" }}>URL FILMU YOUTUBE (opcjonalne)</label>
+                <input className="admin-input" value={editing.video_url || ""} onChange={e => setEditing(p => ({ ...p, video_url: e.target.value }))} placeholder="https://www.youtube.com/watch?v=..." />
+                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", marginTop: "4px" }}>Jeśli podasz film, będzie odtwarzany w lightboxie zamiast zdjęcia.</div>
               </div>
 
               {/* Alt */}
