@@ -2,6 +2,16 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import SegmentModal from "./SegmentModal";
 
+function toEmbedUrl(url) {
+  if (!url) return null;
+  if (url.includes("youtube.com/embed/")) return url;
+  const m = url.match(/[?&]v=([^&]+)/);
+  if (m) return `https://www.youtube.com/embed/${m[1]}`;
+  const m2 = url.match(/youtu\.be\/([^?&]+)/);
+  if (m2) return `https://www.youtube.com/embed/${m2[1]}`;
+  return url;
+}
+
 // Fallback hardcoded photos if DB is empty
 const FALLBACK_PHOTOS = [
   {
@@ -239,8 +249,8 @@ export default function PhotoGallery({ onAskAbout }) {
                 style={{ maxWidth: "90vw", maxHeight: "65vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", display: "block" }}
               />
               )}
-              {/* Hotpoints */}
-              {(currentPhoto.hotpoints || []).map((hp, i) => {
+              {/* Hotpoints — only for photos */}
+              {!currentPhoto.video_url && (currentPhoto.hotpoints || []).map((hp, i) => {
                 const segmentObj = SEGMENT_BY_NAME[hp.label];
                 return (
                   <div
