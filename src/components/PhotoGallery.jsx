@@ -151,17 +151,39 @@ export default function PhotoGallery({ onAskAbout }) {
 
         {/* Grid */}
         <div className="gallery-grid">
-          {photos.map((photo, idx) => (
-            <div key={photo.id || idx} className="gallery-thumb" onClick={() => { setLightbox(idx); setActiveHotpoint(null); }}>
-              <img src={photo.src} alt={photo.alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              <div className="gallery-overlay">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-                </svg>
+          {photos.map((photo, idx) => {
+            const isVideo = !!photo.video_url;
+            const thumbSrc = photo.src || null;
+            return (
+              <div key={photo.id || idx} className="gallery-thumb" onClick={() => { setLightbox(idx); setActiveHotpoint(null); }}>
+                {isVideo && !thumbSrc ? (
+                  <div style={{ width: "100%", height: "100%", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ textAlign: "center" }}>
+                      <div style={{ fontSize: "36px", marginBottom: "8px" }}>▶</div>
+                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "12px", fontFamily: "sans-serif" }}>{photo.alt}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <img src={thumbSrc} alt={photo.alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                )}
+                <div className="gallery-overlay">
+                  {isVideo ? (
+                    <div style={{ background: "#FF5C00", borderRadius: "50%", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>▶</div>
+                  ) : (
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+                    </svg>
+                  )}
+                </div>
+                {isVideo && (
+                  <div style={{ position: "absolute", top: "8px", left: "8px", background: "#FF5C00", color: "#fff", fontSize: "9px", fontWeight: 800, letterSpacing: "1px", padding: "2px 7px", borderRadius: "4px", fontFamily: "sans-serif" }}>
+                    WIDEO
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -193,17 +215,30 @@ export default function PhotoGallery({ onAskAbout }) {
             onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
           >‹</button>
 
-          {/* Image + hotpoints */}
+          {/* Image/Video + hotpoints */}
           <div
             onClick={e => e.stopPropagation()}
             style={{ maxWidth: "90vw", maxHeight: "85vh", display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}
           >
             <div style={{ position: "relative", display: "inline-block" }}>
+              {currentPhoto.video_url ? (
+                <div style={{ width: "min(800px, 90vw)", position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "12px", overflow: "hidden", background: "#000", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
+                  <iframe
+                    src={toEmbedUrl(currentPhoto.video_url)}
+                    title={currentPhoto.alt}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                  />
+                </div>
+              ) : (
               <img
                 src={currentPhoto.src}
                 alt={currentPhoto.alt}
                 style={{ maxWidth: "90vw", maxHeight: "65vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", display: "block" }}
               />
+              )}
               {/* Hotpoints */}
               {(currentPhoto.hotpoints || []).map((hp, i) => {
                 const segmentObj = SEGMENT_BY_NAME[hp.label];
