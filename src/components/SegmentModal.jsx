@@ -74,55 +74,12 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
           boxShadow: "0 24px 80px rgba(0,0,0,0.7)",
         }}
       >
-        {/* Main image */}
+        {/* Main image / video */}
         <div style={{ position: "relative" }}>
-          <img
-            src={displayedImg}
-            alt={segment.name}
-            style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
-          />
-          {/* gradient */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(20,20,20,0.7) 100%)", pointerEvents: "none" }} />
-
-          {/* Close */}
-          <button
-            onClick={onClose}
-            style={{ position: "absolute", top: "14px", right: "14px", background: "rgba(0,0,0,0.6)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-          >×</button>
-
-          {segment.id === "giga" && (
-            <div style={{ position: "absolute", top: "14px", left: "14px", background: "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px", fontFamily: "sans-serif" }}>
-              NAJWIĘKSZY W POLSCE
-            </div>
-          )}
-
-          {/* Gallery nav arrows */}
-          {galleryImages.length > 1 && (
-            <>
-              <button
-                onClick={e => { e.stopPropagation(); setGalleryIdx(i => (i - 1 + galleryImages.length) % galleryImages.length); }}
-                style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-              >‹</button>
-              <button
-                onClick={e => { e.stopPropagation(); setGalleryIdx(i => (i + 1) % galleryImages.length); }}
-                style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-              >›</button>
-              <div style={{ position: "absolute", bottom: "10px", right: "14px", color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>
-                {galleryIdx + 1} / {galleryImages.length}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Promo video */}
-        {promoVideo && (
-          <div style={{ padding: "12px 16px 0" }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 700, letterSpacing: "1.2px", fontFamily: "sans-serif", marginBottom: "8px" }}>
-              FILM PROMOCYJNY
-            </div>
-            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "10px", overflow: "hidden", background: "#000" }}>
+          {currentItem.type === "video" ? (
+            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, background: "#000" }}>
               <iframe
-                src={promoVideo}
+                src={currentItem.url}
                 title="Film promocyjny"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -130,13 +87,53 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
                 style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
               />
             </div>
-          </div>
-        )}
+          ) : (
+            <img
+              src={currentItem.url}
+              alt={segment.name}
+              style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
+            />
+          )}
 
-        {/* Gallery thumbnails */}
-        {galleryImages.length > 1 && (
+          {/* gradient — only for images */}
+          {currentItem.type === "image" && (
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(20,20,20,0.7) 100%)", pointerEvents: "none" }} />
+          )}
+
+          {/* Close */}
+          <button
+            onClick={onClose}
+            style={{ position: "absolute", top: "14px", right: "14px", background: "rgba(0,0,0,0.6)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}
+          >×</button>
+
+          {segment.id === "giga" && currentItem.type === "image" && (
+            <div style={{ position: "absolute", top: "14px", left: "14px", background: "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px", fontFamily: "sans-serif" }}>
+              NAJWIĘKSZY W POLSCE
+            </div>
+          )}
+
+          {/* Gallery nav arrows */}
+          {galleryItems.length > 1 && (
+            <>
+              <button
+                onClick={e => { e.stopPropagation(); setGalleryIdx(i => (i - 1 + galleryItems.length) % galleryItems.length); }}
+                style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}
+              >‹</button>
+              <button
+                onClick={e => { e.stopPropagation(); setGalleryIdx(i => (i + 1) % galleryItems.length); }}
+                style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}
+              >›</button>
+              <div style={{ position: "absolute", bottom: "10px", right: "14px", color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif", zIndex: 2 }}>
+                {galleryIdx + 1} / {galleryItems.length}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnails */}
+        {galleryItems.length > 1 && (
           <div style={{ display: "flex", gap: "6px", padding: "10px 16px 0", overflowX: "auto" }}>
-            {galleryImages.map((url, idx) => (
+            {galleryItems.map((item, idx) => (
               <div
                 key={idx}
                 onClick={() => setGalleryIdx(idx)}
@@ -146,9 +143,15 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
                   borderRadius: "6px", overflow: "hidden",
                   border: idx === galleryIdx ? "2px solid #FF5C00" : "2px solid transparent",
                   cursor: "pointer", opacity: idx === galleryIdx ? 1 : 0.55, transition: "all 0.15s",
+                  background: "#000",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}
               >
-                <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                {item.type === "video" ? (
+                  <span style={{ fontSize: "20px" }}>▶</span>
+                ) : (
+                  <img src={item.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                )}
               </div>
             ))}
           </div>
