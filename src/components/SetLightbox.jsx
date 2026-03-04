@@ -89,19 +89,39 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {components.map((comp, i) => {
-                const imgUrl = segmentImages[comp];
+                const imgUrl = segmentImages[comp] || FALLBACK_IMAGES[comp];
+                const isHovered = hoveredComp === i;
                 return (
-                  <div key={i} style={{
-                    display: "flex", alignItems: "center", gap: "12px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    borderRadius: "10px",
-                    padding: "10px 12px",
-                  }}>
-                    <div style={{ width: "48px", height: "36px", borderRadius: "6px", overflow: "hidden", flexShrink: 0, background: "#222" }}>
+                  <div
+                    key={i}
+                    onMouseEnter={() => setHoveredComp(i)}
+                    onMouseLeave={() => setHoveredComp(null)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "12px",
+                      background: isHovered ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${isHovered ? "rgba(255,92,0,0.4)" : "rgba(255,255,255,0.07)"}`,
+                      borderRadius: "10px",
+                      padding: "10px 12px",
+                      cursor: "default",
+                      transition: "all 0.15s",
+                      position: "relative",
+                    }}
+                  >
+                    <div style={{ width: "48px", height: "36px", borderRadius: "6px", overflow: "hidden", flexShrink: 0, background: "#222", transition: "transform 0.2s", transform: isHovered ? "scale(1.1)" : "scale(1)" }}>
                       {imgUrl && <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
                     </div>
                     <span style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>{comp}</span>
+                    {isHovered && imgUrl && (
+                      <div style={{
+                        position: "absolute", right: "56px", top: "50%", transform: "translateY(-50%)",
+                        width: "120px", height: "80px", borderRadius: "8px", overflow: "hidden",
+                        border: "1.5px solid rgba(255,92,0,0.5)",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
+                        zIndex: 20,
+                      }}>
+                        <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </div>
+                    )}
                   </div>
                 );
               })}
