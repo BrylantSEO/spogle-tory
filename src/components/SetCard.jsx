@@ -63,7 +63,7 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
           {set.components.join(" + ")}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
             ⚡ {set.power}
           </span>
@@ -71,6 +71,11 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
             {set.priceLabel}
           </span>
         </div>
+        {set.animators_included !== undefined && set.animators_included > 0 && (
+          <div style={{ color: "rgba(255,92,0,0.7)", fontSize: "11px", fontWeight: 600, fontFamily: "sans-serif" }}>
+            👤 {set.animators_included} {set.animators_included === 1 ? "animator" : "animatorów"} w cenie
+          </div>
+        )}
       </div>
     </div>
   );
