@@ -116,6 +116,15 @@ export default function AdminSegments() {
     setUploading(false);
   };
 
+  // Default components for each preset
+  const PRESET_DEFAULT_COMPONENTS = {
+    legia: ["Tor 20m", "Tor 27m", "Tor 28m"],
+    tor4u: ["Tor 20m", "Tor 27m", "Tor 28m", "Atomic Drop", "Zjeżdżalnia DUO"],
+    gigant: ["Tor 12m", "Tor 20m", "Tor 27m", "Tor 28m", "Atomic Drop", "Zjeżdżalnia DUO"],
+  };
+
+  const ALL_SEGMENT_NAMES = ["Tor 12m", "Tor 20m", "Tor 27m", "Tor 28m", "Atomic Drop", "Zjeżdżalnia DUO"];
+
   const openEditPreset = (setId) => {
     const existing = presets[setId] || {};
     setPresetForm({
@@ -123,6 +132,7 @@ export default function AdminSegments() {
       name: existing.name || PRESET_NAMES[setId] || setId,
       image: existing.image || "",
       price_label: existing.price_label || "",
+      components: existing.components || PRESET_DEFAULT_COMPONENTS[setId] || [],
       id: existing.id || null,
     });
     setEditingPreset(setId);
