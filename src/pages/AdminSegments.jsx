@@ -15,14 +15,19 @@ const DEFAULT_NAMES = {
 
 export default function AdminSegments() {
   const [segments, setSegments] = useState({});
+  const [presets, setPresets] = useState({});
   const [editing, setEditing] = useState(null); // segment_id
+  const [editingPreset, setEditingPreset] = useState(null); // preset set_id
   const [form, setForm] = useState({});
+  const [presetForm, setPresetForm] = useState({});
   const [saving, setSaving] = useState(false);
   const [newGalleryUrl, setNewGalleryUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [activeTab, setActiveTab] = useState("segments"); // "segments" | "presets"
 
   useEffect(() => {
     loadSegments();
+    loadPresets();
   }, []);
 
   const loadSegments = async () => {
@@ -30,6 +35,13 @@ export default function AdminSegments() {
     const map = {};
     data.forEach(s => { map[s.segment_id] = s; });
     setSegments(map);
+  };
+
+  const loadPresets = async () => {
+    const data = await base44.entities.PresetSet.list();
+    const map = {};
+    data.forEach(p => { map[p.set_id] = p; });
+    setPresets(map);
   };
 
   const openEdit = (segId) => {
