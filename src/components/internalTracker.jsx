@@ -70,6 +70,16 @@ function getScrollPct() {
 
 export async function initSession() {
   const params = new URLSearchParams(window.location.search);
+
+  // Exclude admin from tracking via ?notrack=1 (persists in localStorage)
+  if (params.get("notrack") === "1") {
+    localStorage.setItem("spogle_notrack", "1");
+  }
+  if (localStorage.getItem("spogle_notrack") === "1") {
+    window.__spogle_notrack = true;
+    return;
+  }
+
   const w = window.innerWidth;
 
   session.session_id = crypto.randomUUID();
