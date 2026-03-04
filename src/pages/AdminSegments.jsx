@@ -142,6 +142,7 @@ export default function AdminSegments() {
       price_8h: existing.price_8h || "",
       blowers_count: existing.blowers_count || "",
       blower_power_kw: existing.blower_power_kw || "",
+      animators_included: existing.animators_included || "",
       id: existing.id || null,
     });
     setEditingPreset(setId);
@@ -160,6 +161,7 @@ export default function AdminSegments() {
       price_8h: presetForm.price_8h ? Number(presetForm.price_8h) : null,
       blowers_count: presetForm.blowers_count ? Number(presetForm.blowers_count) : null,
       blower_power_kw: presetForm.blower_power_kw ? Number(presetForm.blower_power_kw) : null,
+      animators_included: presetForm.animators_included ? Number(presetForm.animators_included) : null,
     };
     if (presetForm.id) {
       await base44.entities.PresetSet.update(presetForm.id, payload);
@@ -361,6 +363,12 @@ export default function AdminSegments() {
                     <input style={inputStyle} type="number" step="0.1" value={presetForm.blower_power_kw} onChange={e => setPresetForm(f => ({ ...f, blower_power_kw: e.target.value }))} placeholder="np. 1.5" />
                   </div>
                 </div>
+              </div>
+
+              {/* Animators */}
+              <div>
+                <label style={labelStyle}>LICZBA ANIMATORÓW W CENIE</label>
+                <input style={inputStyle} type="number" value={presetForm.animators_included || ""} onChange={e => setPresetForm(f => ({ ...f, animators_included: e.target.value }))} placeholder="np. 2" />
               </div>
 
               <div>
