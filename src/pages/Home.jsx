@@ -587,6 +587,24 @@ export default function Home() {
 
       {/* Gallery */}
       <PhotoGallery onAskAbout={(photo) => {
+        // Pre-select segments from the photo
+        if (photo.segments && photo.segments.length > 0) {
+          const SEGMENT_NAME_TO_ID = {
+            "Tor 12m": "tor12", "Tor 20m": "tor20", "Tor 27m": "tor27", "Tor 28m": "tor28",
+          };
+          const SLIDE_NAME_TO_ID = {
+            "Atomic Drop": "atomic-drop", "Zjeżdżalnia DUO": "duo",
+          };
+          const newSeg = new Set();
+          const newSlides = new Set();
+          photo.segments.forEach(name => {
+            if (SEGMENT_NAME_TO_ID[name]) newSeg.add(SEGMENT_NAME_TO_ID[name]);
+            else if (SLIDE_NAME_TO_ID[name]) newSlides.add(SLIDE_NAME_TO_ID[name]);
+          });
+          if (newSeg.size > 0) setSelected(newSeg);
+          if (newSlides.size > 0) setSelectedSlides(newSlides);
+          setActivePreset(null);
+        }
         setShowForm(true);
       }} />
 
