@@ -450,6 +450,20 @@ export default function Home() {
               ))}
             </div>
 
+            {/* How it works */}
+            <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+              {[
+                { icon: <MousePointer size={16} color="#FF5C00" />, text: "Wybierz segmenty lub gotowy set" },
+                { icon: <Calculator size={16} color="#FF5C00" />, text: "Zobacz cenę na żywo" },
+                { icon: <MessageSquare size={16} color="#FF5C00" />, text: "Wyślij zapytanie — odpiszemy w 24h" },
+              ].map((step, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  {step.icon}
+                  <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "13px", fontFamily: "sans-serif" }}>{step.text}</span>
+                </div>
+              ))}
+            </div>
+
             {/* Decorative line accent */}
             <div
               style={{
