@@ -255,8 +255,8 @@ export default function QuoteFormLightbox({
                   {slide.name} <span style={{ color: "rgba(255,255,255,0.4)" }}>({slide.meters}m)</span>
                 </button>
               ))}
-            </div>
-          </details>
+            </div>}
+          </div>
         </div>
 
         {/* Stats */}
