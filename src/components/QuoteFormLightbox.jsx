@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Zap, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { trackClick, session as trackerSession } from "./internalTracker";
 
