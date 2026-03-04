@@ -321,6 +321,47 @@ export default function AdminSegments() {
                   <img src={presetForm.image} alt="preview" style={{ marginTop: "10px", height: "140px", width: "100%", objectFit: "cover", borderRadius: "8px", display: "block" }} />
                 )}
               </div>
+              <div>
+                <label style={labelStyle}>SKŁAD SETU</label>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {ALL_SEGMENT_NAMES.map(compName => {
+                    const checked = (presetForm.components || []).includes(compName);
+                    const segEntry = Object.values(segments).find(s => s.name === compName);
+                    const thumbUrl = segEntry?.cover_image;
+                    return (
+                      <div
+                        key={compName}
+                        onClick={() => setPresetForm(f => {
+                          const comps = f.components || [];
+                          return { ...f, components: checked ? comps.filter(c => c !== compName) : [...comps, compName] };
+                        })}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "12px",
+                          background: checked ? "rgba(255,92,0,0.12)" : "rgba(255,255,255,0.04)",
+                          border: `1.5px solid ${checked ? "rgba(255,92,0,0.5)" : "rgba(255,255,255,0.08)"}`,
+                          borderRadius: "10px", padding: "10px 14px", cursor: "pointer", transition: "all 0.15s",
+                        }}
+                      >
+                        {thumbUrl ? (
+                          <img src={thumbUrl} alt={compName} style={{ width: "48px", height: "36px", objectFit: "cover", borderRadius: "6px", flexShrink: 0 }} />
+                        ) : (
+                          <div style={{ width: "48px", height: "36px", background: "rgba(255,255,255,0.05)", borderRadius: "6px", flexShrink: 0 }} />
+                        )}
+                        <span style={{ flex: 1, fontWeight: 700, fontSize: "14px" }}>{compName}</span>
+                        <div style={{
+                          width: "20px", height: "20px", borderRadius: "50%",
+                          background: checked ? "#FF5C00" : "rgba(255,255,255,0.1)",
+                          border: checked ? "none" : "2px solid rgba(255,255,255,0.2)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: "11px", color: "#fff", flexShrink: 0,
+                        }}>
+                          {checked ? "✓" : ""}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
               <button
                 onClick={handleSavePreset}
                 disabled={saving}
