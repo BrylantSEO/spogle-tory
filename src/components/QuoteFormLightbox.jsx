@@ -262,7 +262,7 @@ export default function QuoteFormLightbox({
           </div>
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "10px 12px" }}>
             <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 600, fontFamily: "sans-serif", marginBottom: "4px" }}>PRĄD</div>
-            <div style={{ color: "#fff", fontSize: "16px", fontWeight: 800, fontFamily: "'Arial Black', sans-serif" }}>⚡ {totalPower}</div>
+            <div style={{ color: "#fff", fontSize: "16px", fontWeight: 800, fontFamily: "'Arial Black', sans-serif", display: "flex", alignItems: "center", gap: "4px" }}><Zap size={14} color="#FF5C00" /> {totalPower}</div>
           </div>
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "10px 12px" }}>
             <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 600, fontFamily: "sans-serif", marginBottom: "4px" }}>CENA</div>
