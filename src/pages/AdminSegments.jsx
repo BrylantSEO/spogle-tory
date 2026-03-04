@@ -140,6 +140,8 @@ export default function AdminSegments() {
       price_5h: existing.price_5h || "",
       price_6h: existing.price_6h || "",
       price_8h: existing.price_8h || "",
+      power_kw: existing.power_kw || "",
+      setup_time_minutes: existing.setup_time_minutes || "",
       blowers_count: existing.blowers_count || "",
       blower_power_kw: existing.blower_power_kw || "",
       animators_included: existing.animators_included || "",
@@ -159,6 +161,8 @@ export default function AdminSegments() {
       price_5h: presetForm.price_5h ? Number(presetForm.price_5h) : null,
       price_6h: presetForm.price_6h ? Number(presetForm.price_6h) : null,
       price_8h: presetForm.price_8h ? Number(presetForm.price_8h) : null,
+      power_kw: presetForm.power_kw ? Number(presetForm.power_kw) : null,
+      setup_time_minutes: presetForm.setup_time_minutes ? Number(presetForm.setup_time_minutes) : null,
       blowers_count: presetForm.blowers_count ? Number(presetForm.blowers_count) : null,
       blower_power_kw: presetForm.blower_power_kw ? Number(presetForm.blower_power_kw) : null,
       animators_included: presetForm.animators_included ? Number(presetForm.animators_included) : null,
@@ -369,6 +373,21 @@ export default function AdminSegments() {
               <div>
                 <label style={labelStyle}>LICZBA ANIMATORÓW W CENIE</label>
                 <input style={inputStyle} type="number" value={presetForm.animators_included || ""} onChange={e => setPresetForm(f => ({ ...f, animators_included: e.target.value }))} placeholder="np. 2" />
+              </div>
+
+              {/* Power and Setup */}
+              <div>
+                <label style={labelStyle}>MOC CAŁKOWITA (kW) I CZAS MONTAŻU</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>MOC (kW)</label>
+                    <input style={inputStyle} type="number" step="0.1" value={presetForm.power_kw || ""} onChange={e => setPresetForm(f => ({ ...f, power_kw: e.target.value }))} placeholder="np. 5.5" />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>CZAS MONTAŻU (minuty)</label>
+                    <input style={inputStyle} type="number" value={presetForm.setup_time_minutes || ""} onChange={e => setPresetForm(f => ({ ...f, setup_time_minutes: e.target.value }))} placeholder="np. 120" />
+                  </div>
+                </div>
               </div>
 
               <div>
