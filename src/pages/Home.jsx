@@ -167,6 +167,12 @@ export default function Home() {
   useEffect(() => {
     initSession();
     fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+    // Load preset overrides from DB
+    base44.entities.PresetSet.list().then(data => {
+      const map = {};
+      data.forEach(p => { map[p.set_id] = p; });
+      setPresetData(map);
+    });
   }, []);
 
   // Scroll depth
