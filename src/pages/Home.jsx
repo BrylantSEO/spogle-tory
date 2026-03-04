@@ -692,6 +692,8 @@ export default function Home() {
         totalPower={totalPower}
         estimatedPrice={estimatedPrice}
         hasSelection={hasSelection2}
+        selectedHours={selectedHours}
+        onSelectHours={setSelectedHours}
         onSubmit={() => {
           fbq('track', 'InitiateCheckout');
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
