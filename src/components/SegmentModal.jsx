@@ -22,7 +22,7 @@ const SEGMENT_IMAGES = {
   giga: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
 };
 
-export default function SegmentModal({ segment, onClose, onToggle, selected }) {
+export default function SegmentModal({ segment, onClose, onToggle, selected, selectedHours, onSelectHours }) {
   const [dbData, setDbData] = useState(null);
   const [galleryIdx, setGalleryIdx] = useState(0);
 
