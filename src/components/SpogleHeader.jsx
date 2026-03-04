@@ -13,6 +13,7 @@ function useIsMobile() {
 }
 
 export default function SpogleHeader() {
+  const isMobile = useIsMobile();
   return (
     <header
       style={{
