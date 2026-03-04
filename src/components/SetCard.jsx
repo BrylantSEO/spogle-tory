@@ -65,12 +65,17 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
-            ⚡ {set.power}
+            ⚡ {set.power_kw ? `${set.power_kw} kW` : set.power}
           </span>
           <span style={{ color: "#FF5C00", fontSize: "14px", fontWeight: 700, fontFamily: "'Arial Black', sans-serif" }}>
             {set.priceLabel}
           </span>
         </div>
+        {set.setup_time_minutes && (
+          <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "8px" }}>
+            🔧 Montaż: {set.setup_time_minutes} min
+          </div>
+        )}
         {set.animators_included !== undefined && set.animators_included > 0 && (
           <div style={{ color: "rgba(255,92,0,0.7)", fontSize: "11px", fontWeight: 600, fontFamily: "sans-serif" }}>
             👤 {set.animators_included} {set.animators_included === 1 ? "animator" : "animatorów"} w cenie
