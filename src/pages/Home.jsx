@@ -176,6 +176,12 @@ export default function Home() {
       data.forEach(p => { map[p.set_id] = p; });
       setPresetData(map);
     });
+    // Load segment prices from DB
+    base44.entities.TrackSegment.list().then(data => {
+      const map = {};
+      data.forEach(s => { map[s.segment_id] = s; });
+      setSegmentPrices(map);
+    });
   }, []);
 
   // Scroll depth
