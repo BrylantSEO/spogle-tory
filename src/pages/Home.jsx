@@ -338,6 +338,13 @@ export default function Home() {
     });
   }, [totalPrice]);
 
+  // Save selection for returning visitors
+  useEffect(() => {
+    if (selected.size > 0 || selectedSlides.size > 0) {
+      saveLastSelection([...selected], [...selectedSlides]);
+    }
+  }, [selected, selectedSlides]);
+
   const hasSelection2 = hasSelection || !!activePreset;
 
   return (
@@ -533,6 +540,21 @@ export default function Home() {
               minWidth: 0,
             }}
           >
+            {/* Returning visitor banner */}
+            {returningVisitor && (
+              <div style={{ paddingTop: "24px" }}>
+                <ReturningBanner
+                  lastSegmentNames={lastSelectionNames}
+                  onRestoreSelection={() => {
+                    const last = getLastSelection();
+                    setSelected(new Set(last.segments));
+                    setSelectedSlides(new Set(last.slides));
+                    setActivePreset(null);
+                  }}
+                />
+              </div>
+            )}
+
             {/* Section label */}
             <div
               style={{
@@ -542,7 +564,7 @@ export default function Home() {
                 letterSpacing: "2.5px",
                 fontFamily: "sans-serif",
                 marginBottom: "16px",
-                paddingTop: "24px",
+                paddingTop: returningVisitor ? "8px" : "24px",
               }}
             >
               WYBIERZ SEGMENTY TORU
@@ -727,6 +749,7 @@ export default function Home() {
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
           trackClick('FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
           trackerSession.form_opened = true;
+          markFormOpened();
           setShowForm(v => !v);
         }}
         isMobile={isMobile}
