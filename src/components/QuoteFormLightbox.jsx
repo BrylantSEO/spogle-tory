@@ -20,12 +20,24 @@ export default function QuoteFormLightbox({
 }) {
   const [formSegments, setFormSegments] = useState(new Set(initialSegments.map(s => s.id)));
   const [formSlides, setFormSlides] = useState(new Set(initialSlides.map(s => s.id)));
-  const [form, setForm] = useState({ name: "", phone: "", event_date: "", location: "" });
+  const [form, setForm] = useState(() => {
+    try {
+      const saved = localStorage.getItem("spogle_quote_form");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { name: "", phone: "", event_date: "", location: "" };
+  });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const nameFocusedRef = useRef(false);
   const showDiscount = isReturningVisitor() && hadFormOpened();
+
+  // Persist form data to localStorage on change
+  const updateForm = (newForm) => {
+    setForm(newForm);
+    try { localStorage.setItem("spogle_quote_form", JSON.stringify(newForm)); } catch {}
+  };
 
   const selectedSegments = SEGMENTS.filter(s => formSegments.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => formSlides.has(s.id));
@@ -278,7 +290,7 @@ export default function QuoteFormLightbox({
                 style={inputStyle}
                 placeholder="Jan"
                 value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
+                onChange={e => updateForm({ ...form, name: e.target.value })}
                 onFocus={() => { if (!nameFocusedRef.current) { nameFocusedRef.current = true; fbq('trackCustom', 'FormFieldFocused'); } }}
                 required
               />
@@ -289,7 +301,7 @@ export default function QuoteFormLightbox({
                 style={inputStyle}
                 placeholder="+48 000 000 000"
                 value={form.phone}
-                onChange={e => setForm({ ...form, phone: e.target.value })}
+                onChange={e => updateForm({ ...form, phone: e.target.value })}
                 required
               />
             </div>
@@ -301,7 +313,7 @@ export default function QuoteFormLightbox({
                 placeholder="DD.MM.RRRR"
                 style={{ ...inputStyle, colorScheme: "dark" }}
                 value={form.event_date}
-                onChange={e => setForm({ ...form, event_date: e.target.value })}
+                onChange={e => updateForm({ ...form, event_date: e.target.value })}
               />
             </div>
             <div>
@@ -310,7 +322,7 @@ export default function QuoteFormLightbox({
                 style={inputStyle}
                 placeholder="np. Warszawa, Mokotów"
                 value={form.location}
-                onChange={e => setForm({ ...form, location: e.target.value })}
+                onChange={e => updateForm({ ...form, location: e.target.value })}
               />
             </div>
           </div>
