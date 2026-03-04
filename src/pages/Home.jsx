@@ -160,6 +160,8 @@ export default function Home() {
   const [presetLightbox, setPresetLightbox] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
+  const [selectedHours, setSelectedHours] = useState(null);
+  const [segmentPrices, setSegmentPrices] = useState({});
   const isMobile = useMobile();
   const firedScrollRef = useRef(new Set());
   const firedValueRef = useRef(new Set());
