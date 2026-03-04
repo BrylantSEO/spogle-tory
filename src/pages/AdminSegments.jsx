@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 
 const SEGMENT_IDS = ["tor12", "tor20", "tor27", "tor28", "atomic-drop", "duo"];
+const PRESET_IDS = ["legia", "tor4u", "gigant"];
+const PRESET_NAMES = { legia: "Set LEGIA", tor4u: "Set Tor4U", gigant: "Tor Gigant" };
 const DEFAULT_NAMES = {
   "tor12": "Tor 12m",
   "tor20": "Tor 20m",
