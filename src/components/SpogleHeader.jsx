@@ -78,19 +78,29 @@ export default function SpogleHeader() {
         >
           +48 573 177 098
         </a>
-        {/* Mobile: phone icon */}
+        {/* Mobile: clickable phone number */}
         <a
           href="tel:+48573177098"
           onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
           style={{
+            background: "#FF5C00",
             color: "#fff",
+            padding: "8px 18px",
+            borderRadius: "8px",
+            fontWeight: 700,
+            fontSize: "13px",
+            textDecoration: "none",
+            fontFamily: "sans-serif",
+            letterSpacing: "0.2px",
+            whiteSpace: "nowrap",
             display: isMobile ? "flex" : "none",
             alignItems: "center",
-            marginRight: "8px",
+            gap: "6px",
           }}
         >
-          <Phone size={24} />
+          <Phone size={16} /> 573 177 098
         </a>
+        {/* Desktop: WhatsApp button */}
         <a
           href="https://wa.me/48573177098"
           target="_blank"
@@ -108,6 +118,7 @@ export default function SpogleHeader() {
             letterSpacing: "0.2px",
             whiteSpace: "nowrap",
             transition: "background 0.2s",
+            display: isMobile ? "none" : "block",
           }}
           onMouseEnter={e => (e.target.style.background = "#e05200")}
           onMouseLeave={e => (e.target.style.background = "#FF5C00")}
