@@ -613,9 +613,14 @@ export default function Home() {
             {modalSegment && (
               <SegmentModal
                 segment={modalSegment}
-                selected={selected.has(modalSegment.id)}
-                onToggle={() => toggleSegment(modalSegment.id)}
+                selected={selected.has(modalSegment.id) || selectedSlides.has(modalSegment.id)}
+                onToggle={() => {
+                  if (SEGMENTS.find(s => s.id === modalSegment.id)) toggleSegment(modalSegment.id);
+                  else toggleSlide(modalSegment.id);
+                }}
                 onClose={() => setModalSegment(null)}
+                selectedHours={selectedHours}
+                onSelectHours={setSelectedHours}
               />
             )}
 
