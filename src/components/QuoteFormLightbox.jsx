@@ -40,12 +40,30 @@ export default function QuoteFormLightbox({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const allSegmentNames = [...selectedSegments.map(s => s.name), ...selectedSlideItems.map(s => s.name)];
     await base44.entities.QuoteRequest.create({
       ...form,
-      selected_segments: [...selectedSegments.map(s => s.name), ...selectedSlideItems.map(s => s.name)],
+      selected_segments: allSegmentNames,
       total_meters: calculatedMeters,
       estimated_price: displayPrice,
       total_power: totalPower,
+    });
+    // Send email notification to kontakt@spogle.pl
+    await base44.integrations.Core.SendEmail({
+      to: "kontakt@spogle.pl",
+      subject: `Nowe zapytanie o tor przeszkód — ${form.name}`,
+      body: `
+        <h2>Nowe zapytanie z konfiguratora</h2>
+        <p><strong>Imię:</strong> ${form.name}</p>
+        <p><strong>Telefon:</strong> ${form.phone}</p>
+        <p><strong>Data wydarzenia:</strong> ${form.event_date || "nie podano"}</p>
+        <p><strong>Lokalizacja:</strong> ${form.location || "nie podano"}</p>
+        <hr/>
+        <p><strong>Wybrane elementy:</strong> ${allSegmentNames.join(", ")}</p>
+        <p><strong>Łączna długość:</strong> ${calculatedMeters}m</p>
+        <p><strong>Wymagany prąd:</strong> ${totalPower}</p>
+        <p><strong>Szacowana cena:</strong> ${displayPrice}</p>
+      `,
     });
     setLoading(false);
     setSubmitted(true);
