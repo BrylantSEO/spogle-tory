@@ -76,7 +76,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
               {set.name}
             </div>
             <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", fontFamily: "sans-serif", marginTop: "4px" }}>
-              {set.meters}m · ⚡ {set.power}
+              {set.meters}m · ⚡ {set.power_kw || set.power}
             </div>
           </div>
         </div>
@@ -129,6 +129,31 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
               {components.length === 0 && (
                 <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "13px", fontFamily: "sans-serif" }}>Brak elementów</div>
               )}
+            </div>
+          </div>
+
+          {/* Setup time */}
+          {set.setup_time_minutes && (
+            <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,92,0,0.08)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>CZAS MONTAŻU</div>
+              <div style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>🔧 {set.setup_time_minutes} minut</div>
+            </div>
+          )}
+
+          {/* Included items */}
+          <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "8px" }}>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "8px" }}>CO WCHODZI W PAKIET</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              {[
+                "Okablowanie (kable zwykłe + siła)",
+                "Rozdzielnia 32A (63A - informacja o warunku)",
+                "Sztuczna trawa",
+                "Kotwy do montażu"
+              ].map((item, i) => (
+                <div key={i} style={{ color: "rgba(255,255,255,0.7)", fontSize: "12px", fontFamily: "sans-serif", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ color: "#FF5C00", fontWeight: 700 }}>✓</span> {item}
+                </div>
+              ))}
             </div>
           </div>
 
