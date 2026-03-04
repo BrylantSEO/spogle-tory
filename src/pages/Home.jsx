@@ -706,6 +706,7 @@ export default function Home() {
         hasSelection={hasSelection2}
         selectedHours={selectedHours}
         onSelectHours={setSelectedHours}
+        isPreset={!!activePreset}
         onSubmit={() => {
           fbq('track', 'InitiateCheckout');
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
