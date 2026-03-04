@@ -145,6 +145,7 @@ export default function AdminSegments() {
       name: presetForm.name,
       image: presetForm.image,
       price_label: presetForm.price_label,
+      components: presetForm.components || [],
     };
     if (presetForm.id) {
       await base44.entities.PresetSet.update(presetForm.id, payload);
