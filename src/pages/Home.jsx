@@ -3,6 +3,8 @@ import { MousePointer, Calculator, MessageSquare } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { initSession, trackClick, session as trackerSession } from "../components/internalTracker";
 import SpogleHeader from "../components/SpogleHeader";
+import ReturningBanner from "../components/ReturningBanner";
+import { recordVisit, isReturningVisitor, saveLastSelection, getLastSelection, markFormOpened } from "../components/returningVisitor";
 import SegmentCard from "../components/SegmentCard";
 import SetCard from "../components/SetCard";
 import SetLightbox from "../components/SetLightbox";
@@ -162,6 +164,8 @@ export default function Home() {
   const [modalSegment, setModalSegment] = useState(null);
   const [selectedHours, setSelectedHours] = useState(null);
   const [segmentPrices, setSegmentPrices] = useState({});
+  const [returningVisitor, setReturningVisitor] = useState(false);
+  const [lastSelectionNames, setLastSelectionNames] = useState([]);
   const isMobile = useMobile();
   const firedScrollRef = useRef(new Set());
   const firedValueRef = useRef(new Set());
@@ -170,6 +174,17 @@ export default function Home() {
   useEffect(() => {
     initSession();
     fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+    // Track returning visitor
+    const visitData = recordVisit();
+    if (visitData.visit_count >= 3) {
+      setReturningVisitor(true);
+      const last = getLastSelection();
+      const allItems = [...SEGMENTS, ...SLIDES];
+      const names = [...last.segments, ...last.slides]
+        .map(id => allItems.find(s => s.id === id)?.name)
+        .filter(Boolean);
+      setLastSelectionNames(names);
+    }
     // Load preset overrides from DB
     base44.entities.PresetSet.list().then(data => {
       const map = {};
