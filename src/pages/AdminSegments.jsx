@@ -335,6 +335,34 @@ export default function AdminSegments() {
                   <img src={presetForm.image} alt="preview" style={{ marginTop: "10px", height: "140px", width: "100%", objectFit: "cover", borderRadius: "8px", display: "block" }} />
                 )}
               </div>
+              {/* Prices */}
+              <div>
+                <label style={labelStyle}>CENNIK SETU (zł netto)</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
+                  {[5, 6, 8].map(h => (
+                    <div key={h}>
+                      <label style={{ ...labelStyle, marginBottom: "3px" }}>{h}H</label>
+                      <input style={inputStyle} type="number" value={presetForm[`price_${h}h`]} onChange={e => setPresetForm(f => ({ ...f, [`price_${h}h`]: e.target.value }))} placeholder="—" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Blowers */}
+              <div>
+                <label style={labelStyle}>DMUCHAWY</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>LICZBA DMUCHAW</label>
+                    <input style={inputStyle} type="number" value={presetForm.blowers_count} onChange={e => setPresetForm(f => ({ ...f, blowers_count: e.target.value }))} placeholder="np. 4" />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>MOC DMUCHAWY (kW)</label>
+                    <input style={inputStyle} type="number" step="0.1" value={presetForm.blower_power_kw} onChange={e => setPresetForm(f => ({ ...f, blower_power_kw: e.target.value }))} placeholder="np. 1.5" />
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label style={labelStyle}>SKŁAD SETU</label>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -503,6 +531,21 @@ export default function AdminSegments() {
                       />
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Blowers */}
+              <div>
+                <label style={labelStyle}>DMUCHAWY</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>LICZBA DMUCHAW</label>
+                    <input style={inputStyle} type="number" value={form.blowers_count} onChange={e => setForm(f => ({ ...f, blowers_count: e.target.value }))} placeholder="np. 2" />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, marginBottom: "3px" }}>MOC DMUCHAWY (kW)</label>
+                    <input style={inputStyle} type="number" step="0.1" value={form.blower_power_kw} onChange={e => setForm(f => ({ ...f, blower_power_kw: e.target.value }))} placeholder="np. 1.5" />
+                  </div>
                 </div>
               </div>
 
