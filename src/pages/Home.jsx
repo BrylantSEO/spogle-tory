@@ -585,6 +585,30 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Testimonials */}
+      <div style={{ padding: isMobile ? "40px 16px" : "60px 48px", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "32px", textAlign: "center" }}>
+          CO MÓWIĄ KLIENCI
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "16px" }}>
+          {[
+            { stars: 5, text: "Profesjonalna obsługa, tor był hitem eventu!", author: "Anna K.", city: "Warszawa" },
+            { stars: 5, text: "Szybka wycena, montaż bez problemów. Polecamy!", author: "Firma XYZ", city: "Kraków" },
+            { stars: 5, text: "Dzieci szalały przez 4 godziny. Zdecydowanie wrócimy!", author: "Piotr M.", city: "Łódź" },
+          ].map((r, i) => (
+            <div key={i} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "20px" }}>
+              <div style={{ color: "#FF5C00", fontSize: "18px", marginBottom: "12px" }}>{"★".repeat(r.stars)}</div>
+              <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: "1.6", marginBottom: "16px" }}>
+                "{r.text}"
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>
+                {r.author}, {r.city}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Gallery */}
       <PhotoGallery onAskAbout={(photo) => {
         // Pre-select segments from the photo
