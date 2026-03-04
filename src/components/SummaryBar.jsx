@@ -1,4 +1,6 @@
-export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile }) {
+const HOURS = [3, 4, 5, 6, 8];
+
+export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile, selectedHours, onSelectHours }) {
   return (
     <div
       style={{
@@ -16,6 +18,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
         justifyContent: hasSelection ? (isMobile ? "space-between" : "flex-start") : "center",
         height: isMobile ? "auto" : "64px",
         transition: "background 0.3s",
+        gap: "0",
       }}
     >
       {!hasSelection ? (
@@ -23,25 +26,71 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
           Skonfiguruj swój tor → wybierz segmenty lub gotowy set
         </div>
       ) : isMobile ? (
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", padding: "10px 0" }}>
-          <div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>Szacowana cena</div>
-            <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
-              {estimatedPrice}
-            </div>
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "10px 0" }}>
+          {/* Hours picker */}
+          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px" }}>Liczba godzin:</span>
+            {HOURS.map(h => (
+              <button
+                key={h}
+                onClick={() => onSelectHours(selectedHours === h ? null : h)}
+                style={{
+                  background: selectedHours === h ? "#FF5C00" : "rgba(255,255,255,0.07)",
+                  color: selectedHours === h ? "#fff" : "rgba(255,255,255,0.6)",
+                  border: selectedHours === h ? "none" : "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "6px",
+                  padding: "4px 10px",
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  fontFamily: "sans-serif",
+                  cursor: "pointer",
+                }}
+              >{h}h</button>
+            ))}
           </div>
-          <button
-            onClick={onSubmit}
-            style={{ background: "#FF5C00", color: "#fff", border: "none", borderRadius: "10px", padding: "13px 22px", fontWeight: 800, fontSize: "14px", fontFamily: "sans-serif", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap", letterSpacing: "0.2px" }}
-          >
-            Wyślij zapytanie →
-          </button>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+            <div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>Szacowana cena</div>
+              <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
+                {estimatedPrice}
+              </div>
+            </div>
+            <button
+              onClick={onSubmit}
+              style={{ background: "#FF5C00", color: "#fff", border: "none", borderRadius: "10px", padding: "13px 22px", fontWeight: 800, fontSize: "14px", fontFamily: "sans-serif", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap", letterSpacing: "0.2px" }}
+            >
+              Wyślij zapytanie →
+            </button>
+          </div>
         </div>
       ) : (
         <>
           <StatPill icon="📏" label="Łączna długość" value={`${totalMeters} m`} active />
           <Divider />
           <StatPill icon="⚡" label="Wymagany prąd" value={totalPower || "0A"} active />
+          <Divider />
+          {/* Hours picker */}
+          <div style={{ display: "flex", gap: "6px", alignItems: "center", padding: "0 16px" }}>
+            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px", whiteSpace: "nowrap" }}>⏱ Godziny:</span>
+            {HOURS.map(h => (
+              <button
+                key={h}
+                onClick={() => onSelectHours(selectedHours === h ? null : h)}
+                style={{
+                  background: selectedHours === h ? "#FF5C00" : "rgba(255,255,255,0.07)",
+                  color: selectedHours === h ? "#fff" : "rgba(255,255,255,0.55)",
+                  border: selectedHours === h ? "none" : "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "6px",
+                  padding: "5px 12px",
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  fontFamily: "sans-serif",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >{h}h</button>
+            ))}
+          </div>
           <Divider />
           <StatPill icon="💰" label="Szacowana cena" value={estimatedPrice} active orange />
           <div style={{ marginLeft: "auto" }}>
