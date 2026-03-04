@@ -116,6 +116,45 @@ export default function AdminSegments() {
     setUploading(false);
   };
 
+  const openEditPreset = (setId) => {
+    const existing = presets[setId] || {};
+    setPresetForm({
+      set_id: setId,
+      name: existing.name || PRESET_NAMES[setId] || setId,
+      image: existing.image || "",
+      price_label: existing.price_label || "",
+      id: existing.id || null,
+    });
+    setEditingPreset(setId);
+  };
+
+  const handleSavePreset = async () => {
+    setSaving(true);
+    const payload = {
+      set_id: presetForm.set_id,
+      name: presetForm.name,
+      image: presetForm.image,
+      price_label: presetForm.price_label,
+    };
+    if (presetForm.id) {
+      await base44.entities.PresetSet.update(presetForm.id, payload);
+    } else {
+      await base44.entities.PresetSet.create(payload);
+    }
+    await loadPresets();
+    setSaving(false);
+    setEditingPreset(null);
+  };
+
+  const handlePresetImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    setPresetForm(f => ({ ...f, image: file_url }));
+    setUploading(false);
+  };
+
   const inputStyle = {
     background: "rgba(255,255,255,0.06)",
     border: "1px solid rgba(255,255,255,0.12)",
