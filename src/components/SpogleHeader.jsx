@@ -50,6 +50,7 @@ export default function SpogleHeader() {
 
       {/* Right side */}
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        {/* Desktop: text number */}
         <a
           href="tel:+48573177098"
           onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
@@ -60,9 +61,23 @@ export default function SpogleHeader() {
             fontWeight: 500,
             letterSpacing: "0.3px",
             fontFamily: "sans-serif",
+            display: window.innerWidth < 768 ? "none" : "block",
           }}
         >
           +48 573 177 098
+        </a>
+        {/* Mobile: phone icon */}
+        <a
+          href="tel:+48573177098"
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
+          style={{
+            color: "#fff",
+            display: window.innerWidth < 768 ? "flex" : "none",
+            alignItems: "center",
+            marginRight: "8px",
+          }}
+        >
+          <Phone size={24} />
         </a>
         <a
           href="https://wa.me/48573177098"
