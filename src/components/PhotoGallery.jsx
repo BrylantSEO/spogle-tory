@@ -340,7 +340,7 @@ export default function PhotoGallery({ onAskAbout }) {
                       onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
                       onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                     >
-                      Zapytaj o rezerwację →
+                      Zapytaj o rezerwację tego toru →
                     </button>
                   )}
                 </div>
