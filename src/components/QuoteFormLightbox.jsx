@@ -202,11 +202,15 @@ export default function QuoteFormLightbox({
           </div>
 
           {/* Add more segments/slides */}
-          <details style={{ cursor: "pointer" }}>
-            <summary style={{ color: "#FF5C00", fontSize: "13px", fontWeight: 700, fontFamily: "sans-serif", outline: "none", userSelect: "none" }}>
+          <div style={{ cursor: "pointer" }}>
+            <div
+              onClick={() => setAddOpen(v => !v)}
+              style={{ color: "#FF5C00", fontSize: "13px", fontWeight: 700, fontFamily: "sans-serif", outline: "none", userSelect: "none", display: "flex", alignItems: "center", gap: "4px" }}
+            >
               + Dodaj kolejne tory
-            </summary>
-            <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+              <ChevronRight size={16} style={{ transition: "transform 0.2s", transform: addOpen ? "rotate(90deg)" : "rotate(0deg)" }} />
+            </div>
+            {addOpen && <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
               {SEGMENTS.filter(s => !formSegments.has(s.id)).map(seg => (
                 <button
                   key={seg.id}
