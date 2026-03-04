@@ -243,6 +243,84 @@ export default function AdminSegments() {
           </div>
         )}
 
+        {/* Presets list */}
+        {!editing && !editingPreset && activeTab === "presets" && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+            {PRESET_IDS.map(setId => {
+              const p = presets[setId];
+              return (
+                <div
+                  key={setId}
+                  onClick={() => openEditPreset(setId)}
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1.5px solid rgba(255,255,255,0.08)",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    transition: "border-color 0.2s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "#FF5C00"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
+                >
+                  {p?.image ? (
+                    <img src={p.image} alt={p.name} style={{ width: "100%", height: "100px", objectFit: "cover", display: "block", opacity: 0.8 }} />
+                  ) : (
+                    <div style={{ height: "100px", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.2)", fontSize: "12px" }}>
+                      Brak zdjęcia
+                    </div>
+                  )}
+                  <div style={{ padding: "12px 14px" }}>
+                    <div style={{ fontWeight: 800, fontSize: "14px", marginBottom: "4px" }}>{p?.name || PRESET_NAMES[setId]}</div>
+                    <div style={{ color: "#FF5C00", fontSize: "12px", fontWeight: 700, marginBottom: "4px" }}>{p?.price_label || "—"}</div>
+                    <div style={{ marginTop: "4px", color: "#FF5C00", fontSize: "12px", fontWeight: 700 }}>Edytuj →</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Preset edit form */}
+        {editingPreset && (
+          <div>
+            <button onClick={() => setEditingPreset(null)} style={{ background: "rgba(255,255,255,0.07)", border: "none", borderRadius: "8px", color: "#fff", padding: "8px 16px", cursor: "pointer", marginBottom: "24px", fontSize: "13px", fontFamily: "sans-serif" }}>
+              ← Wróć do listy
+            </button>
+            <h2 style={{ fontSize: "22px", fontWeight: 900, marginBottom: "24px" }}>{presetForm.name}</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <div>
+                <label style={labelStyle}>NAZWA</label>
+                <input style={inputStyle} value={presetForm.name} onChange={e => setPresetForm(f => ({ ...f, name: e.target.value }))} />
+              </div>
+              <div>
+                <label style={labelStyle}>ETYKIETA CENY</label>
+                <input style={inputStyle} value={presetForm.price_label} onChange={e => setPresetForm(f => ({ ...f, price_label: e.target.value }))} placeholder="np. od 2 897 zł lub Wycena indywidualna" />
+              </div>
+              <div>
+                <label style={labelStyle}>ZDJĘCIE GŁÓWNE</label>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <input style={{ ...inputStyle, flex: 1 }} value={presetForm.image} onChange={e => setPresetForm(f => ({ ...f, image: e.target.value }))} placeholder="URL zdjęcia..." />
+                  <label style={{ background: "#FF5C00", color: "#fff", borderRadius: "8px", padding: "10px 14px", cursor: "pointer", fontSize: "12px", fontWeight: 700, fontFamily: "sans-serif", whiteSpace: "nowrap" }}>
+                    {uploading ? "..." : "Wgraj plik"}
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={handlePresetImageUpload} />
+                  </label>
+                </div>
+                {presetForm.image && (
+                  <img src={presetForm.image} alt="preview" style={{ marginTop: "10px", height: "140px", width: "100%", objectFit: "cover", borderRadius: "8px", display: "block" }} />
+                )}
+              </div>
+              <button
+                onClick={handleSavePreset}
+                disabled={saving}
+                style={{ background: "#FF5C00", color: "#fff", border: "none", borderRadius: "10px", padding: "14px", fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif", cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1 }}
+              >
+                {saving ? "Zapisywanie..." : "Zapisz zmiany"}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Edit form */}
         {editing && (
           <div>
