@@ -286,7 +286,17 @@ export default function Home() {
 
   // Calculate price based on selected hours
   const calcPriceWithHours = () => {
-    if (activePresetData) return activePresetData.priceLabel;
+    if (activePresetData) {
+      // For presets, use preset-level prices from DB
+      if (selectedHours) {
+        const hourKey = `price_${selectedHours}h`;
+        const dbPreset = presetData[activePresetData.id];
+        if (dbPreset && dbPreset[hourKey]) return `${dbPreset[hourKey]} zł netto`;
+      }
+      // Fallback to preset's default price_label from DB or hardcoded
+      const dbPreset = presetData[activePresetData.id];
+      return dbPreset?.price_label || activePresetData.priceLabel;
+    }
     if (!selectedHours) return totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
     const hourKey = `price_${selectedHours}h`;
     let total = 0;
