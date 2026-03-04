@@ -560,6 +560,7 @@ export default function Home() {
                 image: override.image || preset.image,
                 priceLabel: override.price_label || preset.priceLabel,
                 name: override.name || preset.name,
+                components: override.components && override.components.length > 0 ? override.components : preset.components,
               };
               return (
                 <SetCard
