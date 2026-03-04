@@ -181,10 +181,29 @@ export default function AdminSegments() {
     <div style={{ background: "#0f0f0f", minHeight: "100vh", color: "#fff", fontFamily: "sans-serif", padding: "40px 32px" }}>
       <div style={{ maxWidth: "900px", margin: "0 auto" }}>
         <div style={{ color: "#FF5C00", fontSize: "11px", fontWeight: 700, letterSpacing: "2.5px", marginBottom: "8px" }}>PANEL ADMINA</div>
-        <h1 style={{ fontSize: "32px", fontWeight: 900, marginBottom: "32px" }}>Edycja segmentów toru</h1>
+        <h1 style={{ fontSize: "32px", fontWeight: 900, marginBottom: "24px" }}>Edycja segmentów toru</h1>
+
+        {/* Tabs */}
+        {!editing && !editingPreset && (
+          <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+            {[["segments", "Segmenty"], ["presets", "Gotowe Sety"]].map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                style={{
+                  background: activeTab === key ? "#FF5C00" : "rgba(255,255,255,0.07)",
+                  border: "none", borderRadius: "8px", color: "#fff",
+                  padding: "10px 20px", cursor: "pointer", fontSize: "13px", fontWeight: 700, fontFamily: "sans-serif",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Segment list */}
-        {!editing && (
+        {!editing && !editingPreset && activeTab === "segments" && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
             {SEGMENT_IDS.map(segId => {
               const s = segments[segId];
