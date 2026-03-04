@@ -484,7 +484,7 @@ export default function Home() {
                 flexWrap: "wrap",
               }}
             >
-              {["500+ eventów", "Montaż w cenie", "Własny transport"].map(badge => (
+              {["500+ eventów", "Montaż w cenie", "Darmowy transport na terenie Warszawy i okolic"].map(badge => (
                 <div
                   key={badge}
                   style={{
