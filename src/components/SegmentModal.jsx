@@ -3,15 +3,25 @@ import { base44 } from "@/api/base44Client";
 
 function toEmbedUrl(url) {
   if (!url) return null;
+  let videoId = null;
   // already embed
-  if (url.includes("youtube.com/embed/")) return url;
+  if (url.includes("youtube.com/embed/")) {
+    const m = url.match(/embed\/([^?&/]+)/);
+    videoId = m ? m[1] : null;
+    if (!videoId) return url;
+  }
   // watch url
-  const m = url.match(/[?&]v=([^&]+)/);
-  if (m) return `https://www.youtube.com/embed/${m[1]}`;
+  if (!videoId) {
+    const m = url.match(/[?&]v=([^&]+)/);
+    if (m) videoId = m[1];
+  }
   // youtu.be
-  const m2 = url.match(/youtu\.be\/([^?&]+)/);
-  if (m2) return `https://www.youtube.com/embed/${m2[1]}`;
-  return url;
+  if (!videoId) {
+    const m2 = url.match(/youtu\.be\/([^?&]+)/);
+    if (m2) videoId = m2[1];
+  }
+  if (!videoId) return url;
+  return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
 }
 
 const SEGMENT_IMAGES = {
