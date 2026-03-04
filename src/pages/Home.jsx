@@ -223,6 +223,8 @@ export default function Home() {
       setActivePreset(preset.id);
       setSelected(new Set(preset.segmentIds));
       setSelectedSlides(new Set(preset.slideIds));
+      // Presets require minimum 5h
+      if (!selectedHours || selectedHours < 5) setSelectedHours(5);
     }
     setShowForm(false);
   };
