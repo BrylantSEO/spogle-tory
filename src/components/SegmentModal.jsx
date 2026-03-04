@@ -35,11 +35,14 @@ export default function SegmentModal({ segment, onClose, onToggle, selected }) {
 
   const coverImg = dbData?.cover_image || segment.image || SEGMENT_IMAGES[segment.id] || null;
   const promoVideo = dbData?.promo_video_url ? toEmbedUrl(dbData.promo_video_url) : null;
-  const baseImages = dbData?.gallery_images?.length > 0 ? dbData.gallery_images : (coverImg ? [coverImg] : []);
-  // Add video as last "slide" if present
-  const galleryItems = promoVideo
-    ? [...baseImages, { type: "video", url: promoVideo }]
-    : baseImages.map(url => ({ type: "image", url }));
+  // Build gallery: cover first, then gallery_images (deduplicated), then video
+  const rawGallery = dbData?.gallery_images?.length > 0 ? dbData.gallery_images : [];
+  const allImages = coverImg ? [coverImg, ...rawGallery.filter(url => url !== coverImg)] : rawGallery;
+  const baseImages = allImages.length > 0 ? allImages : (coverImg ? [coverImg] : []);
+  const galleryItems = [
+    ...baseImages.map(url => ({ type: "image", url })),
+    ...(promoVideo ? [{ type: "video", url: promoVideo }] : []),
+  ];
   const description = dbData?.description || segment.description;
   const currentItem = galleryItems[galleryIdx] || { type: "image", url: coverImg };
 
