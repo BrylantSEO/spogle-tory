@@ -48,22 +48,16 @@ export default function QuoteFormLightbox({
       estimated_price: displayPrice,
       total_power: totalPower,
     });
-    // Send email notification to kontakt@spogle.pl
-    await base44.integrations.Core.SendEmail({
-      to: "kontakt@spogle.pl",
-      subject: `Nowe zapytanie o tor przeszkód — ${form.name}`,
-      body: `
-        <h2>Nowe zapytanie z konfiguratora</h2>
-        <p><strong>Imię:</strong> ${form.name}</p>
-        <p><strong>Telefon:</strong> ${form.phone}</p>
-        <p><strong>Data wydarzenia:</strong> ${form.event_date || "nie podano"}</p>
-        <p><strong>Lokalizacja:</strong> ${form.location || "nie podano"}</p>
-        <hr/>
-        <p><strong>Wybrane elementy:</strong> ${allSegmentNames.join(", ")}</p>
-        <p><strong>Łączna długość:</strong> ${calculatedMeters}m</p>
-        <p><strong>Wymagany prąd:</strong> ${totalPower}</p>
-        <p><strong>Szacowana cena:</strong> ${displayPrice}</p>
-      `,
+    // Send email notification via backend function
+    await base44.functions.invoke('sendQuoteEmail', {
+      name: form.name,
+      phone: form.phone,
+      event_date: form.event_date,
+      location: form.location,
+      segments: allSegmentNames.join(", "),
+      meters: calculatedMeters,
+      power: totalPower,
+      price: displayPrice,
     });
     setLoading(false);
     setSubmitted(true);
