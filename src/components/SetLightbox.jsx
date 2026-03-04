@@ -1,14 +1,20 @@
+import { useState, useEffect } from "react";
+import { base44 } from "@/api/base44Client";
+
 export default function SetLightbox({ set, onClose, onSelect, isActive }) {
+  const [segmentImages, setSegmentImages] = useState({});
+
+  useEffect(() => {
+    base44.entities.TrackSegment.list().then(data => {
+      const map = {};
+      data.forEach(s => { map[s.name] = s.cover_image; });
+      setSegmentImages(map);
+    });
+  }, []);
+
   if (!set) return null;
 
-  const SEGMENT_IMAGES = {
-    "Tor 12m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
-    "Tor 20m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
-    "Tor 27m": "https://www.spogle.pl/wp-content/uploads/2025/06/2.png",
-    "Tor 28m": "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
-    "Atomic Drop": "https://www.spogle.pl/wp-content/uploads/2025/02/IMG_1031-scaled.jpg",
-    "Zjeżdżalnia DUO": "https://www.spogle.pl/wp-content/uploads/2025/02/zjezdzalnia-dmuchana-duo.jpg",
-  };
+  const components = set.components && set.components.length > 0 ? set.components : [];
 
   return (
     <div
@@ -44,7 +50,11 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
 
         {/* LEFT COLUMN — Image + Header */}
         <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-          <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          {set.image ? (
+            <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          ) : (
+            <div style={{ width: "100%", height: "100%", background: "#111" }} />
+          )}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%)" }} />
           {set.badge && (
             <div style={{ position: "absolute", top: "14px", left: "14px", background: set.badgeColor || "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px" }}>
@@ -62,29 +72,32 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
         </div>
 
         {/* RIGHT COLUMN — Components + Price */}
-        <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column" }}>
-          {/* Components list */}
+        <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
           <div style={{ flex: 1 }}>
             <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px" }}>
               SKŁAD SETU
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {set.components.map((comp, i) => (
-                <div key={i} style={{
-                  display: "flex", alignItems: "center", gap: "12px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderRadius: "10px",
-                  padding: "10px 12px",
-                }}>
-                  {SEGMENT_IMAGES[comp] && (
-                    <div style={{ width: "48px", height: "36px", borderRadius: "6px", overflow: "hidden", flexShrink: 0 }}>
-                      <img src={SEGMENT_IMAGES[comp]} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              {components.map((comp, i) => {
+                const imgUrl = segmentImages[comp];
+                return (
+                  <div key={i} style={{
+                    display: "flex", alignItems: "center", gap: "12px",
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: "10px",
+                    padding: "10px 12px",
+                  }}>
+                    <div style={{ width: "48px", height: "36px", borderRadius: "6px", overflow: "hidden", flexShrink: 0, background: "#222" }}>
+                      {imgUrl && <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
                     </div>
-                  )}
-                  <span style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>{comp}</span>
-                </div>
-              ))}
+                    <span style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>{comp}</span>
+                  </div>
+                );
+              })}
+              {components.length === 0 && (
+                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "13px", fontFamily: "sans-serif" }}>Brak elementów</div>
+              )}
             </div>
           </div>
 
