@@ -1,15 +1,27 @@
-const SEGMENT_IMAGES = {
+import { useState, useEffect } from "react";
+import { base44 } from "@/api/base44Client";
+
+const FALLBACK_IMAGES = {
   tor12: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-12m-warszawa.jpg",
   tor20: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m-warszawa.jpg",
   tor27: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-27m-warszawa.jpg",
-  tor28: "https://www.spogle.pl/wp-content/uploads/2025/06/Tor-na-tle-legii.jpg",
+  tor28: "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-28m-warszawa.jpg",
   giga: "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg",
 };
-const DEFAULT_IMG = "https://www.spogle.pl/wp-content/uploads/2025/06/tor-przeszkod-97m-1.jpg";
 
 export default function SegmentCard({ segment, selected, onToggle, onOpenDetail }) {
   const isGiga = segment.id === "giga";
-  const imgSrc = segment.image || SEGMENT_IMAGES[segment.id] || DEFAULT_IMG;
+  const [coverImage, setCoverImage] = useState(segment.image || FALLBACK_IMAGES[segment.id] || null);
+
+  useEffect(() => {
+    base44.entities.TrackSegment.filter({ segment_id: segment.id }).then(results => {
+      if (results && results.length > 0 && results[0].cover_image) {
+        setCoverImage(results[0].cover_image);
+      }
+    });
+  }, [segment.id]);
+
+  const imgSrc = coverImage;
 
   return (
     <div
