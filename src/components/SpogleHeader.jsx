@@ -73,7 +73,7 @@ export default function SpogleHeader() {
             fontWeight: 500,
             letterSpacing: "0.3px",
             fontFamily: "sans-serif",
-            display: window.innerWidth < 768 ? "none" : "block",
+            display: isMobile ? "none" : "block",
           }}
         >
           +48 573 177 098
@@ -84,7 +84,7 @@ export default function SpogleHeader() {
           onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
           style={{
             color: "#fff",
-            display: window.innerWidth < 768 ? "flex" : "none",
+            display: isMobile ? "flex" : "none",
             alignItems: "center",
             marginRight: "8px",
           }}
