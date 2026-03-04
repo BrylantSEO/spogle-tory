@@ -22,6 +22,7 @@ export default function QuoteFormLightbox({
   const [form, setForm] = useState({ name: "", phone: "", event_date: "", location: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const nameFocusedRef = useRef(false);
 
   const selectedSegments = SEGMENTS.filter(s => formSegments.has(s.id));
