@@ -67,6 +67,7 @@ export default function SpogleHeader() {
           href="https://wa.me/48573177098"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'WhatsAppClick'); trackClick('WhatsAppClick', { source: 'header' }); }}
           style={{
             background: "#FF5C00",
             color: "#fff",
