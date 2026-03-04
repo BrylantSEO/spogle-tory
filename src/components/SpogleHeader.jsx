@@ -1,4 +1,5 @@
 import { trackClick } from "./internalTracker";
+import { Phone } from "lucide-react";
 
 export default function SpogleHeader() {
   return (
