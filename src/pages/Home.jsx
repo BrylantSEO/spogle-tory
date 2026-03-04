@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { MousePointer, Calculator, MessageSquare } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { initSession, trackClick, session as trackerSession } from "../components/internalTracker";
 import SpogleHeader from "../components/SpogleHeader";
