@@ -132,6 +132,7 @@ export async function initSession() {
 }
 
 export async function trackClick(eventName, data = {}) {
+  if (window.__spogle_notrack) return;
   const now = Date.now();
   session.total_clicks += 1;
 
@@ -164,7 +165,7 @@ export async function trackClick(eventName, data = {}) {
 }
 
 export async function endSession() {
-  if (!session.id) return;
+  if (!session.id || window.__spogle_notrack) return;
   const seconds = Math.round((Date.now() - session._startMs) / 1000);
 
   try {
