@@ -58,6 +58,8 @@ export default function AdminSegments() {
       price_5h: existing.price_5h || "",
       price_6h: existing.price_6h || "",
       price_8h: existing.price_8h || "",
+      blowers_count: existing.blowers_count || "",
+      blower_power_kw: existing.blower_power_kw || "",
       id: existing.id || null,
     });
     setEditing(segId);
@@ -78,6 +80,8 @@ export default function AdminSegments() {
       price_5h: form.price_5h ? Number(form.price_5h) : null,
       price_6h: form.price_6h ? Number(form.price_6h) : null,
       price_8h: form.price_8h ? Number(form.price_8h) : null,
+      blowers_count: form.blowers_count ? Number(form.blowers_count) : null,
+      blower_power_kw: form.blower_power_kw ? Number(form.blower_power_kw) : null,
     };
     if (form.id) {
       await base44.entities.TrackSegment.update(form.id, payload);
@@ -133,6 +137,11 @@ export default function AdminSegments() {
       image: existing.image || "",
       price_label: existing.price_label || "",
       components: existing.components || PRESET_DEFAULT_COMPONENTS[setId] || [],
+      price_5h: existing.price_5h || "",
+      price_6h: existing.price_6h || "",
+      price_8h: existing.price_8h || "",
+      blowers_count: existing.blowers_count || "",
+      blower_power_kw: existing.blower_power_kw || "",
       id: existing.id || null,
     });
     setEditingPreset(setId);
@@ -146,6 +155,11 @@ export default function AdminSegments() {
       image: presetForm.image,
       price_label: presetForm.price_label,
       components: presetForm.components || [],
+      price_5h: presetForm.price_5h ? Number(presetForm.price_5h) : null,
+      price_6h: presetForm.price_6h ? Number(presetForm.price_6h) : null,
+      price_8h: presetForm.price_8h ? Number(presetForm.price_8h) : null,
+      blowers_count: presetForm.blowers_count ? Number(presetForm.blowers_count) : null,
+      blower_power_kw: presetForm.blower_power_kw ? Number(presetForm.blower_power_kw) : null,
     };
     if (presetForm.id) {
       await base44.entities.PresetSet.update(presetForm.id, payload);
