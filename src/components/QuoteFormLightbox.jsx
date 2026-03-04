@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Zap, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { trackClick, session as trackerSession } from "./internalTracker";
+import { isReturningVisitor, hadFormOpened, DISCOUNT_CODE } from "./returningVisitor";
 
 function fbq(...args) {
   if (typeof window.fbq === 'function') window.fbq(...args);
@@ -24,6 +25,7 @@ export default function QuoteFormLightbox({
   const [loading, setLoading] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const nameFocusedRef = useRef(false);
+  const showDiscount = isReturningVisitor() && hadFormOpened();
 
   const selectedSegments = SEGMENTS.filter(s => formSegments.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => formSlides.has(s.id));
@@ -324,6 +326,23 @@ export default function QuoteFormLightbox({
             {loading ? "Wysyłanie..." : "Wyślij zapytanie — odpiszemy w 24h"}
           </button>
 
+          {showDiscount && (
+            <div style={{
+              background: "linear-gradient(135deg, rgba(255,92,0,0.12), rgba(255,92,0,0.04))",
+              border: "1px solid rgba(255,92,0,0.25)",
+              borderRadius: "10px",
+              padding: "12px 16px",
+              marginTop: "12px",
+              textAlign: "center",
+            }}>
+              <div style={{ color: "#FF5C00", fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", marginBottom: "2px" }}>
+                🎉 Kod zniżkowy: {DISCOUNT_CODE}
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>
+                Podaj go w zapytaniu, a otrzymasz rabat!
+              </div>
+            </div>
+          )}
           <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "12px", textAlign: "center", marginTop: "10px", fontFamily: "sans-serif" }}>
             Bez zobowiązań. Nie sprzedajemy danych.
           </p>
