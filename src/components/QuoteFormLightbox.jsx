@@ -297,6 +297,8 @@ export default function QuoteFormLightbox({
               <label style={labelStyle}>DATA WYDARZENIA</label>
               <input
                 type="date"
+                lang="pl"
+                placeholder="DD.MM.RRRR"
                 style={{ ...inputStyle, colorScheme: "dark" }}
                 value={form.event_date}
                 onChange={e => setForm({ ...form, event_date: e.target.value })}
