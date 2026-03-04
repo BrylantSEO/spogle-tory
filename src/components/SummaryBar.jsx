@@ -52,7 +52,12 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
           <StatPill icon="⚡" label="Wymagany prąd" value={totalPower || "0A"} active={totalMeters > 0} />
           <Divider />
           <StatPill icon="💰" label="Szacowana cena" value={hasSelection ? estimatedPrice : "od 0 zł"} active={hasSelection} orange={hasSelection} />
-          <div style={{ marginLeft: "auto" }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "16px" }}>
+            {!canSubmit && (
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif" }}>
+                ← Wybierz segment lub gotowy set powyżej
+              </div>
+            )}
             <button
               onClick={canSubmit ? onSubmit : undefined}
               disabled={!canSubmit}
