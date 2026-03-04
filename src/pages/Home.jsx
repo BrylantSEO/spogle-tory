@@ -607,17 +607,21 @@ export default function Home() {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "16px" }}>
           {[
-            { stars: 5, text: "Profesjonalna obsługa, tor był hitem eventu!", author: "Anna K.", city: "Warszawa" },
-            { stars: 5, text: "Szybka wycena, montaż bez problemów. Polecamy!", author: "Firma XYZ", city: "Kraków" },
-            { stars: 5, text: "Dzieci szalały przez 4 godziny. Zdecydowanie wrócimy!", author: "Piotr M.", city: "Łódź" },
+            { text: "Korzystam z usług Spogle od kilku lat i jeszcze nigdy mnie nie zawiedli. Mogę polecić tę współpracę. Zawsze miła i bezproblemowa obsługa oraz konkurencyjne stawki.", author: "Anna Kautz", ago: "6 miesięcy temu" },
+            { text: "Miałam przyjemność współpracować z tą firmą przy organizacji dnia dziecka w szkole podstawowej. Całość usługi na najwyższym poziomie, począwszy od wstępnych ustaleń aż po realizację.", author: "Aneta Baj", ago: "8 miesięcy temu" },
+            { text: "Obsługa na najwyższym poziomie. Super kontakt i współpraca z Panem Hubertem. Animatorzy do obsługi urządzeń zaangażowani i dbający o bezpieczeństwo nawet najmniejszych użytkowników. Polecam :)", author: "Natalia", ago: "7 miesięcy temu" },
           ].map((r, i) => (
             <div key={i} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "20px" }}>
-              <div style={{ color: "#FF5C00", fontSize: "18px", marginBottom: "12px" }}>{"★".repeat(r.stars)}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                <span style={{ color: "#FF5C00", fontSize: "16px" }}>★★★★★</span>
+                <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>{r.ago}</span>
+              </div>
               <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: "1.6", marginBottom: "16px" }}>
                 "{r.text}"
               </div>
-              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>
-                {r.author}, {r.city}
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>{r.author}</span>
+                <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", fontFamily: "sans-serif" }}>· Google</span>
               </div>
             </div>
           ))}
