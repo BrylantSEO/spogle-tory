@@ -82,8 +82,8 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
         </div>
 
         {/* RIGHT COLUMN — Components + Price */}
-        <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
-          <div style={{ flex: 1 }}>
+         <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", overflowY: "auto", maxHeight: "100%", position: "relative", zIndex: 10 }}>
+           <div style={{ flex: 1, overflowY: "auto" }}>
             <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px" }}>
               SKŁAD SETU
             </div>
@@ -132,33 +132,42 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
             </div>
           </div>
 
-          {/* Setup time */}
-          {set.setup_time_minutes && (
-            <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,92,0,0.08)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>CZAS MONTAŻU</div>
-              <div style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>🔧 {set.setup_time_minutes} minut</div>
-            </div>
-          )}
+          {/* Setup time and animators info */}
+          <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+            {set.setup_time_minutes && (
+              <div style={{ flex: 1, padding: "12px", background: "rgba(255,92,0,0.15)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
+                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>MONTAŻ</div>
+                <div style={{ color: "#FF5C00", fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif" }}>🔧 {set.setup_time_minutes} min</div>
+              </div>
+            )}
+            {set.animators_included && set.animators_included > 0 && (
+              <div style={{ flex: 1, padding: "12px", background: "rgba(255,92,0,0.15)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
+                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>ANIMATORZY</div>
+                <div style={{ color: "#FF5C00", fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif" }}>👤 {set.animators_included}</div>
+              </div>
+            )}
+          </div>
 
           {/* Included items */}
-          <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "8px" }}>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "8px" }}>CO WCHODZI W PAKIET</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ marginBottom: "20px", padding: "14px", background: "rgba(255,92,0,0.08)", borderRadius: "10px", border: "1px solid rgba(255,92,0,0.3)" }}>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "10px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "10px", textTransform: "uppercase" }}>W PAKIECIE</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {[
-                "Okablowanie (kable zwykłe + siła)",
-                "Rozdzielnia 32A (63A - informacja o warunku)",
+                "Okablowanie (kable + siła)",
+                "Rozdzielnica 32A (63A - wcześniejsza info)",
                 "Sztuczna trawa",
-                "Kotwy do montażu"
+                "Kotwy montażowe"
               ].map((item, i) => (
-                <div key={i} style={{ color: "rgba(255,255,255,0.7)", fontSize: "12px", fontFamily: "sans-serif", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ color: "#FF5C00", fontWeight: 700 }}>✓</span> {item}
+                <div key={i} style={{ color: "rgba(255,255,255,0.75)", fontSize: "12px", fontFamily: "sans-serif", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                  <span style={{ color: "#FF5C00", fontWeight: 900, fontSize: "16px", marginTop: "-2px", flexShrink: 0 }}>✓</span>
+                  <span>{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Price + CTA */}
-          <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ marginTop: "auto", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ color: "#FF5C00", fontSize: "24px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", marginBottom: "12px" }}>
               {set.priceLabel}
             </div>
