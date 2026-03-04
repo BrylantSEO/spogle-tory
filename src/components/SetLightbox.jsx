@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 
+const FALLBACK_IMAGES = {
+  "Tor 12m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-12m.jpg",
+  "Tor 20m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-20m.jpg",
+  "Tor 27m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-27m.jpg",
+  "Tor 28m": "https://www.spogle.pl/wp-content/uploads/2025/02/tor-przeszkod-28m.jpg",
+  "Atomic Drop": "https://www.spogle.pl/wp-content/uploads/2025/02/IMG_1031-scaled.jpg",
+  "Zjeżdżalnia DUO": "https://www.spogle.pl/wp-content/uploads/2025/02/zjezdzalnia-dmuchana-duo.jpg",
+};
+
 export default function SetLightbox({ set, onClose, onSelect, isActive }) {
   const [segmentImages, setSegmentImages] = useState({});
+  const [hoveredComp, setHoveredComp] = useState(null);
 
   useEffect(() => {
     base44.entities.TrackSegment.list().then(data => {
