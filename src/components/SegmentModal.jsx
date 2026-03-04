@@ -193,9 +193,21 @@ export default function SegmentModal({ segment, onClose, onToggle, selected, sel
               </div>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${prices.length}, 1fr)`, gap: "8px" }}>
                 {prices.map(({ h, v }) => (
-                  <div key={h} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "10px 8px", textAlign: "center" }}>
-                    <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, fontFamily: "sans-serif", marginBottom: "4px" }}>{h}H</div>
-                    <div style={{ color: "#fff", fontSize: "15px", fontWeight: 900, fontFamily: "'Arial Black', sans-serif" }}>{v} zł</div>
+                  <div
+                    key={h}
+                    onClick={() => onSelectHours && onSelectHours(selectedHours === h ? null : h)}
+                    style={{
+                      background: selectedHours === h ? "rgba(255,92,0,0.15)" : "rgba(255,255,255,0.04)",
+                      border: selectedHours === h ? "1.5px solid #FF5C00" : "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: "10px",
+                      padding: "10px 8px",
+                      textAlign: "center",
+                      cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <div style={{ color: selectedHours === h ? "#FF5C00" : "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, fontFamily: "sans-serif", marginBottom: "4px" }}>{h}H</div>
+                    <div style={{ color: selectedHours === h ? "#FF5C00" : "#fff", fontSize: "15px", fontWeight: 900, fontFamily: "'Arial Black', sans-serif" }}>{v} zł</div>
                   </div>
                 ))}
               </div>
