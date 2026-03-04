@@ -210,52 +210,32 @@ export default function QuoteFormLightbox({
               + Dodaj kolejne tory
               <ChevronRight size={16} style={{ transition: "transform 0.2s", transform: addOpen ? "rotate(90deg)" : "rotate(0deg)" }} />
             </div>
-            {addOpen && <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-              {SEGMENTS.filter(s => !formSegments.has(s.id)).map(seg => (
-                <button
-                  key={seg.id}
-                  onClick={() => setFormSegments(prev => new Set([...prev, seg.id]))}
-                  style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    borderRadius: "8px",
-                    padding: "10px 12px",
-                    color: "#fff",
-                    fontSize: "13px",
-                    fontFamily: "sans-serif",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={e => e.target.style.borderColor = "rgba(255,92,0,0.4)"}
-                  onMouseLeave={e => e.target.style.borderColor = "rgba(255,255,255,0.07)"}
-                >
-                  {seg.name} <span style={{ color: "rgba(255,255,255,0.4)" }}>({seg.meters}m)</span>
-                </button>
-              ))}
-              {SLIDES.filter(s => !formSlides.has(s.id)).map(slide => (
-                <button
-                  key={slide.id}
-                  onClick={() => setFormSlides(prev => new Set([...prev, slide.id]))}
-                  style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    borderRadius: "8px",
-                    padding: "10px 12px",
-                    color: "#fff",
-                    fontSize: "13px",
-                    fontFamily: "sans-serif",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={e => e.target.style.borderColor = "rgba(255,92,0,0.4)"}
-                  onMouseLeave={e => e.target.style.borderColor = "rgba(255,255,255,0.07)"}
-                >
-                  {slide.name} <span style={{ color: "rgba(255,255,255,0.4)" }}>({slide.meters}m)</span>
-                </button>
-              ))}
-            </div>}
+            {addOpen && (
+              <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                {SEGMENTS.filter(s => !formSegments.has(s.id)).map(seg => (
+                  <button
+                    key={seg.id}
+                    onClick={() => setFormSegments(prev => new Set([...prev, seg.id]))}
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "10px 12px", color: "#fff", fontSize: "13px", fontFamily: "sans-serif", cursor: "pointer", textAlign: "left", transition: "all 0.2s" }}
+                    onMouseEnter={e => e.target.style.borderColor = "rgba(255,92,0,0.4)"}
+                    onMouseLeave={e => e.target.style.borderColor = "rgba(255,255,255,0.07)"}
+                  >
+                    {seg.name} <span style={{ color: "rgba(255,255,255,0.4)" }}>({seg.meters}m)</span>
+                  </button>
+                ))}
+                {SLIDES.filter(s => !formSlides.has(s.id)).map(slide => (
+                  <button
+                    key={slide.id}
+                    onClick={() => setFormSlides(prev => new Set([...prev, slide.id]))}
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "10px 12px", color: "#fff", fontSize: "13px", fontFamily: "sans-serif", cursor: "pointer", textAlign: "left", transition: "all 0.2s" }}
+                    onMouseEnter={e => e.target.style.borderColor = "rgba(255,92,0,0.4)"}
+                    onMouseLeave={e => e.target.style.borderColor = "rgba(255,255,255,0.07)"}
+                  >
+                    {slide.name} <span style={{ color: "rgba(255,255,255,0.4)" }}>({slide.meters}m)</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
