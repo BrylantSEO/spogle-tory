@@ -282,11 +282,24 @@ export default function Home() {
   });
   const totalPower = activePresetData ? activePresetData.power : (powerValues.length > 0 ? powerValues.reduce((a, b) => a + b, 0) + "A" : "0A");
 
-  const estimatedPrice = activePresetData
-    ? activePresetData.priceLabel
-    : totalPrice > 0
-    ? `od ${totalPrice} zł`
-    : "od 0 zł";
+  // Calculate price based on selected hours
+  const calcPriceWithHours = () => {
+    if (activePresetData) return activePresetData.priceLabel;
+    if (!selectedHours) return totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+    const hourKey = `price_${selectedHours}h`;
+    let total = 0;
+    let anyPrice = false;
+    [...selected].forEach(id => {
+      const dbSeg = segmentPrices[id];
+      if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+    });
+    [...selectedSlides].forEach(id => {
+      const dbSeg = segmentPrices[id];
+      if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+    });
+    return anyPrice ? `${total} zł netto` : totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+  };
+  const estimatedPrice = calcPriceWithHours();
 
   // Configurator value threshold
   useEffect(() => {
