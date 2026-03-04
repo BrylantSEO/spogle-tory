@@ -21,23 +21,30 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
       }}
     >
       {isMobile ? (
-        <>
-          <div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>
-              Szacowana cena
-            </div>
-            <div style={{ color: hasSelection ? "#FF5C00" : "rgba(255,255,255,0.3)", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
-              {hasSelection ? estimatedPrice : "0 zł"}
-            </div>
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", padding: "10px 0" }}>
+            {!canSubmit && (
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif", textAlign: "center" }}>
+                ← Wybierz segment lub gotowy set powyżej
+              </div>
+            )}
+            {canSubmit && (
+              <div>
+                <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>
+                  Szacowana cena
+                </div>
+                <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
+                  {estimatedPrice}
+                </div>
+              </div>
+            )}
+            <button
+              onClick={canSubmit ? onSubmit : undefined}
+              disabled={!canSubmit}
+              style={{ background: canSubmit ? "#FF5C00" : "rgba(255,255,255,0.1)", color: canSubmit ? "#fff" : "rgba(255,255,255,0.3)", border: "none", borderRadius: "10px", padding: "13px 22px", fontWeight: 800, fontSize: "14px", fontFamily: "sans-serif", cursor: canSubmit ? "pointer" : "not-allowed", transition: "all 0.2s", whiteSpace: "nowrap", letterSpacing: "0.2px" }}
+            >
+              Wyślij zapytanie →
+            </button>
           </div>
-          <button
-            onClick={canSubmit ? onSubmit : undefined}
-            disabled={!canSubmit}
-            style={{ background: canSubmit ? "#FF5C00" : "rgba(255,255,255,0.1)", color: canSubmit ? "#fff" : "rgba(255,255,255,0.3)", border: "none", borderRadius: "10px", padding: "13px 22px", fontWeight: 800, fontSize: "14px", fontFamily: "sans-serif", cursor: canSubmit ? "pointer" : "not-allowed", transition: "all 0.2s", whiteSpace: "nowrap", letterSpacing: "0.2px" }}
-          >
-            Wyślij zapytanie →
-          </button>
-        </>
       ) : (
         <>
           <StatPill icon="📏" label="Łączna długość" value={`${totalMeters} m`} active={totalMeters > 0} />
