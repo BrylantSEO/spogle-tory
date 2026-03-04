@@ -553,15 +553,24 @@ export default function Home() {
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "10px" }}>
-            {PRESETS.map(preset => (
-              <SetCard
-                key={preset.id}
-                set={preset}
-                isActive={activePreset === preset.id}
-                onSelect={() => applyPreset(preset)}
-                onDetail={() => { setPresetLightbox(preset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); trackClick('SetDetailOpened', { preset_id: preset.id }); }}
-              />
-            ))}
+            {PRESETS.map(preset => {
+              const override = presetData[preset.id] || {};
+              const mergedPreset = {
+                ...preset,
+                image: override.image || preset.image,
+                priceLabel: override.price_label || preset.priceLabel,
+                name: override.name || preset.name,
+              };
+              return (
+                <SetCard
+                  key={preset.id}
+                  set={mergedPreset}
+                  isActive={activePreset === preset.id}
+                  onSelect={() => applyPreset(mergedPreset)}
+                  onDetail={() => { setPresetLightbox(mergedPreset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); trackClick('SetDetailOpened', { preset_id: preset.id }); }}
+                />
+              );
+            })}
           </div>
 
           {presetLightbox && (
