@@ -394,6 +394,45 @@ export default function Home() {
 
       <SpogleHeader />
 
+      {/* Call banner */}
+      <div style={{
+        position: "fixed",
+        top: "64px",
+        left: 0,
+        right: 0,
+        zIndex: 90,
+        background: "linear-gradient(90deg, rgba(255,92,0,0.95) 0%, rgba(220,60,0,0.95) 100%)",
+        backdropFilter: "blur(8px)",
+        padding: isMobile ? "10px 16px" : "10px 32px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: isMobile ? "8px" : "20px",
+        flexWrap: "wrap",
+      }}>
+        <span style={{ color: "#fff", fontSize: isMobile ? "13px" : "14px", fontFamily: "sans-serif", fontWeight: 600, textAlign: "center" }}>
+          🤔 Nie wiesz co wybrać? <strong>Zadzwoń — doradzimy!</strong>
+        </span>
+        <a
+          href="tel:+48573177098"
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'call_banner' }); }}
+          style={{
+            background: "#fff",
+            color: "#FF5C00",
+            padding: "6px 18px",
+            borderRadius: "6px",
+            fontWeight: 800,
+            fontSize: "14px",
+            textDecoration: "none",
+            fontFamily: "sans-serif",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.2px",
+          }}
+        >
+          📞 +48 573 177 098
+        </a>
+      </div>
+
       {/* Hero */}
       <div
         className="noise-bg grid-lines"
