@@ -336,15 +336,16 @@ export default function QuoteFormLightbox({
               color: "#fff",
               border: "none",
               borderRadius: "10px",
-              padding: "14px",
+              padding: "12px 10px",
               fontWeight: 800,
-              fontSize: "15px",
+              fontSize: "clamp(11px, 3vw, 15px)",
               fontFamily: "sans-serif",
               cursor: "pointer",
-              letterSpacing: "0.3px",
+              letterSpacing: "0.2px",
               boxShadow: "0 4px 24px rgba(255,92,0,0.3)",
               transition: "opacity 0.2s",
               opacity: loading ? 0.6 : 1,
+              whiteSpace: "nowrap",
             }}
           >
             {loading ? "Wysyłanie..." : "Wyślij zapytanie — odpiszemy w 24h"}
