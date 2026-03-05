@@ -216,6 +216,8 @@ export default function PhotoGallery({ onAskAbout }) {
           tabIndex={0}
           onKeyDown={handleKeyDown}
           autoFocus
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           onClick={() => { setLightbox(null); setActiveHotpoint(null); }}
           style={{
             position: "fixed", inset: 0, zIndex: 300,
