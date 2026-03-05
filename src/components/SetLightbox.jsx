@@ -112,18 +112,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
                       {imgUrl && <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
                     </div>
                     <span style={{ color: "#fff", fontSize: "14px", fontWeight: 600, fontFamily: "sans-serif" }}>{comp}</span>
-                    {isHovered && imgUrl && (
-                      <div style={{
-                        position: "absolute", right: "calc(100% + 12px)", top: "50%", transform: "translateY(-50%)",
-                        width: "220px", height: "150px", borderRadius: "10px", overflow: "hidden",
-                        border: "2px solid rgba(255,92,0,0.6)",
-                        boxShadow: "0 12px 40px rgba(0,0,0,0.8)",
-                        zIndex: 100,
-                        pointerEvents: "none",
-                      }}>
-                        <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      </div>
-                    )}
+                    {/* hover preview rendered via portal-like state */}
                   </div>
                 );
               })}
