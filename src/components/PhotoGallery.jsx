@@ -69,6 +69,15 @@ export default function PhotoGallery({ onAskAbout }) {
   const prev = () => { setLightbox(i => (i - 1 + photos.length) % photos.length); setActiveHotpoint(null); };
   const next = () => { setLightbox(i => (i + 1) % photos.length); setActiveHotpoint(null); };
 
+  const touchStartX = useRef(null);
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+    touchStartX.current = null;
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "ArrowLeft") prev();
     if (e.key === "ArrowRight") next();
