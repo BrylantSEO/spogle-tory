@@ -55,8 +55,8 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
       >
         {/* Close */}
         <button
-          onClick={onClose}
-          style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: "32px", height: "32px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
+          style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%", width: "32px", height: "32px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 600 }}
         >×</button>
 
         {/* LEFT COLUMN — Image + Header */}
