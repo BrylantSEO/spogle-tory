@@ -100,6 +100,20 @@ export default function SpogleHeader() {
         >
           <Phone size={16} /> 573 177 098
         </a>
+        {/* Desktop: Email */}
+        <a
+          href="mailto:kontakt@spogle.pl"
+          style={{
+            color: "rgba(255,255,255,0.65)",
+            textDecoration: "none",
+            fontSize: "13px",
+            fontFamily: "sans-serif",
+            letterSpacing: "0.2px",
+            display: isMobile ? "none" : "block",
+          }}
+        >
+          kontakt@spogle.pl
+        </a>
         {/* Desktop: WhatsApp button */}
         <a
           href="https://wa.me/48573177098"
