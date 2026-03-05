@@ -95,8 +95,8 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
                 return (
                   <div
                     key={i}
-                    onMouseEnter={() => setHoveredComp(i)}
-                    onMouseLeave={() => setHoveredComp(null)}
+                    onMouseEnter={() => { setHoveredComp(i); setHoveredImg(imgUrl); }}
+                    onMouseLeave={() => { setHoveredComp(null); setHoveredImg(null); }}
                     style={{
                       display: "flex", alignItems: "center", gap: "12px",
                       background: isHovered ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
