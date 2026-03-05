@@ -29,9 +29,9 @@ export default function SpogleHeader() {
         display: "flex",
         alignItems: "center",
         padding: "0 32px",
-        justifyContent: "space-between",
-      }}
-    >
+        justifyContent: "space-between"
+      }}>
+
       {/* Logo */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div
@@ -42,9 +42,9 @@ export default function SpogleHeader() {
             borderRadius: "6px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+            justifyContent: "center"
+          }}>
+
           <span style={{ color: "#fff", fontWeight: 900, fontSize: "16px", fontFamily: "sans-serif" }}>S</span>
         </div>
         <span
@@ -53,9 +53,9 @@ export default function SpogleHeader() {
             fontWeight: 800,
             fontSize: "20px",
             letterSpacing: "-0.5px",
-            fontFamily: "'Arial Black', sans-serif",
-          }}
-        >
+            fontFamily: "'Arial Black', sans-serif"
+          }}>
+
           SPOGLE
         </span>
       </div>
@@ -65,7 +65,7 @@ export default function SpogleHeader() {
         {/* Desktop: text number */}
         <a
           href="tel:+48573177098"
-          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
+          onClick={() => {if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick');trackClick('PhoneClick', { source: 'header' });}}
           style={{
             color: "rgba(255,255,255,0.75)",
             textDecoration: "none",
@@ -73,15 +73,15 @@ export default function SpogleHeader() {
             fontWeight: 500,
             letterSpacing: "0.3px",
             fontFamily: "sans-serif",
-            display: isMobile ? "none" : "block",
-          }}
-        >
+            display: isMobile ? "none" : "block"
+          }}>
+
           +48 573 177 098
         </a>
         {/* Mobile: clickable phone number */}
         <a
           href="tel:+48573177098"
-          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'header' }); }}
+          onClick={() => {if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick');trackClick('PhoneClick', { source: 'header' });}}
           style={{
             background: "#FF5C00",
             color: "#fff",
@@ -95,9 +95,9 @@ export default function SpogleHeader() {
             whiteSpace: "nowrap",
             display: isMobile ? "flex" : "none",
             alignItems: "center",
-            gap: "6px",
-          }}
-        >
+            gap: "6px"
+          }}>
+
           <Phone size={16} /> 573 177 098
         </a>
         {/* Desktop: Email */}
@@ -109,37 +109,37 @@ export default function SpogleHeader() {
             fontSize: "13px",
             fontFamily: "sans-serif",
             letterSpacing: "0.2px",
-            display: isMobile ? "none" : "block",
-          }}
-        >
+            display: isMobile ? "none" : "block"
+          }}>
+
           kontakt@spogle.pl
         </a>
         {/* Desktop: WhatsApp button */}
-        <a
-          href="https://wa.me/48573177098"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'WhatsAppClick'); trackClick('WhatsAppClick', { source: 'header' }); }}
-          style={{
-            background: "#FF5C00",
-            color: "#fff",
-            padding: "8px 18px",
-            borderRadius: "8px",
-            fontWeight: 700,
-            fontSize: "13px",
-            textDecoration: "none",
-            fontFamily: "sans-serif",
-            letterSpacing: "0.2px",
-            whiteSpace: "nowrap",
-            transition: "background 0.2s",
-            display: isMobile ? "none" : "block",
-          }}
-          onMouseEnter={e => (e.target.style.background = "#e05200")}
-          onMouseLeave={e => (e.target.style.background = "#FF5C00")}
-        >
-          Zapytaj na WhatsApp
-        </a>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
-    </header>
-  );
+    </header>);
+
 }
