@@ -13,6 +13,7 @@ const FALLBACK_IMAGES = {
 export default function SetLightbox({ set, onClose, onSelect, isActive }) {
   const [segmentImages, setSegmentImages] = useState({});
   const [hoveredComp, setHoveredComp] = useState(null);
+  const [hoveredImg, setHoveredImg] = useState(null);
 
   useEffect(() => {
     base44.entities.TrackSegment.list().then(data => {
