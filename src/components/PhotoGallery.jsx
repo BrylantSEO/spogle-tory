@@ -55,16 +55,24 @@ const SEGMENT_BY_NAME = {
 };
 
 export default function PhotoGallery({ onAskAbout }) {
-  const [photos, setPhotos] = useState(FALLBACK_PHOTOS);
+  const [allItems, setAllItems] = useState({ photos: FALLBACK_PHOTOS, videos: [] });
   const [lightbox, setLightbox] = useState(null);
   const [activeHotpoint, setActiveHotpoint] = useState(null);
   const [hotpointSegmentModal, setHotpointSegmentModal] = useState(null);
 
   useEffect(() => {
     base44.entities.GalleryPhoto.list("sort_order", 200).then(data => {
-      if (data && data.length > 0) setPhotos(data);
+      if (data && data.length > 0) {
+        setAllItems({
+          photos: data.filter(d => !d.video_url),
+          videos: data.filter(d => !!d.video_url),
+        });
+      }
     });
   }, []);
+
+  const photos = allItems.photos;
+  const videos = allItems.videos;
 
   const prev = () => { setLightbox(i => (i - 1 + photos.length) % photos.length); setActiveHotpoint(null); };
   const next = () => { setLightbox(i => (i + 1) % photos.length); setActiveHotpoint(null); };
