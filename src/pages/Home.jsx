@@ -438,7 +438,7 @@ export default function Home() {
         className="noise-bg grid-lines"
         style={{
           minHeight: "100vh",
-          paddingTop: "64px",
+          paddingTop: "110px",
           display: "flex",
           alignItems: "stretch",
         }}
