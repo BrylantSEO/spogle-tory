@@ -154,9 +154,13 @@ export default function PhotoGallery({ onAskAbout }) {
           <div style={{ color: "#FF5C00", fontSize: "11px", fontWeight: 700, letterSpacing: "2.5px", fontFamily: "sans-serif", marginBottom: "12px" }}>
             GALERIA
           </div>
-          <h2 style={{ fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", fontSize: "40px", fontWeight: 900, color: "#fff", letterSpacing: "-0.5px", textTransform: "uppercase" }}>
+          <h2 style={{ fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", fontSize: "40px", fontWeight: 900, color: "#fff", letterSpacing: "-0.5px", textTransform: "uppercase", marginBottom: "16px" }}>
             Nasze realizacje
           </h2>
+          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "16px", fontFamily: "sans-serif", lineHeight: 1.65, maxWidth: "640px", marginBottom: "10px" }}>
+            <strong style={{ color: "#fff" }}>Tory przeszkód dopasowane do Twoich potrzeb!</strong> Zainteresowała Cię jakaś konfiguracja? Na każdym zdjęciu masz zaznaczone jakie dokładnie dmuchańce wchodzą w jej skład.{" "}
+            <span style={{ color: "rgba(255,255,255,0.7)" }}>Powiększ zdjęcie i wyślij nam zapytanie o ten dokładnie tor.</span>
+          </p>
         </div>
 
         {/* Grid */}
