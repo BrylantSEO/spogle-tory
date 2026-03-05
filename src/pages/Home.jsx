@@ -403,11 +403,11 @@ export default function Home() {
         zIndex: 90,
         background: "linear-gradient(90deg, rgba(255,92,0,0.95) 0%, rgba(220,60,0,0.95) 100%)",
         backdropFilter: "blur(8px)",
-        padding: isMobile ? "10px 16px" : "10px 32px",
-        display: "flex",
+        padding: "10px 32px",
+        display: isMobile ? "none" : "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: isMobile ? "8px" : "20px",
+        gap: "20px",
         flexWrap: "wrap",
       }}>
         <span style={{ color: "#fff", fontSize: isMobile ? "13px" : "14px", fontFamily: "sans-serif", fontWeight: 600, textAlign: "center" }}>
