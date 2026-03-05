@@ -61,12 +61,19 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
 
         {/* LEFT COLUMN — Image + Header */}
         <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-          {set.image ? (
+          {hoveredImg ? (
+            <img src={hoveredImg} alt="podgląd" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "opacity 0.2s" }} />
+          ) : set.image ? (
             <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
           ) : (
             <div style={{ width: "100%", height: "100%", background: "#111" }} />
           )}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%)" }} />
+          {hoveredImg && (
+            <div style={{ position: "absolute", top: "12px", left: "14px", background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", backdropFilter: "blur(4px)" }}>
+              podgląd
+            </div>
+          )}
           {set.badge && (
             <div style={{ position: "absolute", top: "14px", left: "14px", background: set.badgeColor || "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px" }}>
               {set.badge}
