@@ -491,7 +491,7 @@ export default function Home() {
                 marginBottom: "20px",
               }}
             >
-              TORY PRZESZKÓD · WARSZAWA I OKOLICE
+              WYNAJEM TORÓW PRZESZKÓD · CAŁA POLSKA
             </div>
 
             {/* Headline */}
@@ -523,9 +523,18 @@ export default function Home() {
                 maxWidth: "360px",
               }}
             >
-              Wybierz segmenty, które chcesz połączyć.{" "}
+              Skonfiguruj tor dopasowany do Twojej przestrzeni i budżetu.{" "}
               <span style={{ color: "rgba(255,255,255,0.7)" }}>Cena, metry i wymagany prąd liczą się na żywo.</span>
             </p>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "8px", padding: "8px 14px", marginBottom: "24px",
+              fontSize: "12px", fontFamily: "sans-serif", color: "rgba(255,255,255,0.65)",
+            }}>
+              <span style={{ color: "#4CAF50", fontWeight: 700, fontSize: "14px" }}>✓</span>
+              Dojazd <strong style={{ color: "#fff" }}>bezpłatny</strong> w promieniu 50 km od Warszawy · dalej doliczamy koszt transportu
+            </div>
 
             {/* CTA scroll button — mobile only */}
             {isMobile && (
