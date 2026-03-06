@@ -558,39 +558,35 @@ export default function Home() {
               <span style={{ color: "rgba(255,255,255,0.7)" }}>Cena, metry i wymagany prąd liczą się na żywo.</span>
             </p>
 
-            {/* Trust highlights */}
-            <div className="trust-badges" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-              {["Montaż w cenie", "Darmowy transport (Warszawa i okolice)", "Animator w cenie (80m+)"].map(badge => (
-                <div
-                  key={badge}
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "8px",
-                    padding: "8px 14px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.65)",
-                    fontFamily: "sans-serif",
-                    letterSpacing: "0.2px",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  ✓ {badge}
-                </div>
-              ))}
-            </div>
-
-            {/* How it works */}
-            <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            {/* How it works — large steps */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[
-                { icon: <MousePointer size={16} color="#FF5C00" />, text: "Wybierz segmenty lub gotowy set" },
-                { icon: <Calculator size={16} color="#FF5C00" />, text: "Zobacz cenę na żywo" },
-                { icon: <MessageSquare size={16} color="#FF5C00" />, text: "Wyślij zapytanie — odpiszemy w 24h" },
+                { num: "1", icon: <MousePointer size={22} color="#FF5C00" />, title: "Wybierz segmenty", desc: "Kliknij tory po prawej lub wybierz gotowy set" },
+                { num: "2", icon: <Calculator size={22} color="#FF5C00" />, title: "Sprawdź cenę na żywo", desc: "Cena, metry i prąd aktualizują się automatycznie" },
+                { num: "3", icon: <MessageSquare size={22} color="#FF5C00" />, title: "Wyślij zapytanie", desc: "Odpiszemy w ciągu 24h z dokładną ofertą" },
               ].map((step, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  {step.icon}
-                  <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "13px", fontFamily: "sans-serif" }}>{step.text}</span>
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+                  <div style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "rgba(255,92,0,0.12)",
+                    border: "1px solid rgba(255,92,0,0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    {step.icon}
+                  </div>
+                  <div>
+                    <div style={{ color: "#fff", fontSize: "16px", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "-0.2px", marginBottom: "3px" }}>
+                      {step.title}
+                    </div>
+                    <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.5 }}>
+                      {step.desc}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
