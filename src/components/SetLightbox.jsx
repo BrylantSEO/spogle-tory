@@ -192,7 +192,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
     );
   }
 
-  // Desktop — original two-column layout
+  // Desktop — new two-row layout
   return (
     <div
       onClick={onClose}
@@ -212,11 +212,11 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
           border: "1.5px solid rgba(255,255,255,0.1)",
           borderRadius: "16px",
           width: "100%",
-          maxWidth: "900px",
+          maxWidth: "1100px",
           overflow: "hidden",
           position: "relative",
           display: "flex",
-          minHeight: "500px",
+          flexDirection: "column",
         }}
       >
         {/* Close */}
@@ -225,38 +225,124 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
           style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%", width: "32px", height: "32px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 600 }}
         >×</button>
 
-        {/* LEFT — Image */}
-        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-          {hoveredImg ? (
-            <img src={hoveredImg} alt="podgląd" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-          ) : set.image ? (
-            <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-          ) : (
-            <div style={{ width: "100%", height: "100%", background: "#111" }} />
-          )}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%)" }} />
-          {hoveredImg && (
-            <div style={{ position: "absolute", top: "12px", left: "14px", background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", backdropFilter: "blur(4px)" }}>podgląd</div>
-          )}
-          {set.badge && (
-            <div style={{ position: "absolute", top: "14px", left: "14px", background: set.badgeColor || "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px" }}>
-              {set.badge}
+        {/* TOP ROW — 80% image + 20% components */}
+        <div style={{ display: "flex", height: "420px" }}>
+
+          {/* Image — 80% */}
+          <div style={{ flex: "0 0 80%", position: "relative", overflow: "hidden" }}>
+            {hoveredImg ? (
+              <img src={hoveredImg} alt="podgląd" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "opacity 0.2s" }} />
+            ) : set.image ? (
+              <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            ) : (
+              <div style={{ width: "100%", height: "100%", background: "#111" }} />
+            )}
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.75) 100%)" }} />
+            {hoveredImg && (
+              <div style={{ position: "absolute", top: "12px", left: "14px", background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", backdropFilter: "blur(4px)" }}>podgląd</div>
+            )}
+            {set.badge && !hoveredImg && (
+              <div style={{ position: "absolute", top: "14px", left: "14px", background: set.badgeColor || "#FF5C00", color: "#fff", fontSize: "11px", fontWeight: 800, letterSpacing: "1.2px", padding: "4px 10px", borderRadius: "5px" }}>
+                {set.badge}
+              </div>
+            )}
+            <div style={{ position: "absolute", bottom: "18px", left: "20px" }}>
+              <div style={{ color: "#fff", fontSize: "36px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "-0.5px", lineHeight: 1 }}>{set.name}</div>
+              <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "15px", fontFamily: "sans-serif", marginTop: "6px" }}>{set.meters}m · ⚡ {set.power_kw || set.power}</div>
             </div>
-          )}
-          <div style={{ position: "absolute", bottom: "14px", left: "16px" }}>
-            <div style={{ color: "#fff", fontSize: "28px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "-0.3px" }}>{set.name}</div>
-            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", fontFamily: "sans-serif", marginTop: "4px" }}>{set.meters}m · ⚡ {set.power_kw || set.power}</div>
+          </div>
+
+          {/* Components — 20% */}
+          <div style={{ flex: "0 0 20%", borderLeft: "1px solid rgba(255,255,255,0.08)", padding: "20px 16px", overflowY: "auto", display: "flex", flexDirection: "column" }}>
+            <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "9px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px", textTransform: "uppercase" }}>Skład setu</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {components.map((comp, i) => {
+                const imgUrl = segmentImages[comp] || FALLBACK_IMAGES[comp];
+                const isHovered = hoveredComp === i;
+                return (
+                  <div
+                    key={i}
+                    onMouseEnter={() => { setHoveredComp(i); setHoveredImg(imgUrl); }}
+                    onMouseLeave={() => { setHoveredComp(null); setHoveredImg(null); }}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "8px",
+                      background: isHovered ? "rgba(255,92,0,0.12)" : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${isHovered ? "rgba(255,92,0,0.4)" : "rgba(255,255,255,0.07)"}`,
+                      borderRadius: "8px",
+                      padding: "8px 10px",
+                      cursor: "default",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <div style={{ width: "36px", height: "28px", borderRadius: "4px", overflow: "hidden", flexShrink: 0, background: "#222" }}>
+                      {imgUrl && <img src={imgUrl} alt={comp} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
+                    </div>
+                    <span style={{ color: isHovered ? "#FF5C00" : "#fff", fontSize: "12px", fontWeight: 600, fontFamily: "sans-serif", lineHeight: 1.3 }}>{comp}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* RIGHT — Details */}
-        <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", overflowY: "auto", maxHeight: "90vh" }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px" }}>SKŁAD SETU</div>
-            <div style={{ marginBottom: "20px" }}><ComponentList /></div>
-            <MetaInfo />
+        {/* BOTTOM ROW — technical details + CTA */}
+        <div style={{ padding: "20px 24px", borderTop: "1px solid rgba(255,255,255,0.08)", display: "flex", gap: "16px", alignItems: "flex-start" }}>
+
+          {/* Montaż + Animatorzy */}
+          {(set.setup_time_minutes || set.animators_included > 0) && (
+            <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+              {set.setup_time_minutes && (
+                <div style={{ padding: "12px 16px", background: "rgba(255,92,0,0.12)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
+                  <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "9px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>MONTAŻ</div>
+                  <div style={{ color: "#FF5C00", fontSize: "14px", fontWeight: 800, fontFamily: "sans-serif" }}>🔧 {set.setup_time_minutes} min</div>
+                </div>
+              )}
+              {set.animators_included > 0 && (
+                <div style={{ padding: "12px 16px", background: "rgba(255,92,0,0.12)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
+                  <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "9px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>ANIMATORZY</div>
+                  <div style={{ color: "#FF5C00", fontSize: "14px", fontWeight: 800, fontFamily: "sans-serif" }}>👤 {set.animators_included}</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* W pakiecie */}
+          <div style={{ flex: 1, padding: "12px 16px", background: "rgba(255,92,0,0.06)", borderRadius: "8px", border: "1px solid rgba(255,92,0,0.2)" }}>
+            <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "8px" }}>W PAKIECIE</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px" }}>
+              {includedItems.map((item, i) => (
+                <div key={i} style={{ color: "rgba(255,255,255,0.7)", fontSize: "12px", fontFamily: "sans-serif", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ color: "#FF5C00", fontWeight: 900 }}>✓</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <CTA />
+
+          {/* Price + CTA */}
+          <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
+            <div style={{ color: "#FF5C00", fontSize: "28px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", lineHeight: 1 }}>
+              {set.priceLabel}
+            </div>
+            <button
+              onClick={() => { onSelect(); onClose(); }}
+              style={{
+                background: isActive ? "rgba(255,92,0,0.2)" : "#FF5C00",
+                color: isActive ? "#FF5C00" : "#fff",
+                border: isActive ? "1.5px solid #FF5C00" : "none",
+                borderRadius: "8px",
+                padding: "13px 28px",
+                fontSize: "15px",
+                fontWeight: 700,
+                fontFamily: "sans-serif",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.3px",
+              }}
+            >
+              {isActive ? "✓ Zaznaczony" : "Wybierz ten set"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
