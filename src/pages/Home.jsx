@@ -1110,11 +1110,12 @@ function InlineQuoteForm({ isMobile }) {
       event_date: form.event_date, location: form.location, notes: form.notes,
       selected_segments: [], total_meters: 0, estimated_price: "—", total_power: "—",
     });
-    await base44.functions.invoke("sendQuoteEmail", {
+    const webhookParams = new URLSearchParams({
       name: form.name, phone: form.phone,
-      event_date: form.event_date, location: form.location,
-      segments: "—", meters: 0, power: "—", price: "—",
+      event_date: form.event_date || "", location: form.location || "",
+      notes: form.notes || "", segments: "—", meters: 0, power: "—", price: "—",
     });
+    await fetch(`https://seodd.app.n8n.cloud/webhook-test/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
     setLoading(false);
     setSubmitted(true);
   };

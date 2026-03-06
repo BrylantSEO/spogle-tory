@@ -66,17 +66,19 @@ export default function QuoteFormLightbox({
       estimated_price: displayPrice,
       total_power: totalPower,
     });
-    // Send email notification via backend function
-    await base44.functions.invoke('sendQuoteEmail', {
+    // Send notification via n8n webhook
+    const webhookParams = new URLSearchParams({
       name: form.name,
       phone: form.phone,
-      event_date: form.event_date,
-      location: form.location,
+      event_date: form.event_date || "",
+      location: form.location || "",
+      notes: form.notes || "",
       segments: allSegmentNames.join(", "),
       meters: calculatedMeters,
       power: totalPower,
       price: displayPrice,
     });
+    await fetch(`https://seodd.app.n8n.cloud/webhook-test/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
     setLoading(false);
     setSubmitted(true);
     fbq('track', 'Lead');
