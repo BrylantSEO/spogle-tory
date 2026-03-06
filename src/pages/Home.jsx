@@ -13,6 +13,7 @@ import QuoteForm from "../components/QuoteForm";
 import QuoteFormLightbox from "../components/QuoteFormLightbox";
 import SegmentModal from "../components/SegmentModal";
 import PhotoGallery from "../components/PhotoGallery";
+import { getSeasonInfo } from "../lib/seasonUtils";
 
 const SEGMENTS = [
   {
@@ -357,6 +358,7 @@ export default function Home() {
   }, [selected, selectedSlides]);
 
   const hasSelection2 = hasSelection || !!activePreset;
+  const currentSeasonInfo = getSeasonInfo();
 
   return (
     <div
@@ -591,6 +593,35 @@ export default function Home() {
                     setActivePreset(null);
                   }}
                 />
+              </div>
+            )}
+
+            {/* Seasonal banner */}
+            {currentSeasonInfo.banner && (
+              <div style={{
+                marginTop: "16px",
+                background: currentSeasonInfo.banner.bg,
+                border: `1.5px solid ${currentSeasonInfo.banner.border}`,
+                borderRadius: "12px",
+                padding: "14px 18px",
+                display: "flex",
+                gap: "12px",
+                alignItems: "flex-start",
+              }}>
+                <span style={{ fontSize: "22px", flexShrink: 0 }}>{currentSeasonInfo.banner.icon}</span>
+                <div>
+                  <div style={{ color: currentSeasonInfo.banner.color, fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", marginBottom: "3px" }}>
+                    {currentSeasonInfo.banner.title}
+                    {currentSeasonInfo.discountPercent > 0 && (
+                      <span style={{ marginLeft: "8px", background: currentSeasonInfo.banner.color, color: "#000", borderRadius: "4px", padding: "1px 7px", fontSize: "11px", fontWeight: 900 }}>
+                        -{currentSeasonInfo.discountPercent}%
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", lineHeight: 1.5 }}>
+                    {currentSeasonInfo.banner.text}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -930,6 +961,7 @@ export default function Home() {
         selectedHours={selectedHours}
         onSelectHours={setSelectedHours}
         isPreset={!!activePreset}
+        isHighSeason={currentSeasonInfo.type === "highseason"}
         discountPercent={discountPercent}
         discountAmount={discountAmount}
         needsCustomQuote={needsCustomQuote}

@@ -1,7 +1,7 @@
 const ALL_HOURS = [3, 4, 5, 6, 8];
 
-export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile, selectedHours, onSelectHours, isPreset, discountPercent, discountAmount, needsCustomQuote }) {
-  const HOURS = isPreset ? ALL_HOURS.filter(h => h >= 5) : ALL_HOURS;
+export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile, selectedHours, onSelectHours, isPreset, isHighSeason, discountPercent, discountAmount, needsCustomQuote }) {
+  const HOURS = (isPreset || isHighSeason) ? ALL_HOURS.filter(h => h >= 5) : ALL_HOURS;
   return (
     <div
       style={{

@@ -3,6 +3,7 @@ import { Zap, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { trackClick, session as trackerSession } from "./internalTracker";
 import { isReturningVisitor, hadFormOpened, DISCOUNT_CODE } from "./returningVisitor";
+import { getSeasonInfo } from "@/lib/seasonUtils";
 
 function fbq(...args) {
   if (typeof window.fbq === 'function') window.fbq(...args);
@@ -32,6 +33,7 @@ export default function QuoteFormLightbox({
   const [addOpen, setAddOpen] = useState(false);
   const nameFocusedRef = useRef(false);
   const showDiscount = isReturningVisitor() && hadFormOpened();
+  const seasonInfo = getSeasonInfo(form.event_date);
 
   // Persist form data to localStorage on change
   const updateForm = (newForm) => {
@@ -331,6 +333,35 @@ export default function QuoteFormLightbox({
               />
             </div>
           </div>
+
+          {/* Seasonal banner */}
+          {seasonInfo.banner && (
+            <div style={{
+              background: seasonInfo.banner.bg,
+              border: `1.5px solid ${seasonInfo.banner.border}`,
+              borderRadius: "10px",
+              padding: "12px 16px",
+              marginBottom: "12px",
+              display: "flex",
+              gap: "12px",
+              alignItems: "flex-start",
+            }}>
+              <span style={{ fontSize: "20px", flexShrink: 0 }}>{seasonInfo.banner.icon}</span>
+              <div>
+                <div style={{ color: seasonInfo.banner.color, fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", marginBottom: "3px" }}>
+                  {seasonInfo.banner.title}
+                  {seasonInfo.discountPercent > 0 && (
+                    <span style={{ marginLeft: "8px", background: seasonInfo.banner.color, color: "#000", borderRadius: "4px", padding: "1px 7px", fontSize: "11px", fontWeight: 900 }}>
+                      -{seasonInfo.discountPercent}%
+                    </span>
+                  )}
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", lineHeight: 1.5 }}>
+                  {seasonInfo.banner.text}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div style={{ marginBottom: "12px" }}>
             <label style={labelStyle}>DODATKOWE INFORMACJE (OPCJONALNIE)</label>
