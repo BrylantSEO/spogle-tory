@@ -959,6 +959,12 @@ export default function Home() {
         </div>
       </div>
 
+      {/* FAQ */}
+      <FaqSection isMobile={isMobile} />
+
+      {/* Inline contact form */}
+      <InlineQuoteForm isMobile={isMobile} />
+
       {/* Quote Form Lightbox */}
       {showForm && (
         <QuoteFormLightbox
@@ -996,6 +1002,179 @@ export default function Home() {
         }}
         isMobile={isMobile}
       />
+    </div>
+  );
+}
+
+const FAQ_ITEMS = [
+  {
+    q: "Na jak długo wynajmujecie tor przeszkód?",
+    a: "Standardowo wynajmujemy tory na 3–8 godzin. Najczęściej wybierane są pakiety 5h i 6h. Czas pracy liczymy od momentu gotowości do użytkowania przez uczestników.",
+  },
+  {
+    q: "Co wchodzi w skład ceny wynajmu?",
+    a: "Cena zawiera transport (w promieniu do 50 km od Warszawy), montaż i demontaż, obsługę animatorską, okablowanie, rozdzielnicę elektryczną, sztuczną trawę pod tor oraz kotwy montażowe.",
+  },
+  {
+    q: "Ile miejsca potrzebuję na ustawienie toru?",
+    a: "Do długości toru doliczyć należy ok. 3–5 m przed wejściem i wyjściem. Szerokość to ok. 4–5 m. Teren powinien być w miarę równy — trawa, asfalt, kostka brukowa.",
+  },
+  {
+    q: "Czy dostosujecie tor do konkretnej przestrzeni?",
+    a: "Tak. Możemy łączyć różne segmenty i konfigurować układ toru pod dany teren. Napisz do nas z wymiarami miejsca, a dobierzemy odpowiednie elementy.",
+  },
+  {
+    q: "Jakie jest minimalne zapotrzebowanie na prąd?",
+    a: "Tor 12m wymaga osobnego obwodu 16A/230V. Większe konfiguracje — od 32A do 63A (400V, trójfazowe). Szczegóły dostępne przy każdym segmencie. Posiadamy własne rozdzielnice.",
+  },
+  {
+    q: "Czy wymagana jest zaliczka?",
+    a: "Tak, po ustaleniu szczegółów pobieramy zaliczkę rezerwacyjną. Zabezpiecza ona wybrany termin. Pozostała kwota płatna jest w dniu realizacji eventu.",
+  },
+  {
+    q: "Jak szybko otrzymam wycenę po wysłaniu zapytania?",
+    a: "Odpowiadamy w ciągu kilku godzin w dni robocze — najczęściej w przeciągu 1–2 godzin. W nagłych przypadkach możesz też zadzwonić bezpośrednio.",
+  },
+];
+
+function FaqSection({ isMobile }) {
+  const [openIdx, setOpenIdx] = useState(null);
+  return (
+    <div style={{ padding: isMobile ? "40px 16px" : "60px 48px", maxWidth: "860px", margin: "0 auto", width: "100%" }}>
+      <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "28px", textAlign: "center" }}>
+        NAJCZĘSTSZE PYTANIA
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {FAQ_ITEMS.map((item, i) => {
+          const isOpen = openIdx === i;
+          return (
+            <div
+              key={i}
+              style={{
+                background: isOpen ? "rgba(255,92,0,0.07)" : "rgba(255,255,255,0.03)",
+                border: `1px solid ${isOpen ? "rgba(255,92,0,0.3)" : "rgba(255,255,255,0.08)"}`,
+                borderRadius: "12px",
+                overflow: "hidden",
+                transition: "all 0.2s",
+              }}
+            >
+              <button
+                onClick={() => setOpenIdx(isOpen ? null : i)}
+                style={{
+                  width: "100%", textAlign: "left", background: "none", border: "none",
+                  padding: "16px 18px", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
+                }}
+              >
+                <span style={{ color: isOpen ? "#FF5C00" : "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "sans-serif", lineHeight: 1.4 }}>
+                  {item.q}
+                </span>
+                <span style={{ color: "#FF5C00", fontSize: "18px", fontWeight: 700, flexShrink: 0, transform: isOpen ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</span>
+              </button>
+              {isOpen && (
+                <div style={{ padding: "0 18px 16px", color: "rgba(255,255,255,0.65)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.7 }}>
+                  {item.a}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function InlineQuoteForm({ isMobile }) {
+  const [form, setForm] = useState(() => {
+    try {
+      const saved = localStorage.getItem("spogle_quote_form");
+      if (saved) return { notes: "", ...JSON.parse(saved) };
+    } catch {}
+    return { name: "", phone: "", event_date: "", location: "", notes: "" };
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const updateForm = (key, val) => {
+    const next = { ...form, [key]: val };
+    setForm(next);
+    try { localStorage.setItem("spogle_quote_form", JSON.stringify(next)); } catch {}
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.phone) return;
+    setLoading(true);
+    await base44.entities.QuoteRequest.create({
+      name: form.name, phone: form.phone,
+      event_date: form.event_date, location: form.location, notes: form.notes,
+      selected_segments: [], total_meters: 0, estimated_price: "—", total_power: "—",
+    });
+    await base44.functions.invoke("sendQuoteEmail", {
+      name: form.name, phone: form.phone,
+      event_date: form.event_date, location: form.location,
+      segments: "—", meters: 0, power: "—", price: "—",
+    });
+    setLoading(false);
+    setSubmitted(true);
+  };
+
+  const inputStyle = {
+    width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: "10px", padding: "13px 14px", color: "#fff", fontSize: "14px", fontFamily: "sans-serif",
+    outline: "none", boxSizing: "border-box",
+  };
+
+  return (
+    <div style={{ padding: isMobile ? "0 16px 80px" : "0 48px 80px", maxWidth: "860px", margin: "0 auto", width: "100%" }}>
+      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "16px", padding: isMobile ? "24px 16px" : "36px 40px" }}>
+        <div style={{ marginBottom: "24px" }}>
+          <div style={{ color: "#FF5C00", fontSize: isMobile ? "22px" : "26px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", marginBottom: "6px" }}>
+            Zapytaj o wycenę
+          </div>
+          <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif" }}>
+            Odpowiemy w ciągu kilku godzin. Możesz też zadzwonić: <span style={{ color: "#FF5C00", fontWeight: 700 }}>+48 573 177 098</span>
+          </div>
+        </div>
+
+        {submitted ? (
+          <div style={{ textAlign: "center", padding: "32px 0" }}>
+            <div style={{ fontSize: "40px", marginBottom: "12px" }}>✓</div>
+            <div style={{ color: "#fff", fontSize: "18px", fontWeight: 800, fontFamily: "sans-serif", marginBottom: "6px" }}>Zapytanie wysłane!</div>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif" }}>Odezwiemy się wkrótce.</div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "12px" }}>
+              <input style={inputStyle} placeholder="Imię i nazwisko *" value={form.name} onChange={e => updateForm("name", e.target.value)} required />
+              <input style={inputStyle} placeholder="Telefon *" value={form.phone} onChange={e => updateForm("phone", e.target.value)} required />
+              <input style={inputStyle} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} />
+              <input style={inputStyle} placeholder="Miejscowość / adres" value={form.location} onChange={e => updateForm("location", e.target.value)} />
+            </div>
+            <textarea
+              style={{ ...inputStyle, resize: "vertical", minHeight: "90px" }}
+              placeholder="Uwagi, pytania, szczegóły eventu..."
+              value={form.notes}
+              onChange={e => updateForm("notes", e.target.value)}
+            />
+            <button
+              type="submit"
+              disabled={loading || !form.name || !form.phone}
+              style={{
+                background: loading || !form.name || !form.phone ? "rgba(255,255,255,0.1)" : "#FF5C00",
+                color: loading || !form.name || !form.phone ? "rgba(255,255,255,0.3)" : "#fff",
+                border: "none", borderRadius: "10px", padding: "14px 28px",
+                fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif",
+                cursor: loading || !form.name || !form.phone ? "not-allowed" : "pointer",
+                alignSelf: isMobile ? "stretch" : "flex-start",
+                transition: "all 0.2s", letterSpacing: "0.3px",
+              }}
+            >
+              {loading ? "Wysyłanie..." : "Wyślij zapytanie →"}
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
