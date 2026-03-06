@@ -462,7 +462,7 @@ export default function Home() {
             width: "100%",
             maxWidth: "1400px",
             margin: "0 auto",
-            padding: isMobile ? "24px 16px 120px" : "40px 48px",
+            padding: isMobile ? "24px 16px 0" : "40px 48px",
             display: "flex",
             gap: "0",
             alignItems: "flex-start",
