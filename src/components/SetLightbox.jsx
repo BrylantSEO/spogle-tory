@@ -92,7 +92,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
         {/* RIGHT COLUMN — Components + Price */}
          <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", overflowY: "auto", maxHeight: "100%", position: "relative", zIndex: 10 }}>
            <div style={{ flex: 1, overflowY: "auto" }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px" }}>
+            <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "12px" }}>
               SKŁAD SETU
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -124,7 +124,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
                 );
               })}
               {components.length === 0 && (
-                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "13px", fontFamily: "sans-serif" }}>Brak elementów</div>
+                <div style={{ color: "rgba(255,255,255,0.82)", fontSize: "13px", fontFamily: "sans-serif" }}>Brak elementów</div>
               )}
             </div>
           </div>
@@ -133,13 +133,13 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
           <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
             {set.setup_time_minutes && (
               <div style={{ flex: 1, padding: "12px", background: "rgba(255,92,0,0.15)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
-                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>MONTAŻ</div>
+                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>MONTAŻ</div>
                 <div style={{ color: "#FF5C00", fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif" }}>🔧 {set.setup_time_minutes} min</div>
               </div>
             )}
             {set.animators_included && set.animators_included > 0 && (
               <div style={{ flex: 1, padding: "12px", background: "rgba(255,92,0,0.15)", borderRadius: "8px", borderLeft: "3px solid #FF5C00" }}>
-                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>ANIMATORZY</div>
+                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "10px", fontWeight: 700, letterSpacing: "1px", fontFamily: "sans-serif", marginBottom: "4px" }}>ANIMATORZY</div>
                 <div style={{ color: "#FF5C00", fontSize: "15px", fontWeight: 800, fontFamily: "sans-serif" }}>👤 {set.animators_included}</div>
               </div>
             )}
@@ -147,7 +147,7 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
 
           {/* Included items */}
           <div style={{ marginBottom: "20px", padding: "14px", background: "rgba(255,92,0,0.08)", borderRadius: "10px", border: "1px solid rgba(255,92,0,0.3)" }}>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "10px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "10px", textTransform: "uppercase" }}>W PAKIECIE</div>
+            <div style={{ color: "rgba(255,255,255,0.78)", fontSize: "10px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "10px", textTransform: "uppercase" }}>W PAKIECIE</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {[
                 "Okablowanie (kable + siła)",

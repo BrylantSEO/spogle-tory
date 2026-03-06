@@ -546,7 +546,7 @@ export default function Home() {
             {/* Subline */}
             <p
               style={{
-                color: "rgba(255,255,255,0.5)",
+                color: "rgba(255,255,255,0.78)",
                 fontSize: "17px",
                 lineHeight: 1.6,
                 fontFamily: "sans-serif",
@@ -634,7 +634,7 @@ export default function Home() {
             {/* Section label */}
             <div
               style={{
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(255,255,255,0.6)",
                 fontSize: "11px",
                 fontWeight: 700,
                 letterSpacing: "2.5px",
@@ -666,7 +666,7 @@ export default function Home() {
             {/* Slides section */}
             <div
               style={{
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(255,255,255,0.6)",
                 fontSize: "11px",
                 fontWeight: 700,
                 letterSpacing: "2.5px",
@@ -740,7 +740,7 @@ export default function Home() {
             <div style={{ color: "#FF5C00", fontSize: "22px", fontWeight: 900, letterSpacing: "-0.3px", fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", textTransform: "uppercase", marginBottom: "4px" }}>
               Lub wybierz gotowy set
             </div>
-            <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif" }}>
               Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
             </div>
           </div>
@@ -748,7 +748,7 @@ export default function Home() {
           {/* When to choose preset vs custom */}
           <div style={{ marginBottom: "28px" }}>
             <div style={{
-              color: "rgba(255,255,255,0.25)",
+              color: "rgba(255,255,255,0.82)",
               fontSize: "11px",
               fontWeight: 700,
               letterSpacing: "2.5px",
@@ -772,7 +772,7 @@ export default function Home() {
                 <div style={{ color: "#FF5C00", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
                   Gotowy set — kiedy?
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
                   Wybierz jeden z naszych sprawdzonych zestawów
                 </div>
                 <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -798,7 +798,7 @@ export default function Home() {
                 <div style={{ color: "rgba(255,255,255,0.8)", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
                   Własne zestawienie — kiedy?
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
                   Kliknij segmenty wyżej i ułóż tor pod siebie
                 </div>
                 <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -808,8 +808,8 @@ export default function Home() {
                     "Konkretny układ terenu wymaga niestandardowej konfiguracji",
                     "Masz określony budżet i sam decydujesz co wchodzi w skład",
                   ].map((item, i) => (
-                    <li key={i} style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                      <span style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0, marginTop: "1px" }}>→</span>
+                    <li key={i} style={{ color: "rgba(255,255,255,0.82)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                      <span style={{ color: "rgba(255,255,255,0.6)", flexShrink: 0, marginTop: "1px" }}>→</span>
                       {item}
                     </li>
                   ))}
@@ -884,7 +884,7 @@ export default function Home() {
                 <div style={{ color: "#fff", fontSize: isMobile ? "24px" : "30px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", lineHeight: 1, letterSpacing: "-0.5px" }}>
                   {item.value}
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px", fontFamily: "sans-serif", marginTop: "4px", lineHeight: 1.4 }}>
+                <div style={{ color: "rgba(255,255,255,0.72)", fontSize: "12px", fontFamily: "sans-serif", marginTop: "4px", lineHeight: 1.4 }}>
                   {item.label}
                 </div>
               </div>
@@ -895,7 +895,7 @@ export default function Home() {
 
       {/* Testimonials */}
       <div style={{ padding: isMobile ? "0 16px 40px" : "0 48px 60px", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "32px", textAlign: "center" }}>
+        <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "32px", textAlign: "center" }}>
           CO MÓWIĄ KLIENCI
         </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "16px" }}>
@@ -907,14 +907,14 @@ export default function Home() {
             <div key={i} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
                 <span style={{ color: "#FF5C00", fontSize: "16px" }}>★★★★★</span>
-                <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>{r.ago}</span>
+                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif" }}>{r.ago}</span>
               </div>
               <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: "1.6", marginBottom: "16px" }}>
                 "{r.text}"
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>{r.author}</span>
-                <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", fontFamily: "sans-serif" }}>· Google</span>
+                <span style={{ color: "rgba(255,255,255,0.78)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>{r.author}</span>
+                <span style={{ color: "rgba(255,255,255,0.82)", fontSize: "11px", fontFamily: "sans-serif" }}>· Google</span>
               </div>
             </div>
           ))}

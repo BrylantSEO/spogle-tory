@@ -181,7 +181,7 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
 
         <div
           style={{
-            color: "rgba(255,255,255,0.4)",
+            color: "rgba(255,255,255,0.7)",
             fontSize: "11px",
             marginTop: "3px",
             fontFamily: "sans-serif",
@@ -200,7 +200,7 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
+            <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif" }}>
               ⚡ {segment.power}
             </span>
             <span

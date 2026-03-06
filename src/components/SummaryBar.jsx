@@ -30,7 +30,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
         <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "10px 0" }}>
           {/* Hours picker */}
           <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px" }}>Liczba godzin:</span>
+            <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px" }}>Liczba godzin:</span>
             {HOURS.map(h => (
               <button
                 key={h}
@@ -51,7 +51,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
             <div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif" }}>Szacowana cena</div>
+              <div style={{ color: "rgba(255,255,255,0.78)", fontSize: "11px", fontFamily: "sans-serif" }}>Szacowana cena</div>
               <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
                 {estimatedPrice}
               </div>
@@ -61,7 +61,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
                 </div>
               )}
               {needsCustomQuote && (
-                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px" }}>
+                <div style={{ color: "rgba(255,255,255,0.72)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px" }}>
                   Podaj maila — wycenimy indywidualnie
                 </div>
               )}
@@ -82,7 +82,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
           <Divider />
           {/* Hours picker */}
           <div style={{ display: "flex", gap: "6px", alignItems: "center", padding: "0 16px" }}>
-            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px", whiteSpace: "nowrap" }}>⏱ Godziny:</span>
+            <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontFamily: "sans-serif", marginRight: "4px", whiteSpace: "nowrap" }}>⏱ Godziny:</span>
             {HOURS.map(h => (
               <button
                 key={h}
@@ -104,7 +104,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
           </div>
           <Divider />
           <div style={{ padding: "0 16px", minWidth: "140px" }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "3px", letterSpacing: "0.3px" }}>
+            <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "3px", letterSpacing: "0.3px" }}>
               💰 Szacowana cena
             </div>
             <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "16px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.4px" }}>
@@ -116,7 +116,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
               </div>
             )}
             {needsCustomQuote && (
-              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px", whiteSpace: "nowrap" }}>
+              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px", whiteSpace: "nowrap" }}>
                 Podaj maila — wycenimy indywidualnie
               </div>
             )}
@@ -140,7 +140,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
 function StatPill({ icon, label, value, active, orange }) {
   return (
     <div style={{ padding: "0 16px", minWidth: "120px" }}>
-      <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "3px", letterSpacing: "0.3px" }}>
+      <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "3px", letterSpacing: "0.3px" }}>
         {icon} {label}
       </div>
       <div

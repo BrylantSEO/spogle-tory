@@ -64,12 +64,12 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
           </span>
         </div>
 
-        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontFamily: "sans-serif", lineHeight: 1.4, marginBottom: "10px" }}>
+        <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "11px", fontFamily: "sans-serif", lineHeight: 1.4, marginBottom: "10px" }}>
           {set.components.join(" + ")}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
-          <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
+          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif" }}>
             ⚡ {set.power_kw ? `${set.power_kw} kW` : set.power}
           </span>
           <span style={{ color: "#FF5C00", fontSize: "14px", fontWeight: 700, fontFamily: "'Arial Black', sans-serif" }}>
@@ -77,7 +77,7 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
           </span>
         </div>
         {set.setup_time_minutes && (
-          <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "8px" }}>
+          <div style={{ color: "rgba(255,255,255,0.78)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "8px" }}>
             🔧 Montaż: {set.setup_time_minutes} min
           </div>
         )}
