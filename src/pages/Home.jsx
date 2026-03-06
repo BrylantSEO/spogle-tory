@@ -178,6 +178,7 @@ export default function Home() {
   useEffect(() => {
     initSession();
     fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+    gtag('event', 'page_view', { page_title: 'Tor Przeszkód Konfigurator' });
     // Track returning visitor
     const visitData = recordVisit();
     if (visitData.visit_count >= 3) {
@@ -210,6 +211,7 @@ export default function Home() {
       setSelectedSlides(new Set());
     } else {
       fbq('trackCustom', 'PresetSelected', { preset_id: preset.id, meters: preset.meters });
+      gtag('event', 'select_item', { item_id: preset.id, item_name: preset.name, item_category: 'preset' });
       trackClick('PresetSelected', { preset_id: preset.id, meters: preset.meters });
       setActivePreset(preset.id);
       setSelected(new Set(preset.segmentIds));
@@ -228,6 +230,7 @@ export default function Home() {
         next.delete(id);
       } else {
         fbq('trackCustom', 'SegmentSelected', { segment_id: id });
+        gtag('event', 'select_content', { content_type: 'segment', content_id: id });
         trackClick('SegmentSelected', { segment_id: id });
         next.add(id);
       }
@@ -244,6 +247,7 @@ export default function Home() {
         next.delete(id);
       } else {
         fbq('trackCustom', 'SlideSelected', { slide_id: id });
+        gtag('event', 'select_content', { content_type: 'slide', content_id: id });
         trackClick('SlideSelected', { slide_id: id });
         next.add(id);
       }
@@ -350,6 +354,7 @@ export default function Home() {
       if (totalPrice >= threshold && !firedValueRef.current.has(threshold)) {
         firedValueRef.current.add(threshold);
         fbq('trackCustom', 'ConfiguratorHighValue', { threshold });
+        gtag('event', 'add_to_cart', { value: threshold, currency: 'PLN' });
       }
     });
   }, [totalPrice]);
@@ -432,7 +437,7 @@ export default function Home() {
         </span>
         <a
           href="tel:+48573177098"
-          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'call_banner' }); }}
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); gtag('event', 'contact', { method: 'phone', source: 'call_banner' }); trackClick('PhoneClick', { source: 'call_banner' }); }}
           style={{
             background: "#fff",
             color: "#FF5C00",
@@ -1000,6 +1005,7 @@ export default function Home() {
         onSubmit={() => {
           fbq('track', 'InitiateCheckout');
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          gtag('event', 'generate_lead', { value: typeof estimatedPrice === 'number' ? estimatedPrice : undefined, currency: 'PLN' });
           trackClick('FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
           trackerSession.form_opened = true;
           markFormOpened();
