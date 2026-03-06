@@ -58,6 +58,7 @@ export default function AdminSegments() {
       price_5h: existing.price_5h || "",
       price_6h: existing.price_6h || "",
       price_8h: existing.price_8h || "",
+      total_power_kw: existing.total_power_kw || "",
       blowers_count: existing.blowers_count || "",
       blower_power_kw: existing.blower_power_kw || "",
       id: existing.id || null,
@@ -80,6 +81,7 @@ export default function AdminSegments() {
       price_5h: form.price_5h ? Number(form.price_5h) : null,
       price_6h: form.price_6h ? Number(form.price_6h) : null,
       price_8h: form.price_8h ? Number(form.price_8h) : null,
+      total_power_kw: form.total_power_kw ? Number(form.total_power_kw) : null,
       blowers_count: form.blowers_count ? Number(form.blowers_count) : null,
       blower_power_kw: form.blower_power_kw ? Number(form.blower_power_kw) : null,
     };
@@ -561,9 +563,25 @@ export default function AdminSegments() {
                 </div>
               </div>
 
+              {/* Power */}
+              <div>
+                <label style={labelStyle}>WYMAGANA MOC (kW)</label>
+                <input
+                  style={inputStyle}
+                  type="number"
+                  step="0.1"
+                  value={form.total_power_kw}
+                  onChange={e => setForm(f => ({ ...f, total_power_kw: e.target.value }))}
+                  placeholder="np. 3.5"
+                />
+                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", marginTop: "4px" }}>
+                  Łączna moc pobierana przez ten tor (wyświetlana na karcie i w konfiguratorze).
+                </div>
+              </div>
+
               {/* Blowers */}
               <div>
-                <label style={labelStyle}>DMUCHAWY</label>
+                <label style={labelStyle}>DMUCHAWY (opcjonalnie)</label>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   <div>
                     <label style={{ ...labelStyle, marginBottom: "3px" }}>LICZBA DMUCHAW</label>

@@ -298,8 +298,13 @@ export default function Home() {
     if (!nums) return 0;
     return parseFloat(nums[nums.length - 1]);
   };
+  const getEffectivePowerKw = (seg) => {
+    const db = segmentPrices[seg.id];
+    if (db?.total_power_kw) return db.total_power_kw;
+    return parsePowerKw(seg.power);
+  };
   const allPowerItems = [...selectedSegments, ...selectedSlideItems];
-  const totalPowerNum = allPowerItems.reduce((sum, s) => sum + parsePowerKw(s.power), 0);
+  const totalPowerNum = allPowerItems.reduce((sum, s) => sum + getEffectivePowerKw(s), 0);
   const totalPower = activePresetData ? activePresetData.power : (totalPowerNum > 0 ? totalPowerNum.toFixed(1).replace(/\.0$/, "") + " kW" : "0 kW");
 
   // Calculate price based on selected hours
@@ -614,15 +619,19 @@ export default function Home() {
 
             {/* Cards grid */}
             <div className="segment-grid">
-              {SEGMENTS.map(segment => (
-                <SegmentCard
-                  key={segment.id}
-                  segment={segment}
-                  selected={selected.has(segment.id)}
-                  onToggle={() => toggleSegment(segment.id)}
-                  onOpenDetail={() => { setModalSegment(segment); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); trackClick('SegmentDetailOpened', { segment_id: segment.id }); }}
-                />
-              ))}
+              {SEGMENTS.map(segment => {
+                const dbPow = segmentPrices[segment.id]?.total_power_kw;
+                const seg = dbPow ? { ...segment, power: `${dbPow} kW` } : segment;
+                return (
+                  <SegmentCard
+                    key={segment.id}
+                    segment={seg}
+                    selected={selected.has(segment.id)}
+                    onToggle={() => toggleSegment(segment.id)}
+                    onOpenDetail={() => { setModalSegment(seg); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); trackClick('SegmentDetailOpened', { segment_id: segment.id }); }}
+                  />
+                );
+              })}
             </div>
 
             {/* Slides section */}
@@ -640,15 +649,19 @@ export default function Home() {
               DODAJ ZJEŻDŻALNIĘ (OPCJONALNIE)
             </div>
             <div className="segment-grid">
-              {SLIDES.map(slide => (
-                <SegmentCard
-                  key={slide.id}
-                  segment={slide}
-                  selected={selectedSlides.has(slide.id)}
-                  onToggle={() => toggleSlide(slide.id)}
-                  onOpenDetail={() => { setModalSegment(slide); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); trackClick('SegmentDetailOpened', { segment_id: slide.id }); }}
-                />
-              ))}
+              {SLIDES.map(slide => {
+                const dbPow = segmentPrices[slide.id]?.total_power_kw;
+                const sl = dbPow ? { ...slide, power: `${dbPow} kW` } : slide;
+                return (
+                  <SegmentCard
+                    key={slide.id}
+                    segment={sl}
+                    selected={selectedSlides.has(slide.id)}
+                    onToggle={() => toggleSlide(slide.id)}
+                    onOpenDetail={() => { setModalSegment(sl); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); trackClick('SegmentDetailOpened', { segment_id: slide.id }); }}
+                  />
+                );
+              })}
             </div>
 
             {/* Additional attractions upsell */}
