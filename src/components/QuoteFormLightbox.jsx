@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { trackCustom } from "../utils/tracking";
+import { trackCustom } from "../components/tracking";
 
 export default function QuoteFormLightbox({
   initialSegments,

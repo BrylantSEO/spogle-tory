@@ -8,7 +8,7 @@ import QuoteForm from "../components/QuoteForm";
 import QuoteFormLightbox from "../components/QuoteFormLightbox";
 import SegmentModal from "../components/SegmentModal";
 import PhotoGallery from "../components/PhotoGallery";
-import { track, trackCustom } from "../utils/tracking";
+import { track, trackCustom } from "../components/tracking";
 
 const SEGMENTS = [
   {
