@@ -37,7 +37,7 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
         border: selected
           ? "1.5px solid #FF5C00"
           : hovered
-          ? "1.5px solid rgba(255,255,255,0.28)"
+          ? "1.5px solid rgba(255,92,0,0.55)"
           : isGiga
           ? "1.5px solid rgba(255,255,255,0.12)"
           : "1.5px solid rgba(255,255,255,0.07)",
@@ -101,29 +101,27 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
           </div>
         )}
 
-        {/* Checkbox */}
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            width: "22px",
-            height: "22px",
-            borderRadius: "5px",
-            border: selected ? "none" : "2px solid rgba(255,255,255,0.4)",
-            background: selected ? "#FF5C00" : "rgba(0,0,0,0.4)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.15s ease",
-          }}
-        >
-          {selected && (
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path d="M1 4L4.2 7.5L10 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-        </div>
+        {/* Selected badge */}
+        {selected && (
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              background: "#FF5C00",
+              color: "#fff",
+              fontSize: "10px",
+              fontWeight: 800,
+              letterSpacing: "0.5px",
+              padding: "3px 8px",
+              borderRadius: "5px",
+              fontFamily: "sans-serif",
+              pointerEvents: "none",
+            }}
+          >
+            ✓ Dodano
+          </div>
+        )}
 
         {/* "Szczegóły" button */}
         <button
@@ -201,20 +199,41 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
             marginTop: "10px",
           }}
         >
-          <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
-            ⚡ {segment.power}
-          </span>
-          <span
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif" }}>
+              ⚡ {segment.power}
+            </span>
+            <span
+              style={{
+                color: segment.priceLabel ? "#FF5C00" : selected ? "#FF5C00" : "rgba(255,255,255,0.7)",
+                fontSize: isGiga ? "14px" : "13px",
+                fontWeight: 700,
+                fontFamily: "'Arial Black', sans-serif",
+                transition: "color 0.15s",
+              }}
+            >
+              {segment.priceLabel || `od ${segment.price} zł`}
+            </span>
+          </div>
+          <button
+            onClick={e => { e.stopPropagation(); onToggle(); }}
             style={{
-              color: segment.priceLabel ? "#FF5C00" : selected ? "#FF5C00" : "rgba(255,255,255,0.7)",
-              fontSize: isGiga ? "14px" : "13px",
-              fontWeight: 700,
-              fontFamily: "'Arial Black', sans-serif",
-              transition: "color 0.15s",
+              background: selected ? "rgba(255,92,0,0.15)" : "#FF5C00",
+              color: selected ? "#FF5C00" : "#fff",
+              border: selected ? "1px solid rgba(255,92,0,0.4)" : "none",
+              borderRadius: "6px",
+              padding: "5px 12px",
+              fontSize: "11px",
+              fontWeight: 800,
+              fontFamily: "sans-serif",
+              cursor: "pointer",
+              letterSpacing: "0.3px",
+              transition: "all 0.15s",
+              whiteSpace: "nowrap",
             }}
           >
-            {segment.priceLabel || `od ${segment.price} zł`}
-          </span>
+            {selected ? "✓ Dodano" : "+ Wybierz"}
+          </button>
         </div>
       </div>
     </div>
