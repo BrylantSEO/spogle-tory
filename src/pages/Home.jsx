@@ -1151,7 +1151,7 @@ function InlineQuoteForm({ isMobile }) {
               <input style={inputStyle} placeholder="Telefon *" type="tel" value={form.phone} onChange={e => updateForm("phone", e.target.value)} required />
               <input style={inputStyle} placeholder="Email" type="email" value={form.email} onChange={e => updateForm("email", e.target.value)} />
               <input style={inputStyle} placeholder="Miejscowość / adres" value={form.location} onChange={e => updateForm("location", e.target.value)} />
-              <input style={inputStyle} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} style={{ ...inputStyle, colorScheme: "dark" }} />
+              <input style={{ ...inputStyle, colorScheme: "dark", gridColumn: isMobile ? "auto" : "1 / -1" }} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} />
             </div>
             <textarea
               style={{ ...inputStyle, resize: "vertical", minHeight: "90px" }}
