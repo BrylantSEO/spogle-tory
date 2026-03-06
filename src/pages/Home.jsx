@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import { MousePointer, Calculator, MessageSquare, Shield, Award, Clock, Users } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { initSession, trackClick, session as trackerSession } from "../components/internalTracker";
 import SpogleHeader from "../components/SpogleHeader";
+import ReturningBanner from "../components/ReturningBanner";
+import { recordVisit, isReturningVisitor, saveLastSelection, getLastSelection, markFormOpened } from "../components/returningVisitor";
 import SegmentCard from "../components/SegmentCard";
 import SetCard from "../components/SetCard";
 import SetLightbox from "../components/SetLightbox";
@@ -8,7 +13,7 @@ import QuoteForm from "../components/QuoteForm";
 import QuoteFormLightbox from "../components/QuoteFormLightbox";
 import SegmentModal from "../components/SegmentModal";
 import PhotoGallery from "../components/PhotoGallery";
-import { track, trackCustom } from "../components/tracking";
+import { getSeasonInfo } from "../lib/seasonUtils";
 
 const SEGMENTS = [
   {
@@ -17,8 +22,8 @@ const SEGMENTS = [
     shortName: "Mały tor",
     meters: 12,
     description: "Idealna opcja na mniejsze eventy i place zabaw",
-    power: "15A",
-    price: 599,
+    power: "3.5 kW",
+    price: 1200,
     icon: "short",
   },
   {
@@ -27,8 +32,8 @@ const SEGMENTS = [
     shortName: "Średni tor",
     meters: 20,
     description: "Świetny wybór na festyny i firmowe pikniki",
-    power: "15A",
-    price: 799,
+    power: "3.5 kW",
+    price: 1700,
     icon: "medium",
   },
   {
@@ -37,8 +42,8 @@ const SEGMENTS = [
     shortName: "Tor z zakrętem",
     meters: 27,
     description: "Unikalny układ z zakrętem — idealna dla większych obszarów",
-    power: "10–15A",
-    price: 999,
+    power: "2.3–3.5 kW",
+    price: 2200,
     icon: "lshape",
   },
   {
@@ -47,8 +52,8 @@ const SEGMENTS = [
     shortName: "Duży tor",
     meters: 28,
     description: "Maksimum zabawy na dużych eventach plenerowych",
-    power: "15A",
-    price: 1099,
+    power: "3.5 kW",
+    price: 2700,
     icon: "large",
   },
 ];
@@ -59,7 +64,7 @@ const PRESETS = [
     id: "legia",
     name: "Set LEGIA",
     meters: 75,
-    power: "40–45A",
+    power: "9–10 kW",
     priceLabel: "od 2 897 zł",
     badge: "POPULARNY",
     badgeColor: "#1a6b2a",
@@ -72,7 +77,7 @@ const PRESETS = [
     id: "tor4u",
     name: "Set Tor4U",
     meters: 95,
-    power: "56–61A",
+    power: "13–14 kW",
     priceLabel: "od 4 697 zł",
     badge: "POLECAMY",
     badgeColor: "#1a4a8a",
@@ -85,7 +90,7 @@ const PRESETS = [
     id: "gigant",
     name: "Tor Gigant",
     meters: 128,
-    power: "71–76A",
+    power: "16–17 kW",
     priceLabel: "Wycena indywidualna",
     badge: "NAJWIĘKSZY W POLSCE",
     badgeColor: "#FF5C00",
@@ -103,7 +108,7 @@ const GIGA_SEGMENT = {
   shortName: "Gigant (cały zestaw)",
   meters: 108,
   description: "Kompletny zestaw wszystkich segmentów — największy w Polsce",
-  power: "10–15A",
+  power: "2.3–3.5 kW",
   price: null,
   priceLabel: "Wycena indywidualna",
   icon: "giga",
@@ -116,7 +121,7 @@ const SLIDES = [
     shortName: "Giga zjeżdżalnia",
     meters: 11,
     description: "Gigantyczna dmuchana zjeżdżalnia, 11m dł × 7m wys. — dwa tory zjazdowe",
-    power: "8A",
+    power: "1.8 kW",
     price: 1800,
     priceLabel: "od 1800 zł netto",
     badge: "NOWOŚĆ",
@@ -128,7 +133,7 @@ const SLIDES = [
     shortName: "Giga DUO",
     meters: 9,
     description: "Ogromna zjeżdżalnia z dwoma torami jazdy i linami do wspinania, 9m dł × 6m wys.",
-    power: "8A",
+    power: "1.8 kW",
     price: 1800,
     priceLabel: "od 1800 zł netto",
     badge: "NOWOŚĆ",
@@ -146,49 +151,108 @@ function useMobile() {
   return isMobile;
 }
 
+function fbq(...args) {
+  if (typeof window.fbq === 'function' && !window.__spogle_is_bot) window.fbq(...args);
+}
+
 export default function Home() {
   const [selected, setSelected] = useState(new Set());
   const [selectedSlides, setSelectedSlides] = useState(new Set());
   const [activePreset, setActivePreset] = useState(null);
+  const [presetData, setPresetData] = useState({});
   const [presetLightbox, setPresetLightbox] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [modalSegment, setModalSegment] = useState(null);
+  const [selectedHours, setSelectedHours] = useState(null);
+  const [segmentPrices, setSegmentPrices] = useState({});
+  const [returningVisitor, setReturningVisitor] = useState(false);
+  const [lastSelectionNames, setLastSelectionNames] = useState([]);
   const isMobile = useMobile();
-  const valueFired = useRef({ 2000: false, 4000: false });
+  const firedValueRef = useRef(new Set());
 
-  // A) ViewContent on mount
+  // Init session + ViewContent on mount
   useEffect(() => {
-    track('ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+    initSession();
+    fbq('track', 'ViewContent', { content_name: 'Tor Przeszkód Konfigurator' });
+    // Track returning visitor
+    const visitData = recordVisit();
+    if (visitData.visit_count >= 3) {
+      setReturningVisitor(true);
+      const last = getLastSelection();
+      const allItems = [...SEGMENTS, ...SLIDES];
+      const names = [...last.segments, ...last.slides]
+        .map(id => allItems.find(s => s.id === id)?.name)
+        .filter(Boolean);
+      setLastSelectionNames(names);
+    }
+    // Load preset overrides from DB
+    base44.entities.PresetSet.list().then(data => {
+      const map = {};
+      data.forEach(p => { map[p.set_id] = p; });
+      setPresetData(map);
+    });
+    // Load segment prices from DB
+    base44.entities.TrackSegment.list().then(data => {
+      const map = {};
+      data.forEach(s => { map[s.segment_id] = s; });
+      setSegmentPrices(map);
+    });
   }, []);
 
-  // B) Scroll depth — 25%, 50%, 75%, 90%
-  useEffect(() => {
-    const fired = { 25: false, 50: false, 75: false, 90: false };
-    const handleScroll = () => {
-      const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-      [25, 50, 75, 90].forEach(threshold => {
-        if (!fired[threshold] && pct >= threshold) {
-          fired[threshold] = true;
-          trackCustom(`ScrollDepth${threshold}`);
-        }
-      });
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const applyPreset = (preset) => {
+    if (activePreset === preset.id) {
+      setActivePreset(null);
+      setSelected(new Set());
+      setSelectedSlides(new Set());
+    } else {
+      fbq('trackCustom', 'PresetSelected', { preset_id: preset.id, meters: preset.meters });
+      trackClick('PresetSelected', { preset_id: preset.id, meters: preset.meters });
+      setActivePreset(preset.id);
+      setSelected(new Set(preset.segmentIds));
+      setSelectedSlides(new Set(preset.slideIds));
+      // Presets require minimum 5h
+      if (!selectedHours || selectedHours < 5) setSelectedHours(5);
+    }
+    setShowForm(false);
+  };
 
-  // C) Time on page — 30s, 60s, 120s
-  useEffect(() => {
-    const t30 = setTimeout(() => trackCustom('TimeOnPage30s'), 30000);
-    const t60 = setTimeout(() => trackCustom('TimeOnPage60s'), 60000);
-    const t120 = setTimeout(() => trackCustom('TimeOnPage120s'), 120000);
-    return () => [t30, t60, t120].forEach(clearTimeout);
-  }, []);
+  const toggleSegment = (id) => {
+    setActivePreset(null);
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        fbq('trackCustom', 'SegmentSelected', { segment_id: id });
+        trackClick('SegmentSelected', { segment_id: id });
+        next.add(id);
+      }
+      return next;
+    });
+    setShowForm(false);
+  };
+
+  const toggleSlide = (id) => {
+    setActivePreset(null);
+    setSelectedSlides(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        fbq('trackCustom', 'SlideSelected', { slide_id: id });
+        trackClick('SlideSelected', { slide_id: id });
+        next.add(id);
+      }
+      return next;
+    });
+    setShowForm(false);
+  };
 
   const selectedSegments = SEGMENTS.filter(s => selected.has(s.id));
   const selectedSlideItems = SLIDES.filter(s => selectedSlides.has(s.id));
   const hasSelection = selected.size > 0 || selectedSlides.size > 0;
 
+  // If active preset, use preset data for display
   const activePresetData = activePreset ? PRESETS.find(p => p.id === activePreset) : null;
 
   const segmentMeters = selectedSegments.reduce((sum, s) => sum + s.meters, 0);
@@ -197,88 +261,104 @@ export default function Home() {
   const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0)
     + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
 
-  const powerValues = selectedSegments.map(s => {
-    if (s.power.includes("–")) return 15;
-    return parseInt(s.power);
-  });
-  const totalPower = activePresetData ? activePresetData.power : (powerValues.length > 0 ? powerValues.reduce((a, b) => a + b, 0) + "A" : "0A");
+  const parsePowerKw = (powerStr) => {
+    const nums = powerStr.match(/[\d.]+/g);
+    if (!nums) return 0;
+    return parseFloat(nums[nums.length - 1]);
+  };
+  const getEffectivePowerKw = (seg) => {
+    const db = segmentPrices[seg.id];
+    if (db?.total_power_kw) return db.total_power_kw;
+    return parsePowerKw(seg.power);
+  };
+  const allPowerItems = [...selectedSegments, ...selectedSlideItems];
+  const totalPowerNum = allPowerItems.reduce((sum, s) => sum + getEffectivePowerKw(s), 0);
+  const totalPower = activePresetData ? activePresetData.power : (totalPowerNum > 0 ? totalPowerNum.toFixed(1).replace(/\.0$/, "") + " kW" : "0 kW");
 
-  const estimatedPrice = activePresetData
-    ? activePresetData.priceLabel
-    : totalPrice > 0
-    ? `od ${totalPrice} zł`
-    : "od 0 zł";
+  // Discount logic based on number of selected items
+  const totalItemCount = selected.size + selectedSlides.size;
+  const discountPercent = activePresetData ? 0 : (
+    totalItemCount === 2 ? 10 : totalItemCount === 3 ? 20 : 0
+  );
+  const needsCustomQuote = !activePresetData && totalItemCount >= 4;
 
-  const hasSelection2 = hasSelection || !!activePreset;
-
-  // F) High-value threshold tracking — fire once per threshold
-  useEffect(() => {
-    if (totalPrice >= 4000 && !valueFired.current[4000]) {
-      valueFired.current[4000] = true;
-      trackCustom('ConfiguratorHighValue', { threshold: 4000 });
-    } else if (totalPrice >= 2000 && !valueFired.current[2000]) {
-      valueFired.current[2000] = true;
-      trackCustom('ConfiguratorHighValue', { threshold: 2000 });
+  // Calculate price based on selected hours
+  const calcPriceWithHours = () => {
+    if (activePresetData) {
+      // For presets, use preset-level prices from DB
+      if (selectedHours) {
+        const hourKey = `price_${selectedHours}h`;
+        const dbPreset = presetData[activePresetData.id];
+        if (dbPreset && dbPreset[hourKey]) return `${dbPreset[hourKey]} zł netto`;
+      }
+      // Fallback to preset's default price_label from DB or hardcoded
+      const dbPreset = presetData[activePresetData.id];
+      return dbPreset?.price_label || activePresetData.priceLabel;
     }
+    if (needsCustomQuote) return "Wycena indywidualna";
+    if (!selectedHours) {
+      if (totalPrice <= 0) return "od 0 zł";
+      const discounted = discountPercent > 0 ? Math.round(totalPrice * (1 - discountPercent / 100)) : totalPrice;
+      return `od ${discounted} zł`;
+    }
+    const hourKey = `price_${selectedHours}h`;
+    let total = 0;
+    let anyPrice = false;
+    [...selected].forEach(id => {
+      const dbSeg = segmentPrices[id];
+      if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+    });
+    [...selectedSlides].forEach(id => {
+      const dbSeg = segmentPrices[id];
+      if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+    });
+    if (!anyPrice) return totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+    const discounted = discountPercent > 0 ? Math.round(total * (1 - discountPercent / 100)) : total;
+    return `${discounted} zł netto`;
+  };
+  const estimatedPrice = calcPriceWithHours();
+
+  const calcDiscountAmount = () => {
+    if (discountPercent === 0 || activePresetData) return 0;
+    if (selectedHours) {
+      const hourKey = `price_${selectedHours}h`;
+      let total = 0;
+      let anyPrice = false;
+      [...selected].forEach(id => {
+        const dbSeg = segmentPrices[id];
+        if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+      });
+      [...selectedSlides].forEach(id => {
+        const dbSeg = segmentPrices[id];
+        if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+      });
+      if (!anyPrice) return 0;
+      return Math.round(total * discountPercent / 100);
+    }
+    if (totalPrice <= 0) return 0;
+    return Math.round(totalPrice * discountPercent / 100);
+  };
+  const discountAmount = calcDiscountAmount();
+
+  // Configurator value threshold
+  useEffect(() => {
+    [2000, 4000].forEach(threshold => {
+      if (totalPrice >= threshold && !firedValueRef.current.has(threshold)) {
+        firedValueRef.current.add(threshold);
+        fbq('trackCustom', 'ConfiguratorHighValue', { threshold });
+      }
+    });
   }, [totalPrice]);
 
-  // E) Preset selection / deselection
-  const applyPreset = (preset) => {
-    if (activePreset !== preset.id) {
-      trackCustom('PresetSelected', { preset_id: preset.id, meters: preset.meters, price_label: preset.priceLabel });
-    } else {
-      trackCustom('PresetDeselected', { preset_id: preset.id });
+  // Save selection for returning visitors
+  useEffect(() => {
+    if (selected.size > 0 || selectedSlides.size > 0) {
+      saveLastSelection([...selected], [...selectedSlides]);
     }
-    if (activePreset === preset.id) {
-      setActivePreset(null);
-      setSelected(new Set());
-      setSelectedSlides(new Set());
-    } else {
-      setActivePreset(preset.id);
-      setSelected(new Set(preset.segmentIds));
-      setSelectedSlides(new Set(preset.slideIds));
-    }
-    setShowForm(false);
-  };
+  }, [selected, selectedSlides]);
 
-  // D) Segment toggle — add AND remove
-  const toggleSegment = (id) => {
-    setActivePreset(null);
-    const isAdding = !selected.has(id);
-    trackCustom(isAdding ? 'SegmentSelected' : 'SegmentDeselected', { segment_id: id });
-    setSelected(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-    setShowForm(false);
-  };
-
-  // D) Slide toggle — add AND remove
-  const toggleSlide = (id) => {
-    setActivePreset(null);
-    const isAddingSlide = !selectedSlides.has(id);
-    trackCustom(isAddingSlide ? 'SlideSelected' : 'SlideDeselected', { slide_id: id });
-    setSelectedSlides(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-    setShowForm(false);
-  };
-
-  // H) Form open — InitiateCheckout + FormOpened
-  const handleFormOpen = () => {
-    setShowForm(prev => {
-      if (!prev) {
-        track('InitiateCheckout');
-        trackCustom('FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
-      }
-      return !prev;
-    });
-  };
+  const hasSelection2 = hasSelection || !!activePreset;
+  const currentSeasonInfo = getSeasonInfo();
 
   return (
     <div
@@ -327,12 +407,51 @@ export default function Home() {
 
       <SpogleHeader />
 
+      {/* Call banner */}
+      <div style={{
+        position: "fixed",
+        top: "64px",
+        left: 0,
+        right: 0,
+        zIndex: 90,
+        background: "linear-gradient(90deg, rgba(255,92,0,0.95) 0%, rgba(220,60,0,0.95) 100%)",
+        backdropFilter: "blur(8px)",
+        padding: "10px 32px",
+        display: isMobile ? "none" : "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "20px",
+        flexWrap: "wrap",
+      }}>
+        <span style={{ color: "#fff", fontSize: isMobile ? "13px" : "14px", fontFamily: "sans-serif", fontWeight: 600, textAlign: "center" }}>
+          🤔 Nie wiesz co wybrać? <strong>Zadzwoń — doradzimy!</strong>
+        </span>
+        <a
+          href="tel:+48573177098"
+          onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'call_banner' }); }}
+          style={{
+            background: "#fff",
+            color: "#FF5C00",
+            padding: "6px 18px",
+            borderRadius: "6px",
+            fontWeight: 800,
+            fontSize: "14px",
+            textDecoration: "none",
+            fontFamily: "sans-serif",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.2px",
+          }}
+        >
+          📞 +48 573 177 098
+        </a>
+      </div>
+
       {/* Hero */}
       <div
         className="noise-bg grid-lines"
         style={{
           minHeight: "100vh",
-          paddingTop: "64px",
+          paddingTop: "110px",
           display: "flex",
           alignItems: "stretch",
         }}
@@ -396,7 +515,7 @@ export default function Home() {
             {/* Subline */}
             <p
               style={{
-                color: "rgba(255,255,255,0.5)",
+                color: "rgba(255,255,255,0.78)",
                 fontSize: "17px",
                 lineHeight: 1.6,
                 fontFamily: "sans-serif",
@@ -435,32 +554,35 @@ export default function Home() {
               </button>
             )}
 
-            {/* Trust badges */}
-            <div
-              className="trust-badges"
-              style={{
-                display: "flex",
-                gap: "10px",
-                flexWrap: "wrap",
-              }}
-            >
-              {["500+ eventów", "Montaż w cenie", "Własny transport"].map(badge => (
-                <div
-                  key={badge}
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "8px",
-                    padding: "8px 14px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.65)",
-                    fontFamily: "sans-serif",
-                    letterSpacing: "0.2px",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  ✓ {badge}
+            {/* How it works — large steps */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {[
+                { num: "1", icon: <MousePointer size={22} color="#FF5C00" />, title: "Wybierz segmenty", desc: "Kliknij tory po prawej lub wybierz gotowy set" },
+                { num: "2", icon: <Calculator size={22} color="#FF5C00" />, title: "Sprawdź cenę na żywo", desc: "Cena, metry i prąd aktualizują się automatycznie" },
+                { num: "3", icon: <MessageSquare size={22} color="#FF5C00" />, title: "Wyślij zapytanie", desc: "Odpiszemy w ciągu 24h z dokładną ofertą" },
+              ].map((step, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+                  <div style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "rgba(255,92,0,0.12)",
+                    border: "1px solid rgba(255,92,0,0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    {step.icon}
+                  </div>
+                  <div>
+                    <div style={{ color: "#fff", fontSize: "16px", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "-0.2px", marginBottom: "3px" }}>
+                      {step.title}
+                    </div>
+                    <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.5 }}>
+                      {step.desc}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -487,16 +609,60 @@ export default function Home() {
               minWidth: 0,
             }}
           >
+            {/* Returning visitor banner */}
+            {returningVisitor && (
+              <div style={{ paddingTop: "24px" }}>
+                <ReturningBanner
+                  lastSegmentNames={lastSelectionNames}
+                  onRestoreSelection={() => {
+                    const last = getLastSelection();
+                    setSelected(new Set(last.segments));
+                    setSelectedSlides(new Set(last.slides));
+                    setActivePreset(null);
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Seasonal banner */}
+            {currentSeasonInfo.banner && (
+              <div style={{
+                marginTop: "16px",
+                background: currentSeasonInfo.banner.bg,
+                border: `1.5px solid ${currentSeasonInfo.banner.border}`,
+                borderRadius: "12px",
+                padding: "14px 18px",
+                display: "flex",
+                gap: "12px",
+                alignItems: "flex-start",
+              }}>
+                <span style={{ fontSize: "22px", flexShrink: 0 }}>{currentSeasonInfo.banner.icon}</span>
+                <div>
+                  <div style={{ color: currentSeasonInfo.banner.color, fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", marginBottom: "3px" }}>
+                    {currentSeasonInfo.banner.title}
+                    {currentSeasonInfo.discountPercent > 0 && (
+                      <span style={{ marginLeft: "8px", background: currentSeasonInfo.banner.color, color: "#000", borderRadius: "4px", padding: "1px 7px", fontSize: "11px", fontWeight: 900 }}>
+                        -{currentSeasonInfo.discountPercent}%
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", lineHeight: 1.5 }}>
+                    {currentSeasonInfo.banner.text}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Section label */}
             <div
               style={{
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(255,255,255,0.6)",
                 fontSize: "11px",
                 fontWeight: 700,
                 letterSpacing: "2.5px",
                 fontFamily: "sans-serif",
                 marginBottom: "16px",
-                paddingTop: "24px",
+                paddingTop: returningVisitor ? "8px" : "24px",
               }}
             >
               WYBIERZ SEGMENTY TORU
@@ -504,24 +670,25 @@ export default function Home() {
 
             {/* Cards grid */}
             <div className="segment-grid">
-              {SEGMENTS.map(segment => (
-                <SegmentCard
-                  key={segment.id}
-                  segment={segment}
-                  selected={selected.has(segment.id)}
-                  onToggle={() => toggleSegment(segment.id)}
-                  onOpenDetail={() => {
-                    setModalSegment(segment);
-                    trackCustom('SegmentDetailOpened', { segment_id: segment.id });
-                  }}
-                />
-              ))}
+              {SEGMENTS.map(segment => {
+                const dbPow = segmentPrices[segment.id]?.total_power_kw;
+                const seg = dbPow ? { ...segment, power: `${dbPow} kW` } : segment;
+                return (
+                  <SegmentCard
+                    key={segment.id}
+                    segment={seg}
+                    selected={selected.has(segment.id)}
+                    onToggle={() => toggleSegment(segment.id)}
+                    onOpenDetail={() => { setModalSegment(seg); }}
+                  />
+                );
+              })}
             </div>
 
             {/* Slides section */}
             <div
               style={{
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(255,255,255,0.6)",
                 fontSize: "11px",
                 fontWeight: 700,
                 letterSpacing: "2.5px",
@@ -533,27 +700,33 @@ export default function Home() {
               DODAJ ZJEŻDŻALNIĘ (OPCJONALNIE)
             </div>
             <div className="segment-grid">
-              {SLIDES.map(slide => (
-                <SegmentCard
-                  key={slide.id}
-                  segment={slide}
-                  selected={selectedSlides.has(slide.id)}
-                  onToggle={() => toggleSlide(slide.id)}
-                  onOpenDetail={() => {
-                    setModalSegment(slide);
-                    trackCustom('SegmentDetailOpened', { segment_id: slide.id });
-                  }}
-                />
-              ))}
+              {SLIDES.map(slide => {
+                const dbPow = segmentPrices[slide.id]?.total_power_kw;
+                const sl = dbPow ? { ...slide, power: `${dbPow} kW` } : slide;
+                return (
+                  <SegmentCard
+                    key={slide.id}
+                    segment={sl}
+                    selected={selectedSlides.has(slide.id)}
+                    onToggle={() => toggleSlide(slide.id)}
+                    onOpenDetail={() => { setModalSegment(sl); }}
+                  />
+                );
+              })}
             </div>
 
             {/* Modal */}
             {modalSegment && (
               <SegmentModal
                 segment={modalSegment}
-                selected={selected.has(modalSegment.id)}
-                onToggle={() => toggleSegment(modalSegment.id)}
+                selected={selected.has(modalSegment.id) || selectedSlides.has(modalSegment.id)}
+                onToggle={() => {
+                  if (SEGMENTS.find(s => s.id === modalSegment.id)) toggleSegment(modalSegment.id);
+                  else toggleSlide(modalSegment.id);
+                }}
                 onClose={() => setModalSegment(null)}
+                selectedHours={selectedHours}
+                onSelectHours={setSelectedHours}
               />
             )}
 
@@ -571,23 +744,33 @@ export default function Home() {
             <div style={{ color: "#FF5C00", fontSize: "22px", fontWeight: 900, letterSpacing: "-0.3px", fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", textTransform: "uppercase", marginBottom: "4px" }}>
               Lub wybierz gotowy set
             </div>
-            <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif" }}>
               Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
             </div>
           </div>
+
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "10px" }}>
-            {PRESETS.map(preset => (
-              <SetCard
-                key={preset.id}
-                set={preset}
-                isActive={activePreset === preset.id}
-                onSelect={() => applyPreset(preset)}
-                onDetail={() => {
-                  setPresetLightbox(preset);
-                  trackCustom('SetDetailOpened', { preset_id: preset.id });
-                }}
-              />
-            ))}
+            {PRESETS.map(preset => {
+              const override = presetData[preset.id] || {};
+              const mergedPreset = {
+                ...preset,
+                image: override.image || preset.image,
+                priceLabel: override.price_label || preset.priceLabel,
+                name: override.name || preset.name,
+                components: override.components && override.components.length > 0 ? override.components : preset.components,
+                setup_time_minutes: override.setup_time_minutes || null,
+                animators_included: override.animators_included || null,
+              };
+              return (
+                <SetCard
+                  key={preset.id}
+                  set={mergedPreset}
+                  isActive={activePreset === preset.id}
+                  onSelect={() => applyPreset(mergedPreset)}
+                  onDetail={() => { setPresetLightbox(mergedPreset); }}
+                />
+              );
+            })}
           </div>
 
           {presetLightbox && (
@@ -599,40 +782,180 @@ export default function Home() {
             />
           )}
 
-          {/* JAK WYBRAĆ? — after set cards */}
-          <div style={{ marginTop: "32px", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "10px" }}>
-            <div style={{ background: "rgba(255,92,0,0.07)", border: "1px solid rgba(255,92,0,0.2)", borderRadius: "12px", padding: "18px 20px" }}>
-              <div style={{ color: "#FF5C00", fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "0.5px", marginBottom: "8px" }}>
-                GOTOWY SET — KIEDY?
-              </div>
-              <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
-                Wybierz jeden z naszych sprawdzonych zestawów — idealne proporcje długości, atrakcyjności i kosztów dla typowego eventu.
-              </p>
+          {/* Jak wybrać? — after set cards */}
+          <div style={{ marginTop: "32px" }}>
+            <div style={{
+              color: "rgba(255,255,255,0.82)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "2.5px",
+              fontFamily: "sans-serif",
+              marginBottom: "14px",
+              textTransform: "uppercase",
+            }}>
+              Jak wybrać?
             </div>
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "18px 20px" }}>
-              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "0.5px", marginBottom: "8px" }}>
-                WŁASNA KONFIGURACJA — KIEDY?
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: "12px",
+            }}>
+              <div style={{
+                background: "rgba(255,92,0,0.08)",
+                border: "1.5px solid rgba(255,92,0,0.35)",
+                borderRadius: "16px",
+                padding: "24px 28px",
+              }}>
+                <div style={{ color: "#FF5C00", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
+                  Gotowy set — kiedy?
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                  Wybierz jeden z naszych sprawdzonych zestawów
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {[
+                    "Duży event plenerowy — festyn, piknik firmowy, dni osiedla",
+                    "Chcesz gotowej ceny bez kombinowania",
+                    "Zależy Ci na szybkiej decyzji i pewności dostępności",
+                    "Szukasz maksymalnego WOW-efektu — sety to nasze największe tory",
+                  ].map((item, i) => (
+                    <li key={i} style={{ color: "rgba(255,255,255,0.75)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                      <span style={{ color: "#FF5C00", flexShrink: 0, fontWeight: 700, marginTop: "1px" }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
-                Masz specyficzną przestrzeń lub budżet? Dobierz segmenty samodzielnie — kalkulator przeliczy metraż i prąd na żywo.
-              </p>
+              <div style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1.5px solid rgba(255,255,255,0.12)",
+                borderRadius: "16px",
+                padding: "24px 28px",
+              }}>
+                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
+                  Własne zestawienie — kiedy?
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                  Kliknij segmenty wyżej i ułóż tor pod siebie
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {[
+                    "Ograniczona przestrzeń — dopasujesz metry do miejsca",
+                    "Mniejszy event: szkolny dzień sportu, urodziny, piknik",
+                    "Konkretny układ terenu wymaga niestandardowej konfiguracji",
+                    "Masz określony budżet i sam decydujesz co wchodzi w skład",
+                  ].map((item, i) => (
+                    <li key={i} style={{ color: "rgba(255,255,255,0.82)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                      <span style={{ color: "rgba(255,255,255,0.6)", flexShrink: 0, marginTop: "1px" }}>→</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 
-          {/* WIĘCEJ ATRAKCJI — na końcu */}
-          <div style={{ marginTop: "16px", background: "rgba(255,92,0,0.06)", border: "1px solid rgba(255,92,0,0.18)", borderRadius: "12px", padding: "18px 20px" }}>
-            <div style={{ color: "#FF5C00", fontSize: "13px", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "0.5px", marginBottom: "8px" }}>
+          {/* WIĘCEJ ATRAKCJI — na samym końcu */}
+          <div style={{ marginTop: "16px", background: "rgba(255,92,0,0.05)", border: "1px solid rgba(255,92,0,0.2)", borderRadius: "12px", padding: "16px 20px" }}>
+            <div style={{ color: "#FF5C00", fontSize: "12px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "6px" }}>
               WIĘCEJ ATRAKCJI
             </div>
-            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
-              Oferujemy też <strong style={{ color: "rgba(255,255,255,0.8)" }}>dmuchańce, zamki, piana party</strong> i inne atrakcje, które można łączyć z torem. Napisz o tym w polu komentarza przy zapytaniu.
+            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
+              Oferujemy też <strong style={{ color: "rgba(255,255,255,0.85)" }}>dmuchańce, zamki, piana party</strong> i inne atrakcje, które można łączyć z torem. Napisz o tym w polu komentarza przy zapytaniu.
             </p>
           </div>
         </div>
       </div>
 
+      {/* Trust badges with icons */}
+      <div style={{ padding: isMobile ? "40px 16px 0" : "60px 48px 0", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
+          gap: "12px",
+          marginBottom: "60px",
+        }}>
+          {[
+            { icon: <Clock size={28} color="#FF5C00" />, value: "7 lat", label: "doświadczenia" },
+            { icon: <Award size={28} color="#FF5C00" />, value: "500+", label: "eventów wykonanych" },
+            { icon: <Shield size={28} color="#FF5C00" />, value: "OC", label: "ubezpieczenie" },
+            { icon: <Users size={28} color="#FF5C00" />, value: "Własni", label: "doświadczeni animatorzy" },
+          ].map((item, i) => (
+            <div key={i} style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              borderRadius: "16px",
+              padding: isMobile ? "20px 16px" : "28px 24px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "12px",
+              textAlign: "center",
+            }}>
+              <div style={{ background: "rgba(255,92,0,0.12)", borderRadius: "12px", padding: "14px" }}>
+                {item.icon}
+              </div>
+              <div>
+                <div style={{ color: "#fff", fontSize: isMobile ? "24px" : "30px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", lineHeight: 1, letterSpacing: "-0.5px" }}>
+                  {item.value}
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.72)", fontSize: "12px", fontFamily: "sans-serif", marginTop: "4px", lineHeight: 1.4 }}>
+                  {item.label}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div style={{ padding: isMobile ? "0 16px 40px" : "0 48px 60px", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "32px", textAlign: "center" }}>
+          CO MÓWIĄ KLIENCI
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "16px" }}>
+          {[
+            { text: "Korzystam z usług Spogle od kilku lat i jeszcze nigdy mnie nie zawiedli. Mogę polecić tę współpracę. Zawsze miła i bezproblemowa obsługa oraz konkurencyjne stawki.", author: "Anna Kautz", ago: "6 miesięcy temu" },
+            { text: "Miałam przyjemność współpracować z tą firmą przy organizacji dnia dziecka w szkole podstawowej. Całość usługi na najwyższym poziomie, począwszy od wstępnych ustaleń aż po realizację.", author: "Aneta Baj", ago: "8 miesięcy temu" },
+            { text: "Obsługa na najwyższym poziomie. Super kontakt i współpraca z Panem Hubertem. Animatorzy do obsługi urządzeń zaangażowani i dbający o bezpieczeństwo nawet najmniejszych użytkowników. Polecam :)", author: "Natalia", ago: "7 miesięcy temu" },
+          ].map((r, i) => (
+            <div key={i} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                <span style={{ color: "#FF5C00", fontSize: "16px" }}>★★★★★</span>
+                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", fontFamily: "sans-serif" }}>{r.ago}</span>
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: "1.6", marginBottom: "16px" }}>
+                "{r.text}"
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ color: "rgba(255,255,255,0.78)", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>{r.author}</span>
+                <span style={{ color: "rgba(255,255,255,0.82)", fontSize: "11px", fontFamily: "sans-serif" }}>· Google</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Gallery */}
-      <PhotoGallery onAskAbout={() => {
+      <PhotoGallery onAskAbout={(photo) => {
+        // Pre-select segments from the photo
+        if (photo.segments && photo.segments.length > 0) {
+          const SEGMENT_NAME_TO_ID = {
+            "Tor 12m": "tor12", "Tor 20m": "tor20", "Tor 27m": "tor27", "Tor 28m": "tor28",
+          };
+          const SLIDE_NAME_TO_ID = {
+            "Atomic Drop": "atomic-drop", "Zjeżdżalnia DUO": "duo",
+          };
+          const newSeg = new Set();
+          const newSlides = new Set();
+          photo.segments.forEach(name => {
+            if (SEGMENT_NAME_TO_ID[name]) newSeg.add(SEGMENT_NAME_TO_ID[name]);
+            else if (SLIDE_NAME_TO_ID[name]) newSlides.add(SLIDE_NAME_TO_ID[name]);
+          });
+          if (newSeg.size > 0) setSelected(newSeg);
+          if (newSlides.size > 0) setSelectedSlides(newSlides);
+          setActivePreset(null);
+        }
         setShowForm(true);
       }} />
 
@@ -645,8 +968,6 @@ export default function Home() {
           estimatedPrice={estimatedPrice}
           totalPower={totalPower}
           onClose={() => setShowForm(false)}
-          onSuccess={() => track('Lead')}
-          onAbandoned={() => trackCustom('FormAbandoned')}
           SEGMENTS={SEGMENTS}
           SLIDES={SLIDES}
         />
@@ -658,7 +979,21 @@ export default function Home() {
         totalPower={totalPower}
         estimatedPrice={estimatedPrice}
         hasSelection={hasSelection2}
-        onSubmit={handleFormOpen}
+        selectedHours={selectedHours}
+        onSelectHours={setSelectedHours}
+        isPreset={!!activePreset}
+        isHighSeason={currentSeasonInfo.type === "highseason"}
+        discountPercent={discountPercent}
+        discountAmount={discountAmount}
+        needsCustomQuote={needsCustomQuote}
+        onSubmit={() => {
+          fbq('track', 'InitiateCheckout');
+          fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          trackClick('FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
+          trackerSession.form_opened = true;
+          markFormOpened();
+          setShowForm(v => !v);
+        }}
         isMobile={isMobile}
       />
     </div>
