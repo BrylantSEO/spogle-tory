@@ -1,6 +1,6 @@
 const ALL_HOURS = [3, 4, 5, 6, 8];
 
-export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile, selectedHours, onSelectHours, isPreset }) {
+export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, hasSelection, onSubmit, isMobile, selectedHours, onSelectHours, isPreset, discountPercent, discountAmount, needsCustomQuote }) {
   const HOURS = isPreset ? ALL_HOURS.filter(h => h >= 5) : ALL_HOURS;
   return (
     <div
@@ -55,12 +55,22 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
               <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "18px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.5px" }}>
                 {estimatedPrice}
               </div>
+              {discountPercent > 0 && discountAmount > 0 && (
+                <div style={{ color: "#4ade80", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 700, marginTop: "2px" }}>
+                  -{discountPercent}% · oszczędzasz {discountAmount} zł
+                </div>
+              )}
+              {needsCustomQuote && (
+                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px" }}>
+                  Podaj maila — wycenimy indywidualnie
+                </div>
+              )}
             </div>
             <button
               onClick={onSubmit}
               style={{ background: "#FF5C00", color: "#fff", border: "none", borderRadius: "10px", padding: "13px 22px", fontWeight: 800, fontSize: "14px", fontFamily: "sans-serif", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap", letterSpacing: "0.2px" }}
             >
-              Wyślij zapytanie →
+              {needsCustomQuote ? "Uzyskaj wycenę →" : "Wyślij zapytanie →"}
             </button>
           </div>
         </div>
@@ -93,7 +103,24 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
             ))}
           </div>
           <Divider />
-          <StatPill icon="💰" label="Szacowana cena" value={estimatedPrice} active orange />
+          <div style={{ padding: "0 16px", minWidth: "140px" }}>
+            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "sans-serif", marginBottom: "3px", letterSpacing: "0.3px" }}>
+              💰 Szacowana cena
+            </div>
+            <div style={{ color: "#FF5C00", fontWeight: 800, fontSize: "16px", fontFamily: "'Arial Black', sans-serif", letterSpacing: "-0.4px" }}>
+              {estimatedPrice}
+            </div>
+            {discountPercent > 0 && discountAmount > 0 && (
+              <div style={{ color: "#4ade80", fontSize: "11px", fontFamily: "sans-serif", fontWeight: 700, marginTop: "2px", whiteSpace: "nowrap" }}>
+                -{discountPercent}% · oszczędzasz {discountAmount} zł
+              </div>
+            )}
+            {needsCustomQuote && (
+              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "2px", whiteSpace: "nowrap" }}>
+                Podaj maila — wycenimy indywidualnie
+              </div>
+            )}
+          </div>
           <div style={{ marginLeft: "auto" }}>
             <button
               onClick={onSubmit}
@@ -101,7 +128,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
               onMouseEnter={e => { e.currentTarget.style.background = "#e05200"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#FF5C00"; }}
             >
-              Wyślij zapytanie →
+              {needsCustomQuote ? "Uzyskaj wycenę →" : "Wyślij zapytanie →"}
             </button>
           </div>
         </>

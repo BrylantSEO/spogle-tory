@@ -307,6 +307,13 @@ export default function Home() {
   const totalPowerNum = allPowerItems.reduce((sum, s) => sum + getEffectivePowerKw(s), 0);
   const totalPower = activePresetData ? activePresetData.power : (totalPowerNum > 0 ? totalPowerNum.toFixed(1).replace(/\.0$/, "") + " kW" : "0 kW");
 
+  // Discount logic based on number of selected items
+  const totalItemCount = selected.size + selectedSlides.size;
+  const discountPercent = activePresetData ? 0 : (
+    totalItemCount === 2 ? 10 : totalItemCount === 3 ? 20 : 0
+  );
+  const needsCustomQuote = !activePresetData && totalItemCount >= 4;
+
   // Calculate price based on selected hours
   const calcPriceWithHours = () => {
     if (activePresetData) {
@@ -320,7 +327,12 @@ export default function Home() {
       const dbPreset = presetData[activePresetData.id];
       return dbPreset?.price_label || activePresetData.priceLabel;
     }
-    if (!selectedHours) return totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+    if (needsCustomQuote) return "Wycena indywidualna";
+    if (!selectedHours) {
+      if (totalPrice <= 0) return "od 0 zł";
+      const discounted = discountPercent > 0 ? Math.round(totalPrice * (1 - discountPercent / 100)) : totalPrice;
+      return `od ${discounted} zł`;
+    }
     const hourKey = `price_${selectedHours}h`;
     let total = 0;
     let anyPrice = false;
@@ -332,9 +344,33 @@ export default function Home() {
       const dbSeg = segmentPrices[id];
       if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
     });
-    return anyPrice ? `${total} zł netto` : totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+    if (!anyPrice) return totalPrice > 0 ? `od ${totalPrice} zł` : "od 0 zł";
+    const discounted = discountPercent > 0 ? Math.round(total * (1 - discountPercent / 100)) : total;
+    return `${discounted} zł netto`;
   };
   const estimatedPrice = calcPriceWithHours();
+
+  const calcDiscountAmount = () => {
+    if (discountPercent === 0 || activePresetData) return 0;
+    if (selectedHours) {
+      const hourKey = `price_${selectedHours}h`;
+      let total = 0;
+      let anyPrice = false;
+      [...selected].forEach(id => {
+        const dbSeg = segmentPrices[id];
+        if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+      });
+      [...selectedSlides].forEach(id => {
+        const dbSeg = segmentPrices[id];
+        if (dbSeg && dbSeg[hourKey]) { total += dbSeg[hourKey]; anyPrice = true; }
+      });
+      if (!anyPrice) return 0;
+      return Math.round(total * discountPercent / 100);
+    }
+    if (totalPrice <= 0) return 0;
+    return Math.round(totalPrice * discountPercent / 100);
+  };
+  const discountAmount = calcDiscountAmount();
 
   // Configurator value threshold
   useEffect(() => {
@@ -931,6 +967,9 @@ export default function Home() {
         selectedHours={selectedHours}
         onSelectHours={setSelectedHours}
         isPreset={!!activePreset}
+        discountPercent={discountPercent}
+        discountAmount={discountAmount}
+        needsCustomQuote={needsCustomQuote}
         onSubmit={() => {
           fbq('track', 'InitiateCheckout');
           fbq('trackCustom', 'FormOpened', { total_meters: totalMeters, estimated_price: estimatedPrice });
