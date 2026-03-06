@@ -1,16 +1,21 @@
+import { useState } from "react";
+
 export default function SetCard({ set, isActive, onSelect, onDetail }) {
+  const [hovered, setHovered] = useState(false);
   return (
     <div
       onClick={onSelect}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         position: "relative",
-        background: isActive ? "rgba(255,92,0,0.12)" : "rgba(255,255,255,0.03)",
-        border: isActive ? "1.5px solid #FF5C00" : "1.5px solid rgba(255,255,255,0.1)",
+        background: isActive ? "rgba(255,92,0,0.12)" : hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)",
+        border: isActive ? "1.5px solid #FF5C00" : hovered ? "1.5px solid rgba(255,255,255,0.28)" : "1.5px solid rgba(255,255,255,0.1)",
         borderRadius: "14px",
         overflow: "hidden",
         cursor: "pointer",
         transition: "all 0.18s ease",
-        boxShadow: isActive ? "0 0 0 1px #FF5C00, 0 4px 24px rgba(255,92,0,0.15)" : "none",
+        boxShadow: isActive ? "0 0 0 1px #FF5C00, 0 4px 24px rgba(255,92,0,0.15)" : hovered ? "0 4px 16px rgba(0,0,0,0.3)" : "none",
         userSelect: "none",
         display: "flex",
         flexDirection: "column",
@@ -21,7 +26,7 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
         <img
           src={set.image}
           alt={set.name}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: isActive ? "brightness(1)" : "brightness(0.6)", transition: "filter 0.2s" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: isActive ? "brightness(1)" : hovered ? "brightness(0.75)" : "brightness(0.6)", transition: "filter 0.2s" }}
         />
         {isActive && <div style={{ position: "absolute", inset: 0, background: "rgba(255,92,0,0.1)", pointerEvents: "none" }} />}
 

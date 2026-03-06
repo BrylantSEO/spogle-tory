@@ -114,7 +114,11 @@ export default function SegmentModal({ segment, onClose, onToggle, selected, sel
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(20,20,20,0.7) 100%)", pointerEvents: "none" }} />
           )}
 
-          {/* Close */}
+          {/* Close / Back */}
+          <button
+            onClick={onClose}
+            style={{ position: "absolute", top: "14px", left: "14px", background: "rgba(0,0,0,0.65)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "20px", padding: "6px 14px 6px 10px", color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "sans-serif", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", zIndex: 2, backdropFilter: "blur(4px)" }}
+          >‹ Wróć</button>
           <button
             onClick={onClose}
             style={{ position: "absolute", top: "14px", right: "14px", background: "rgba(0,0,0,0.6)", border: "none", borderRadius: "50%", width: "34px", height: "34px", color: "#fff", fontSize: "18px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}

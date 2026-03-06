@@ -23,9 +23,9 @@ export default function QuoteFormLightbox({
   const [form, setForm] = useState(() => {
     try {
       const saved = localStorage.getItem("spogle_quote_form");
-      if (saved) return JSON.parse(saved);
+      if (saved) return { notes: "", ...JSON.parse(saved) };
     } catch {}
-    return { name: "", phone: "", event_date: "", location: "" };
+    return { name: "", phone: "", event_date: "", location: "", notes: "" };
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,11 @@ export default function QuoteFormLightbox({
     setLoading(true);
     const allSegmentNames = [...selectedSegments.map(s => s.name), ...selectedSlideItems.map(s => s.name)];
     await base44.entities.QuoteRequest.create({
-      ...form,
+      name: form.name,
+      phone: form.phone,
+      event_date: form.event_date,
+      location: form.location,
+      notes: form.notes,
       selected_segments: allSegmentNames,
       total_meters: calculatedMeters,
       estimated_price: displayPrice,
@@ -276,8 +280,9 @@ export default function QuoteFormLightbox({
             <div style={{ color: "#fff", fontSize: "16px", fontWeight: 800, fontFamily: "'Arial Black', sans-serif", display: "flex", alignItems: "center", gap: "4px" }}><Zap size={14} color="#FF5C00" /> {totalPower}</div>
           </div>
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "10px 12px" }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 600, fontFamily: "sans-serif", marginBottom: "4px" }}>CENA</div>
+            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", fontWeight: 600, fontFamily: "sans-serif", marginBottom: "4px" }}>CENA ORIENTACYJNA</div>
             <div style={{ color: "#FF5C00", fontSize: "16px", fontWeight: 800, fontFamily: "'Arial Black', sans-serif" }}>{displayPrice}</div>
+            <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "10px", fontFamily: "sans-serif", marginTop: "3px" }}>Przy większych zestawach cena może być niższa</div>
           </div>
         </div>
 
@@ -325,6 +330,16 @@ export default function QuoteFormLightbox({
                 onChange={e => updateForm({ ...form, location: e.target.value })}
               />
             </div>
+          </div>
+
+          <div style={{ marginBottom: "12px" }}>
+            <label style={labelStyle}>DODATKOWE INFORMACJE (OPCJONALNIE)</label>
+            <textarea
+              style={{ ...inputStyle, resize: "vertical", minHeight: "80px", lineHeight: 1.5 }}
+              placeholder="np. liczba uczestników, pytania, szczególne wymagania..."
+              value={form.notes}
+              onChange={e => setForm({ ...form, notes: e.target.value })}
+            />
           </div>
 
           <button

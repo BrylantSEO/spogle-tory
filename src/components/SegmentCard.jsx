@@ -12,6 +12,7 @@ const FALLBACK_IMAGES = {
 export default function SegmentCard({ segment, selected, onToggle, onOpenDetail }) {
   const isGiga = segment.id === "giga";
   const [coverImage, setCoverImage] = useState(segment.image || FALLBACK_IMAGES[segment.id] || null);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     base44.entities.TrackSegment.filter({ segment_id: segment.id }).then(results => {
@@ -26,13 +27,17 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
   return (
     <div
       onClick={onToggle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         position: "relative",
         background: isGiga
-          ? selected ? "rgba(255,92,0,0.12)" : "rgba(255,255,255,0.04)"
-          : selected ? "rgba(255,92,0,0.08)" : "rgba(255,255,255,0.03)",
+          ? selected ? "rgba(255,92,0,0.12)" : hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.04)"
+          : selected ? "rgba(255,92,0,0.08)" : hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)",
         border: selected
           ? "1.5px solid #FF5C00"
+          : hovered
+          ? "1.5px solid rgba(255,255,255,0.28)"
           : isGiga
           ? "1.5px solid rgba(255,255,255,0.12)"
           : "1.5px solid rgba(255,255,255,0.07)",
@@ -42,6 +47,8 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
         transition: "all 0.18s ease",
         boxShadow: selected
           ? "0 0 0 1px #FF5C00, 0 4px 24px rgba(255,92,0,0.15)"
+          : hovered
+          ? "0 4px 16px rgba(0,0,0,0.3)"
           : "none",
         gridColumn: isGiga ? "1 / -1" : undefined,
         userSelect: "none",
@@ -57,7 +64,7 @@ export default function SegmentCard({ segment, selected, onToggle, onOpenDetail 
             height: "100%",
             objectFit: "cover",
             display: "block",
-            filter: selected ? "brightness(1)" : "brightness(0.65)",
+            filter: selected ? "brightness(1)" : hovered ? "brightness(0.8)" : "brightness(0.65)",
             transition: "filter 0.2s",
           }}
         />

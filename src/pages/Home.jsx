@@ -21,7 +21,7 @@ const SEGMENTS = [
     shortName: "Mały tor",
     meters: 12,
     description: "Idealna opcja na mniejsze eventy i place zabaw",
-    power: "15A",
+    power: "3.5 kW",
     price: 1200,
     icon: "short",
   },
@@ -31,7 +31,7 @@ const SEGMENTS = [
     shortName: "Średni tor",
     meters: 20,
     description: "Świetny wybór na festyny i firmowe pikniki",
-    power: "15A",
+    power: "3.5 kW",
     price: 1700,
     icon: "medium",
   },
@@ -41,7 +41,7 @@ const SEGMENTS = [
     shortName: "Tor z zakrętem",
     meters: 27,
     description: "Unikalny układ z zakrętem — idealna dla większych obszarów",
-    power: "10–15A",
+    power: "2.3–3.5 kW",
     price: 2200,
     icon: "lshape",
   },
@@ -51,7 +51,7 @@ const SEGMENTS = [
     shortName: "Duży tor",
     meters: 28,
     description: "Maksimum zabawy na dużych eventach plenerowych",
-    power: "15A",
+    power: "3.5 kW",
     price: 2700,
     icon: "large",
   },
@@ -63,7 +63,7 @@ const PRESETS = [
     id: "legia",
     name: "Set LEGIA",
     meters: 75,
-    power: "40–45A",
+    power: "9–10 kW",
     priceLabel: "od 2 897 zł",
     badge: "POPULARNY",
     badgeColor: "#1a6b2a",
@@ -76,7 +76,7 @@ const PRESETS = [
     id: "tor4u",
     name: "Set Tor4U",
     meters: 95,
-    power: "56–61A",
+    power: "13–14 kW",
     priceLabel: "od 4 697 zł",
     badge: "POLECAMY",
     badgeColor: "#1a4a8a",
@@ -89,7 +89,7 @@ const PRESETS = [
     id: "gigant",
     name: "Tor Gigant",
     meters: 128,
-    power: "71–76A",
+    power: "16–17 kW",
     priceLabel: "Wycena indywidualna",
     badge: "NAJWIĘKSZY W POLSCE",
     badgeColor: "#FF5C00",
@@ -107,7 +107,7 @@ const GIGA_SEGMENT = {
   shortName: "Gigant (cały zestaw)",
   meters: 108,
   description: "Kompletny zestaw wszystkich segmentów — największy w Polsce",
-  power: "10–15A",
+  power: "2.3–3.5 kW",
   price: null,
   priceLabel: "Wycena indywidualna",
   icon: "giga",
@@ -120,7 +120,7 @@ const SLIDES = [
     shortName: "Giga zjeżdżalnia",
     meters: 11,
     description: "Gigantyczna dmuchana zjeżdżalnia, 11m dł × 7m wys. — dwa tory zjazdowe",
-    power: "8A",
+    power: "1.8 kW",
     price: 1800,
     priceLabel: "od 1800 zł netto",
     badge: "NOWOŚĆ",
@@ -132,7 +132,7 @@ const SLIDES = [
     shortName: "Giga DUO",
     meters: 9,
     description: "Ogromna zjeżdżalnia z dwoma torami jazdy i linami do wspinania, 9m dł × 6m wys.",
-    power: "8A",
+    power: "1.8 kW",
     price: 1800,
     priceLabel: "od 1800 zł netto",
     badge: "NOWOŚĆ",
@@ -293,11 +293,14 @@ export default function Home() {
   const totalPrice = selectedSegments.filter(s => s.price).reduce((sum, s) => sum + s.price, 0)
     + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
 
-  const powerValues = selectedSegments.map(s => {
-    if (s.power.includes("–")) return 15;
-    return parseInt(s.power);
-  });
-  const totalPower = activePresetData ? activePresetData.power : (powerValues.length > 0 ? powerValues.reduce((a, b) => a + b, 0) + "A" : "0A");
+  const parsePowerKw = (powerStr) => {
+    const nums = powerStr.match(/[\d.]+/g);
+    if (!nums) return 0;
+    return parseFloat(nums[nums.length - 1]);
+  };
+  const allPowerItems = [...selectedSegments, ...selectedSlideItems];
+  const totalPowerNum = allPowerItems.reduce((sum, s) => sum + parsePowerKw(s.power), 0);
+  const totalPower = activePresetData ? activePresetData.power : (totalPowerNum > 0 ? totalPowerNum.toFixed(1).replace(/\.0$/, "") + " kW" : "0 kW");
 
   // Calculate price based on selected hours
   const calcPriceWithHours = () => {
@@ -523,7 +526,7 @@ export default function Home() {
                 flexWrap: "wrap",
               }}
             >
-              {["500+ eventów", "Montaż w cenie", "Darmowy transport na terenie Warszawy i okolic"].map(badge => (
+              {["500+ eventów", "Montaż w cenie", "Darmowy transport na terenie Warszawy i okolic", "Animator w cenie (80m+)"].map(badge => (
                 <div
                   key={badge}
                   style={{
@@ -646,6 +649,24 @@ export default function Home() {
                   onOpenDetail={() => { setModalSegment(slide); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); trackClick('SegmentDetailOpened', { segment_id: slide.id }); }}
                 />
               ))}
+            </div>
+
+            {/* Additional attractions upsell */}
+            <div
+              style={{
+                marginTop: "28px",
+                background: "rgba(255,92,0,0.05)",
+                border: "1px solid rgba(255,92,0,0.2)",
+                borderRadius: "12px",
+                padding: "16px 20px",
+              }}
+            >
+              <div style={{ color: "#FF5C00", fontSize: "12px", fontWeight: 700, letterSpacing: "1.5px", fontFamily: "sans-serif", marginBottom: "6px" }}>
+                WIĘCEJ ATRAKCJI
+              </div>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
+                Oferujemy też <strong style={{ color: "rgba(255,255,255,0.85)" }}>dmuchańce, zamki, piana party</strong> i inne atrakcje, które można łączyć z torem. Napisz o tym w polu komentarza przy zapytaniu.
+              </p>
             </div>
 
             {/* Modal */}

@@ -68,7 +68,7 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
         <>
           <StatPill icon="📏" label="Łączna długość" value={`${totalMeters} m`} active />
           <Divider />
-          <StatPill icon="⚡" label="Wymagany prąd" value={totalPower || "0A"} active />
+          <StatPill icon="⚡" label="Wymagany prąd" value={totalPower || "0 kW"} active={totalMeters > 0} />
           <Divider />
           {/* Hours picker */}
           <div style={{ display: "flex", gap: "6px", alignItems: "center", padding: "0 16px" }}>
