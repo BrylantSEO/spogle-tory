@@ -155,6 +155,10 @@ function fbq(...args) {
   if (typeof window.fbq === 'function' && !window.__spogle_is_bot) window.fbq(...args);
 }
 
+function gtag(...args) {
+  if (typeof window.gtag === 'function' && !window.__spogle_is_bot) window.gtag(...args);
+}
+
 export default function Home() {
   const [selected, setSelected] = useState(new Set());
   const [selectedSlides, setSelectedSlides] = useState(new Set());

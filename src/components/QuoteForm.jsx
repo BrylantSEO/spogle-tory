@@ -18,6 +18,8 @@ export default function QuoteForm({ selectedSegments, totalMeters, estimatedPric
     });
     setLoading(false);
     setSubmitted(true);
+    if (typeof window.fbq === 'function') window.fbq('trackCustom', 'QuoteSubmitted', { total_meters: totalMeters, estimated_price: estimatedPrice });
+    if (typeof window.gtag === 'function') window.gtag('event', 'purchase', { value: typeof estimatedPrice === 'number' ? estimatedPrice : undefined, currency: 'PLN', transaction_id: Date.now().toString() });
   };
 
   const inputStyle = {
