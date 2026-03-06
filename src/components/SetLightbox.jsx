@@ -62,9 +62,9 @@ export default function SetLightbox({ set, onClose, onSelect, isActive }) {
         {/* LEFT COLUMN — Image + Header */}
         <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
           {hoveredImg ? (
-            <img src={hoveredImg} alt="podgląd" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "opacity 0.2s" }} />
+            <img src={hoveredImg} alt="podgląd" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", transition: "opacity 0.2s" }} />
           ) : set.image ? (
-            <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <img src={set.image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
           ) : (
             <div style={{ width: "100%", height: "100%", background: "#111" }} />
           )}

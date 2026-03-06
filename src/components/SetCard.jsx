@@ -26,7 +26,7 @@ export default function SetCard({ set, isActive, onSelect, onDetail }) {
         <img
           src={set.image}
           alt={set.name}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: isActive ? "brightness(1)" : hovered ? "brightness(0.75)" : "brightness(0.6)", transition: "filter 0.2s" }}
+          style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", filter: isActive ? "brightness(1)" : hovered ? "brightness(0.75)" : "brightness(0.6)", transition: "filter 0.2s" }}
         />
         {isActive && <div style={{ position: "absolute", inset: 0, background: "rgba(255,92,0,0.1)", pointerEvents: "none" }} />}
 
