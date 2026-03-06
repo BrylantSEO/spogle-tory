@@ -2,14 +2,87 @@ import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import SegmentModal from "./SegmentModal";
 
-function toEmbedUrl(url) {
+function getYoutubeVideoId(url) {
   if (!url) return null;
-  if (url.includes("youtube.com/embed/")) return url;
-  const m = url.match(/[?&]v=([^&]+)/);
-  if (m) return `https://www.youtube.com/embed/${m[1]}`;
-  const m2 = url.match(/youtu\.be\/([^?&]+)/);
-  if (m2) return `https://www.youtube.com/embed/${m2[1]}`;
-  return url;
+  // Already embed URL
+  const mEmbed = url.match(/youtube\.com\/embed\/([^?&]+)/);
+  if (mEmbed) return mEmbed[1];
+  // Standard watch URL
+  const mWatch = url.match(/[?&]v=([^&]+)/);
+  if (mWatch) return mWatch[1];
+  // Short URL: youtu.be/VIDEO_ID
+  const mShort = url.match(/youtu\.be\/([^?&]+)/);
+  if (mShort) return mShort[1];
+  // Shorts URL
+  const mShorts = url.match(/youtube\.com\/shorts\/([^?&]+)/);
+  if (mShorts) return mShorts[1];
+  return null;
+}
+
+function YoutubeEmbed({ url, title }) {
+  const [playing, setPlaying] = useState(false);
+  const [thumbError, setThumbError] = useState(false);
+  const videoId = getYoutubeVideoId(url);
+  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0` : null;
+  const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+
+  if (!embedUrl) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", width: "100%", height: "100%", background: "#1a1a1a", color: "#fff", textDecoration: "none" }}
+      >
+        <div style={{ background: "#FF5C00", borderRadius: "50%", width: "56px", height: "56px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>▶</div>
+        <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "12px", fontFamily: "sans-serif" }}>Otwórz film →</div>
+      </a>
+    );
+  }
+
+  if (playing) {
+    return (
+      <iframe
+        src={embedUrl}
+        title={title}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+      />
+    );
+  }
+
+  return (
+    <div
+      onClick={() => setPlaying(true)}
+      style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", cursor: "pointer", background: "#111", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
+    >
+      {thumbUrl && !thumbError && (
+        <img
+          src={thumbUrl}
+          alt={title}
+          onError={() => setThumbError(true)}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      )}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.35)" }} />
+      <div style={{
+        position: "relative",
+        background: "#FF5C00",
+        borderRadius: "50%",
+        width: "60px",
+        height: "60px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "22px",
+        color: "#fff",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.5)",
+        transition: "transform 0.15s",
+      }}>▶</div>
+    </div>
+  );
 }
 
 // Fallback hardcoded photos if DB is empty
@@ -256,14 +329,7 @@ export default function PhotoGallery({ onAskAbout }) {
             <div style={{ position: "relative", display: "inline-block" }}>
               {currentPhoto.video_url ? (
                 <div style={{ width: "min(800px, 90vw)", position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "12px", overflow: "hidden", background: "#000", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
-                  <iframe
-                    src={toEmbedUrl(currentPhoto.video_url)}
-                    title={currentPhoto.alt}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                  />
+                  <YoutubeEmbed url={currentPhoto.video_url} title={currentPhoto.alt} />
                 </div>
               ) : (
               <img
@@ -403,14 +469,7 @@ export default function PhotoGallery({ onAskAbout }) {
             {videos.map((video, idx) => (
               <div key={video.id || idx} style={{ borderRadius: "12px", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.08)", background: "#111" }}>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
-                  <iframe
-                    src={toEmbedUrl(video.video_url)}
-                    title={video.alt}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                  />
+                  <YoutubeEmbed url={video.video_url} title={video.alt} />
                 </div>
                 {(video.alt || video.description) && (
                   <div style={{ padding: "12px 16px" }}>
