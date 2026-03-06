@@ -5,6 +5,7 @@ import SessionsTable from "../components/analytics/SessionsTable";
 import EventBarChart from "../components/analytics/EventBarChart";
 import FunnelChart from "../components/analytics/FunnelChart";
 import BotAnalysis from "../components/analytics/BotAnalysis";
+import SelectionAnalysis from "../components/analytics/SelectionAnalysis";
 
 const RANGES = [
   { label: "Dziś", value: "today" },
@@ -184,6 +185,7 @@ export default function Analityka() {
             <EventBarChart clicks={filteredClicks} range={range} />
             <FunnelChart sessions={filteredSessions} clicks={filteredClicks} />
           </div>
+          <SelectionAnalysis clicks={filteredClicks} />
           <BotAnalysis sessions={filteredSessions} />
         </div>
       )}
