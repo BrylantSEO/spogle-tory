@@ -26,10 +26,12 @@ export default function QuoteFormLightbox({
       const saved = localStorage.getItem("spogle_quote_form");
       if (saved) return { notes: "", ...JSON.parse(saved) };
     } catch {}
-    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "" };
+    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "", antispam: "" };
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [antispamError, setAntispamError] = useState("");
   const [addOpen, setAddOpen] = useState(false);
   const nameFocusedRef = useRef(false);
   const showDiscount = isReturningVisitor() && hadFormOpened();
@@ -51,8 +53,25 @@ export default function QuoteFormLightbox({
     + selectedSlideItems.filter(s => s.price).reduce((sum, s) => sum + s.price, 0);
   const displayPrice = calculatedPrice > 0 ? `od ${calculatedPrice} zł` : "od 0 zł";
 
+  const isPhoneValid = (v) => /^[\d\s\-+()]{9,}$/.test(v.trim());
+  const isAntispamValid = (v) => v.trim().toLowerCase() === "warszawa";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let valid = true;
+    if (!isPhoneValid(form.phone)) {
+      setPhoneError("Podaj poprawny numer telefonu (min. 9 cyfr)");
+      valid = false;
+    } else {
+      setPhoneError("");
+    }
+    if (!isAntispamValid(form.antispam)) {
+      setAntispamError("Niepoprawna odpowiedź");
+      valid = false;
+    } else {
+      setAntispamError("");
+    }
+    if (!valid) return;
     setLoading(true);
     const allSegmentNames = [...selectedSegments.map(s => s.name), ...selectedSlideItems.map(s => s.name)];
     await base44.entities.QuoteRequest.create({
@@ -276,14 +295,17 @@ export default function QuoteFormLightbox({
               onFocus={() => { if (!nameFocusedRef.current) { nameFocusedRef.current = true; fbq('trackCustom', 'FormFieldFocused'); } }}
               required
             />
-            <input
-              style={inputStyle}
-              placeholder="Telefon"
-              type="tel"
-              value={form.phone}
-              onChange={e => updateForm({ ...form, phone: e.target.value })}
-              required
-            />
+            <div>
+              <input
+                style={{ ...inputStyle, borderColor: phoneError ? "#FF5C00" : "rgba(255,255,255,0.1)" }}
+                placeholder="Telefon"
+                type="tel"
+                value={form.phone}
+                onChange={e => { updateForm({ ...form, phone: e.target.value }); setPhoneError(""); }}
+                required
+              />
+              {phoneError && <div style={{ color: "#FF5C00", fontSize: "11px", marginTop: "4px", fontFamily: "sans-serif" }}>{phoneError}</div>}
+            </div>
             <input
               style={inputStyle}
               placeholder="Email"
@@ -343,6 +365,17 @@ export default function QuoteFormLightbox({
               value={form.notes}
               onChange={e => setForm({ ...form, notes: e.target.value })}
             />
+          </div>
+
+          <div style={{ marginBottom: "12px" }}>
+            <input
+              style={{ ...inputStyle, borderColor: antispamError ? "#FF5C00" : "rgba(255,255,255,0.1)" }}
+              placeholder="Podaj stolicę Polski *"
+              value={form.antispam}
+              onChange={e => { updateForm({ ...form, antispam: e.target.value }); setAntispamError(""); }}
+              autoComplete="off"
+            />
+            {antispamError && <div style={{ color: "#FF5C00", fontSize: "11px", marginTop: "4px", fontFamily: "sans-serif" }}>{antispamError}</div>}
           </div>
 
           <button

@@ -1099,10 +1099,15 @@ function InlineQuoteForm({ isMobile }) {
       const saved = localStorage.getItem("spogle_quote_form");
       if (saved) return { notes: "", ...JSON.parse(saved) };
     } catch {}
-    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "" };
+    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "", antispam: "" };
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [antispamError, setAntispamError] = useState("");
+
+  const isPhoneValid = (v) => /^[\d\s\-+()]{9,}$/.test(v.trim());
+  const isAntispamValid = (v) => v.trim().toLowerCase() === "warszawa";
 
   const updateForm = (key, val) => {
     const next = { ...form, [key]: val };
@@ -1113,6 +1118,20 @@ function InlineQuoteForm({ isMobile }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
+    let valid = true;
+    if (!isPhoneValid(form.phone)) {
+      setPhoneError("Podaj poprawny numer telefonu (min. 9 cyfr)");
+      valid = false;
+    } else {
+      setPhoneError("");
+    }
+    if (!isAntispamValid(form.antispam)) {
+      setAntispamError("Niepoprawna odpowiedź");
+      valid = false;
+    } else {
+      setAntispamError("");
+    }
+    if (!valid) return;
     setLoading(true);
     await base44.entities.QuoteRequest.create({
       name: form.name, phone: form.phone,
@@ -1157,7 +1176,10 @@ function InlineQuoteForm({ isMobile }) {
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "12px" }}>
               <input style={inputStyle} placeholder="Imię i nazwisko *" value={form.name} onChange={e => updateForm("name", e.target.value)} required />
-              <input style={inputStyle} placeholder="Telefon *" type="tel" value={form.phone} onChange={e => updateForm("phone", e.target.value)} required />
+              <div>
+                <input style={{ ...inputStyle, borderColor: phoneError ? "#FF5C00" : "rgba(255,255,255,0.12)" }} placeholder="Telefon *" type="tel" value={form.phone} onChange={e => { updateForm("phone", e.target.value); setPhoneError(""); }} required />
+                {phoneError && <div style={{ color: "#FF5C00", fontSize: "11px", marginTop: "4px", fontFamily: "sans-serif" }}>{phoneError}</div>}
+              </div>
               <input style={inputStyle} placeholder="Email" type="email" value={form.email} onChange={e => updateForm("email", e.target.value)} />
               <input style={inputStyle} placeholder="Miejscowość / adres" value={form.location} onChange={e => updateForm("location", e.target.value)} />
               <input style={{ ...inputStyle, colorScheme: "dark", gridColumn: isMobile ? "auto" : "1 / -1" }} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} />
@@ -1168,6 +1190,16 @@ function InlineQuoteForm({ isMobile }) {
               value={form.notes}
               onChange={e => updateForm("notes", e.target.value)}
             />
+            <div>
+              <input
+                style={{ ...inputStyle, borderColor: antispamError ? "#FF5C00" : "rgba(255,255,255,0.12)" }}
+                placeholder="Podaj stolicę Polski *"
+                value={form.antispam}
+                onChange={e => { updateForm("antispam", e.target.value); setAntispamError(""); }}
+                autoComplete="off"
+              />
+              {antispamError && <div style={{ color: "#FF5C00", fontSize: "11px", marginTop: "4px", fontFamily: "sans-serif" }}>{antispamError}</div>}
+            </div>
             <button
               type="submit"
               disabled={loading || !form.name || !form.phone}
