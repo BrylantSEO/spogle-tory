@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MousePointer, Calculator, MessageSquare } from "lucide-react";
+import { MousePointer, Calculator, MessageSquare, Shield, Award, Clock, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { initSession, trackClick, session as trackerSession } from "../components/internalTracker";
 import SpogleHeader from "../components/SpogleHeader";
@@ -522,16 +522,9 @@ export default function Home() {
               <span style={{ color: "rgba(255,255,255,0.7)" }}>Cena, metry i wymagany prąd liczą się na żywo.</span>
             </p>
 
-            {/* Trust badges */}
-            <div
-              className="trust-badges"
-              style={{
-                display: "flex",
-                gap: "10px",
-                flexWrap: "wrap",
-              }}
-            >
-              {["500+ eventów", "Montaż w cenie", "Darmowy transport na terenie Warszawy i okolic", "Animator w cenie (80m+)"].map(badge => (
+            {/* Trust highlights */}
+            <div className="trust-badges" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              {["Montaż w cenie", "Darmowy transport (Warszawa i okolice)", "Animator w cenie (80m+)"].map(badge => (
                 <div
                   key={badge}
                   style={{
@@ -715,6 +708,79 @@ export default function Home() {
               Kliknij zestaw aby automatycznie zaznaczyć wszystkie elementy
             </div>
           </div>
+
+          {/* When to choose preset vs custom */}
+          <div style={{ marginBottom: "28px" }}>
+            <div style={{
+              color: "rgba(255,255,255,0.25)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "2.5px",
+              fontFamily: "sans-serif",
+              marginBottom: "14px",
+              textTransform: "uppercase",
+            }}>
+              Jak wybrać?
+            </div>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: "12px",
+            }}>
+              <div style={{
+                background: "rgba(255,92,0,0.08)",
+                border: "1.5px solid rgba(255,92,0,0.35)",
+                borderRadius: "16px",
+                padding: "24px 28px",
+              }}>
+                <div style={{ color: "#FF5C00", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
+                  Gotowy set — kiedy?
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                  Wybierz jeden z naszych sprawdzonych zestawów
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {[
+                    "Duży event plenerowy — festyn, piknik firmowy, dni osiedla",
+                    "Chcesz gotowej ceny bez kombinowania",
+                    "Zależy Ci na szybkiej decyzji i pewności dostępności",
+                    "Szukasz maksymalnego WOW-efektu — sety to nasze największe tory",
+                  ].map((item, i) => (
+                    <li key={i} style={{ color: "rgba(255,255,255,0.75)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                      <span style={{ color: "#FF5C00", flexShrink: 0, fontWeight: 700, marginTop: "1px" }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1.5px solid rgba(255,255,255,0.12)",
+                borderRadius: "16px",
+                padding: "24px 28px",
+              }}>
+                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: "16px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>
+                  Własne zestawienie — kiedy?
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif", marginBottom: "16px" }}>
+                  Kliknij segmenty wyżej i ułóż tor pod siebie
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {[
+                    "Ograniczona przestrzeń — dopasujesz metry do miejsca",
+                    "Mniejszy event: szkolny dzień sportu, urodziny, piknik",
+                    "Konkretny układ terenu wymaga niestandardowej konfiguracji",
+                    "Masz określony budżet i sam decydujesz co wchodzi w skład",
+                  ].map((item, i) => (
+                    <li key={i} style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", fontFamily: "sans-serif", lineHeight: 1.5, display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                      <span style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0, marginTop: "1px" }}>→</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: "10px" }}>
             {PRESETS.map(preset => {
               const override = presetData[preset.id] || {};
@@ -724,6 +790,8 @@ export default function Home() {
                 priceLabel: override.price_label || preset.priceLabel,
                 name: override.name || preset.name,
                 components: override.components && override.components.length > 0 ? override.components : preset.components,
+                setup_time_minutes: override.setup_time_minutes || null,
+                animators_included: override.animators_included || null,
               };
               return (
                 <SetCard
@@ -748,8 +816,49 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Trust badges with icons */}
+      <div style={{ padding: isMobile ? "40px 16px 0" : "60px 48px 0", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
+          gap: "12px",
+          marginBottom: "60px",
+        }}>
+          {[
+            { icon: <Clock size={28} color="#FF5C00" />, value: "7 lat", label: "doświadczenia" },
+            { icon: <Award size={28} color="#FF5C00" />, value: "500+", label: "eventów wykonanych" },
+            { icon: <Shield size={28} color="#FF5C00" />, value: "OC", label: "ubezpieczenie" },
+            { icon: <Users size={28} color="#FF5C00" />, value: "Własni", label: "doświadczeni animatorzy" },
+          ].map((item, i) => (
+            <div key={i} style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              borderRadius: "16px",
+              padding: isMobile ? "20px 16px" : "28px 24px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "12px",
+              textAlign: "center",
+            }}>
+              <div style={{ background: "rgba(255,92,0,0.12)", borderRadius: "12px", padding: "14px" }}>
+                {item.icon}
+              </div>
+              <div>
+                <div style={{ color: "#fff", fontSize: isMobile ? "24px" : "30px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", lineHeight: 1, letterSpacing: "-0.5px" }}>
+                  {item.value}
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px", fontFamily: "sans-serif", marginTop: "4px", lineHeight: 1.4 }}>
+                  {item.label}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Testimonials */}
-      <div style={{ padding: isMobile ? "40px 16px" : "60px 48px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: isMobile ? "0 16px 40px" : "0 48px 60px", maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", fontFamily: "sans-serif", marginBottom: "32px", textAlign: "center" }}>
           CO MÓWIĄ KLIENCI
         </div>
