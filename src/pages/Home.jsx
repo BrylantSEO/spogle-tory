@@ -167,7 +167,6 @@ export default function Home() {
   const [returningVisitor, setReturningVisitor] = useState(false);
   const [lastSelectionNames, setLastSelectionNames] = useState([]);
   const isMobile = useMobile();
-  const firedScrollRef = useRef(new Set());
   const firedValueRef = useRef(new Set());
 
   // Init session + ViewContent on mount
@@ -199,36 +198,8 @@ export default function Home() {
     });
   }, []);
 
-  // Scroll depth
-  useEffect(() => {
-    const thresholds = [25, 50, 75, 90];
-    const onScroll = () => {
-      const scrolled = window.scrollY + window.innerHeight;
-      const total = document.documentElement.scrollHeight;
-      const pct = (scrolled / total) * 100;
-      thresholds.forEach(t => {
-        if (pct >= t && !firedScrollRef.current.has(t)) {
-          firedScrollRef.current.add(t);
-          fbq('trackCustom', `ScrollDepth${t}`);
-        }
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Time on page
-  useEffect(() => {
-    const t1 = setTimeout(() => fbq('trackCustom', 'TimeOnPage30s'), 30000);
-    const t2 = setTimeout(() => fbq('trackCustom', 'TimeOnPage60s'), 60000);
-    const t3 = setTimeout(() => fbq('trackCustom', 'TimeOnPage120s'), 120000);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, []);
-
   const applyPreset = (preset) => {
     if (activePreset === preset.id) {
-      fbq('trackCustom', 'PresetDeselected', { preset_id: preset.id });
-      trackClick('PresetDeselected', { preset_id: preset.id });
       setActivePreset(null);
       setSelected(new Set());
       setSelectedSlides(new Set());
@@ -249,8 +220,6 @@ export default function Home() {
     setSelected(prev => {
       const next = new Set(prev);
       if (next.has(id)) {
-        fbq('trackCustom', 'SegmentDeselected', { segment_id: id });
-        trackClick('SegmentDeselected', { segment_id: id });
         next.delete(id);
       } else {
         fbq('trackCustom', 'SegmentSelected', { segment_id: id });
@@ -267,8 +236,6 @@ export default function Home() {
     setSelectedSlides(prev => {
       const next = new Set(prev);
       if (next.has(id)) {
-        fbq('trackCustom', 'SlideDeselected', { slide_id: id });
-        trackClick('SlideDeselected', { slide_id: id });
         next.delete(id);
       } else {
         fbq('trackCustom', 'SlideSelected', { slide_id: id });
@@ -653,7 +620,7 @@ export default function Home() {
                     segment={seg}
                     selected={selected.has(segment.id)}
                     onToggle={() => toggleSegment(segment.id)}
-                    onOpenDetail={() => { setModalSegment(seg); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: segment.id }); trackClick('SegmentDetailOpened', { segment_id: segment.id }); }}
+                    onOpenDetail={() => { setModalSegment(seg); }}
                   />
                 );
               })}
@@ -683,7 +650,7 @@ export default function Home() {
                     segment={sl}
                     selected={selectedSlides.has(slide.id)}
                     onToggle={() => toggleSlide(slide.id)}
-                    onOpenDetail={() => { setModalSegment(sl); fbq('trackCustom', 'SegmentDetailOpened', { segment_id: slide.id }); trackClick('SegmentDetailOpened', { segment_id: slide.id }); }}
+                    onOpenDetail={() => { setModalSegment(sl); }}
                   />
                 );
               })}
@@ -831,7 +798,7 @@ export default function Home() {
                   set={mergedPreset}
                   isActive={activePreset === preset.id}
                   onSelect={() => applyPreset(mergedPreset)}
-                  onDetail={() => { setPresetLightbox(mergedPreset); fbq('trackCustom', 'SetDetailOpened', { preset_id: preset.id }); trackClick('SetDetailOpened', { preset_id: preset.id }); }}
+                  onDetail={() => { setPresetLightbox(mergedPreset); }}
                 />
               );
             })}

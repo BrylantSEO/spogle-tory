@@ -23,11 +23,60 @@ function getRangeStart(range) {
   return new Date(now - 30 * 86400000);
 }
 
+function toDateInputValue(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function exportCSV(sessions, clickEvents, dateFrom, dateTo) {
+  const endOfDay = new Date(dateTo);
+  endOfDay.setHours(23, 59, 59, 999);
+  const filtered = sessions.filter(s => {
+    const d = new Date(s.started_at);
+    return d >= dateFrom && d <= endOfDay;
+  });
+
+  const rows = filtered.map(s => {
+    const clicks = clickEvents.filter(c => c.session_id === s.session_id);
+    const hasPhoneClick = clicks.some(c => c.event_name === 'PhoneClick');
+    const highValue = clicks.find(c => c.event_name === 'ConfiguratorHighValue');
+    const formAbandoned = clicks.some(c => c.event_name === 'FormAbandoned');
+    const d = new Date(s.started_at);
+    return [
+      d.toLocaleDateString('pl-PL'),
+      d.toLocaleTimeString('pl-PL'),
+      s.device_type || '',
+      s.referrer || '',
+      s.utm_source || '',
+      s.utm_campaign || '',
+      s.time_on_page_seconds || 0,
+      s.max_scroll_depth || 0,
+      s.segments_selected || 0,
+      s.form_opened ? 'tak' : 'nie',
+      s.form_submitted ? 'tak' : 'nie',
+      formAbandoned ? 'tak' : 'nie',
+      hasPhoneClick ? 'tak' : 'nie',
+      highValue ? JSON.parse(highValue.event_data || '{}').threshold || '' : '',
+      s.is_bot_suspected ? 'tak' : 'nie',
+    ].join(',');
+  });
+
+  const csv = ['data,godzina,urzadzenie,referrer,utm_source,utm_campaign,czas_na_stronie_s,scroll_depth_%,segmenty_wybrane,form_otworzony,form_wyslany,form_porzucony,klik_telefon,wysokowartosciowy_prog,bot', ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `analityka_${toDateInputValue(dateFrom)}_${toDateInputValue(dateTo)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function Analityka() {
   const [range, setRange] = useState("today");
   const [sessions, setSessions] = useState([]);
   const [clicks, setClicks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dateFrom, setDateFrom] = useState(() => toDateInputValue(getRangeStart("today")));
+  const [dateTo, setDateTo] = useState(() => toDateInputValue(new Date()));
 
   useEffect(() => {
     setLoading(true);
@@ -71,27 +120,55 @@ export default function Analityka() {
             Analityka
           </h1>
         </div>
-        <div style={{ display: "flex", gap: "6px", background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "4px" }}>
-          {RANGES.map(r => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-end" }}>
+          <div style={{ display: "flex", gap: "6px", background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "4px" }}>
+            {RANGES.map(r => (
+              <button
+                key={r.value}
+                onClick={() => {
+                  setRange(r.value);
+                  const start = getRangeStart(r.value);
+                  setDateFrom(toDateInputValue(start));
+                  setDateTo(toDateInputValue(new Date()));
+                }}
+                style={{
+                  background: range === r.value ? "#FF5C00" : "transparent",
+                  color: range === r.value ? "#fff" : "rgba(255,255,255,0.5)",
+                  border: "none",
+                  borderRadius: "7px",
+                  padding: "8px 18px",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  fontFamily: "sans-serif",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={e => { setDateFrom(e.target.value); setRange(null); }}
+              style={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "7px", color: "#fff", padding: "6px 10px", fontSize: "13px", fontFamily: "sans-serif" }}
+            />
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>—</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={e => { setDateTo(e.target.value); setRange(null); }}
+              style={{ background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "7px", color: "#fff", padding: "6px 10px", fontSize: "13px", fontFamily: "sans-serif" }}
+            />
             <button
-              key={r.value}
-              onClick={() => setRange(r.value)}
-              style={{
-                background: range === r.value ? "#FF5C00" : "transparent",
-                color: range === r.value ? "#fff" : "rgba(255,255,255,0.5)",
-                border: "none",
-                borderRadius: "7px",
-                padding: "8px 18px",
-                fontSize: "13px",
-                fontWeight: 700,
-                fontFamily: "sans-serif",
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
+              onClick={() => exportCSV(sessions, clicks, new Date(dateFrom), new Date(dateTo))}
+              style={{ background: "#FF5C00", color: "#fff", border: "none", borderRadius: "7px", padding: "7px 16px", fontSize: "13px", fontWeight: 700, fontFamily: "sans-serif", cursor: "pointer" }}
             >
-              {r.label}
+              Pobierz CSV
             </button>
-          ))}
+          </div>
         </div>
       </div>
 
