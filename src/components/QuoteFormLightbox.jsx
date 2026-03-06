@@ -26,7 +26,7 @@ export default function QuoteFormLightbox({
       const saved = localStorage.getItem("spogle_quote_form");
       if (saved) return { notes: "", ...JSON.parse(saved) };
     } catch {}
-    return { name: "", phone: "", event_date: "", location: "", notes: "" };
+    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "" };
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,6 +70,7 @@ export default function QuoteFormLightbox({
     const webhookParams = new URLSearchParams({
       name: form.name,
       phone: form.phone,
+      email: form.email || "",
       event_date: form.event_date || "",
       location: form.location || "",
       notes: form.notes || "",
@@ -282,6 +283,13 @@ export default function QuoteFormLightbox({
               value={form.phone}
               onChange={e => updateForm({ ...form, phone: e.target.value })}
               required
+            />
+            <input
+              style={inputStyle}
+              placeholder="Email"
+              type="email"
+              value={form.email}
+              onChange={e => updateForm({ ...form, email: e.target.value })}
             />
             <input
               type="date"

@@ -1090,7 +1090,7 @@ function InlineQuoteForm({ isMobile }) {
       const saved = localStorage.getItem("spogle_quote_form");
       if (saved) return { notes: "", ...JSON.parse(saved) };
     } catch {}
-    return { name: "", phone: "", event_date: "", location: "", notes: "" };
+    return { name: "", phone: "", email: "", event_date: "", location: "", notes: "" };
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -1111,7 +1111,7 @@ function InlineQuoteForm({ isMobile }) {
       selected_segments: [], total_meters: 0, estimated_price: "—", total_power: "—",
     });
     const webhookParams = new URLSearchParams({
-      name: form.name, phone: form.phone,
+      name: form.name, phone: form.phone, email: form.email || "",
       event_date: form.event_date || "", location: form.location || "",
       notes: form.notes || "", segments: "—", meters: 0, power: "—", price: "—",
     });
@@ -1148,9 +1148,10 @@ function InlineQuoteForm({ isMobile }) {
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "12px" }}>
               <input style={inputStyle} placeholder="Imię i nazwisko *" value={form.name} onChange={e => updateForm("name", e.target.value)} required />
-              <input style={inputStyle} placeholder="Telefon *" value={form.phone} onChange={e => updateForm("phone", e.target.value)} required />
-              <input style={inputStyle} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} />
+              <input style={inputStyle} placeholder="Telefon *" type="tel" value={form.phone} onChange={e => updateForm("phone", e.target.value)} required />
+              <input style={inputStyle} placeholder="Email" type="email" value={form.email} onChange={e => updateForm("email", e.target.value)} />
               <input style={inputStyle} placeholder="Miejscowość / adres" value={form.location} onChange={e => updateForm("location", e.target.value)} />
+              <input style={inputStyle} placeholder="Data eventu" type="date" value={form.event_date} onChange={e => updateForm("event_date", e.target.value)} style={{ ...inputStyle, colorScheme: "dark" }} />
             </div>
             <textarea
               style={{ ...inputStyle, resize: "vertical", minHeight: "90px" }}
