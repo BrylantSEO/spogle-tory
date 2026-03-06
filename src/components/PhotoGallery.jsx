@@ -132,6 +132,7 @@ export default function PhotoGallery({ onAskAbout }) {
   const [lightbox, setLightbox] = useState(null);
   const [activeHotpoint, setActiveHotpoint] = useState(null);
   const [hotpointSegmentModal, setHotpointSegmentModal] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     base44.entities.GalleryPhoto.list("sort_order", 200).then(data => {
@@ -142,6 +143,9 @@ export default function PhotoGallery({ onAskAbout }) {
         });
       }
     });
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
   }, []);
 
   const photos = allItems.photos;
@@ -338,8 +342,8 @@ export default function PhotoGallery({ onAskAbout }) {
                 style={{ maxWidth: "90vw", maxHeight: "65vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)", display: "block" }}
               />
               )}
-              {/* Hotpoints — only for photos */}
-              {!currentPhoto.video_url && (currentPhoto.hotpoints || []).map((hp, i) => {
+              {/* Hotpoints — desktop only */}
+              {!isMobile && !currentPhoto.video_url && (currentPhoto.hotpoints || []).map((hp, i) => {
                 const segmentObj = SEGMENT_BY_NAME[hp.label];
                 return (
                   <div
@@ -382,20 +386,51 @@ export default function PhotoGallery({ onAskAbout }) {
               })}
             </div>
 
-            {/* Segment tags */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center" }}>
-                {(currentPhoto.segments || []).map(seg => (
-                  <span key={seg} style={{ background: "rgba(255,92,0,0.18)", border: "1px solid rgba(255,92,0,0.5)", color: "#FF5C00", fontSize: "11px", fontWeight: 700, fontFamily: "sans-serif", letterSpacing: "0.5px", padding: "3px 10px", borderRadius: "5px" }}>
-                    {seg}
-                  </span>
-                ))}
-                {currentPhoto.total_meters && (
-                  <span style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.6)", fontSize: "11px", fontWeight: 700, fontFamily: "sans-serif", letterSpacing: "0.5px", padding: "3px 10px", borderRadius: "5px" }}>
-                    Łącznie: {currentPhoto.total_meters}
-                  </span>
-                )}
-              </div>
+            {/* Info pod zdjęciem */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%", maxWidth: isMobile ? "100%" : "auto" }}>
+
+              {/* Mobile: rozbudowana lista torów */}
+              {isMobile && (currentPhoto.segments || []).length > 0 && (
+                <div style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", padding: "12px 14px" }}>
+                  <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "10px", fontWeight: 700, letterSpacing: "2px", fontFamily: "sans-serif", marginBottom: "10px" }}>
+                    SKŁAD ZESTAWU
+                    {currentPhoto.total_meters && (
+                      <span style={{ marginLeft: "8px", color: "rgba(255,92,0,0.8)", fontWeight: 700 }}>· łącznie {currentPhoto.total_meters}</span>
+                    )}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {(currentPhoto.segments || []).map((seg, i) => {
+                      const obj = SEGMENT_BY_NAME[seg];
+                      return (
+                        <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <span style={{ color: "#FF5C00", fontWeight: 900, fontSize: "14px", flexShrink: 0, width: "16px", textAlign: "center" }}>{i + 1}</span>
+                          <span style={{ color: "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "sans-serif" }}>{seg}</span>
+                          {obj && (
+                            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", fontFamily: "sans-serif" }}>{obj.meters}m</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Desktop: tagi */}
+              {!isMobile && (
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center" }}>
+                  {(currentPhoto.segments || []).map(seg => (
+                    <span key={seg} style={{ background: "rgba(255,92,0,0.18)", border: "1px solid rgba(255,92,0,0.5)", color: "#FF5C00", fontSize: "11px", fontWeight: 700, fontFamily: "sans-serif", letterSpacing: "0.5px", padding: "3px 10px", borderRadius: "5px" }}>
+                      {seg}
+                    </span>
+                  ))}
+                  {currentPhoto.total_meters && (
+                    <span style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.6)", fontSize: "11px", fontWeight: 700, fontFamily: "sans-serif", letterSpacing: "0.5px", padding: "3px 10px", borderRadius: "5px" }}>
+                      Łącznie: {currentPhoto.total_meters}
+                    </span>
+                  )}
+                </div>
+              )}
+
               {currentPhoto.description && (
                 <div style={{ color: "rgba(255,255,255,0.65)", fontSize: "14px", fontFamily: "sans-serif", fontStyle: "italic", textAlign: "center", maxWidth: "500px" }}>
                   {currentPhoto.description}
@@ -404,7 +439,7 @@ export default function PhotoGallery({ onAskAbout }) {
 
               {/* Price + CTA */}
               {(currentPhoto.price_label || onAskAbout) && (
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
                   {currentPhoto.price_label && (
                     <div style={{ color: "#FF5C00", fontSize: "18px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "-0.3px" }}>
                       {currentPhoto.price_label}
@@ -424,10 +459,8 @@ export default function PhotoGallery({ onAskAbout }) {
                         fontFamily: "sans-serif",
                         cursor: "pointer",
                         letterSpacing: "0.3px",
-                        transition: "opacity 0.15s",
+                        width: isMobile ? "100%" : "auto",
                       }}
-                      onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-                      onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                     >
                       Zapytaj o rezerwację tego toru →
                     </button>
@@ -437,7 +470,7 @@ export default function PhotoGallery({ onAskAbout }) {
 
               <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", fontFamily: "sans-serif" }}>
                 {lightbox + 1} / {photos.length}
-                {(currentPhoto.hotpoints || []).length > 0 && (
+                {!isMobile && (currentPhoto.hotpoints || []).length > 0 && (
                   <span style={{ marginLeft: "8px", color: "rgba(255,92,0,0.6)" }}>· kliknij pinezki aby zobaczyć opis</span>
                 )}
               </div>
