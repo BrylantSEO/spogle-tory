@@ -79,7 +79,7 @@ export default function QuoteFormLightbox({
       power: totalPower,
       price: displayPrice,
     });
-    await fetch(`https://seodd.app.n8n.cloud/webhook-test/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
+    await fetch(`https://seodd.app.n8n.cloud/webhook/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
     setLoading(false);
     setSubmitted(true);
     fbq('track', 'Lead');

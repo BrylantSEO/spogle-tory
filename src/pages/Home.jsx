@@ -1115,7 +1115,7 @@ function InlineQuoteForm({ isMobile }) {
       event_date: form.event_date || "", location: form.location || "",
       notes: form.notes || "", segments: "—", meters: 0, power: "—", price: "—",
     });
-    await fetch(`https://seodd.app.n8n.cloud/webhook-test/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
+    await fetch(`https://seodd.app.n8n.cloud/webhook/1075610a-5587-4741-bdbf-c1cb1528ed4d?${webhookParams}`).catch(() => {});
     setLoading(false);
     setSubmitted(true);
   };
