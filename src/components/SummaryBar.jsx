@@ -23,9 +23,56 @@ export default function SummaryBar({ totalMeters, totalPower, estimatedPrice, ha
       }}
     >
       {!hasSelection ? (
-        <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", fontFamily: "sans-serif", textAlign: "center", padding: isMobile ? "14px 0" : "0" }}>
-          Skonfiguruj swój tor → wybierz segmenty lub gotowy set
-        </div>
+        isMobile ? (
+          <div style={{ width: "100%", display: "flex", gap: "10px", padding: "10px 0" }}>
+            <a
+              href="tel:+48573177098"
+              style={{
+                flex: 1,
+                background: "rgba(255,255,255,0.1)",
+                color: "#fff",
+                border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: "10px",
+                padding: "14px 10px",
+                fontWeight: 700,
+                fontSize: "14px",
+                fontFamily: "sans-serif",
+                cursor: "pointer",
+                textAlign: "center",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+              }}
+            >
+              📞 Zadzwoń
+            </a>
+            <button
+              onClick={onSubmit}
+              style={{
+                flex: 2,
+                background: "#FF5C00",
+                color: "#fff",
+                border: "none",
+                borderRadius: "10px",
+                padding: "14px 10px",
+                fontWeight: 800,
+                fontSize: "14px",
+                fontFamily: "sans-serif",
+                cursor: "pointer",
+                textAlign: "center",
+                boxShadow: "0 4px 16px rgba(255,92,0,0.35)",
+              }}
+            >
+              ✉ Zapytaj o wycenę →
+            </button>
+          </div>
+        ) : (
+          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", fontFamily: "sans-serif", textAlign: "center", padding: "0" }}>
+            Skonfiguruj swój tor → wybierz segmenty lub gotowy set
+          </div>
+        )
       ) : isMobile ? (
         <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "10px 0" }}>
           {/* Hours picker */}

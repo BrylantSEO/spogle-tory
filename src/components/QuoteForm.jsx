@@ -121,15 +121,6 @@ export default function QuoteForm({ selectedSegments, totalMeters, estimatedPric
               onChange={e => setForm({ ...form, event_date: e.target.value })}
             />
           </div>
-          <div>
-            <label style={labelStyle}>LOKALIZACJA</label>
-            <input
-              style={inputStyle}
-              placeholder="np. Warszawa, Mokotów"
-              value={form.location}
-              onChange={e => setForm({ ...form, location: e.target.value })}
-            />
-          </div>
         </div>
 
         <button
@@ -152,7 +143,7 @@ export default function QuoteForm({ selectedSegments, totalMeters, estimatedPric
             transition: "background 0.2s",
           }}
         >
-          {loading ? "Wysyłanie..." : "Wyślij zapytanie — odpiszemy w 24h"}
+          {loading ? "Wysyłanie..." : "Otrzymaj bezpłatną wycenę w 24h →"}
         </button>
 
         <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "12px", textAlign: "center", marginTop: "10px", fontFamily: "sans-serif" }}>

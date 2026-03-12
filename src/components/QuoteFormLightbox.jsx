@@ -307,24 +307,11 @@ export default function QuoteFormLightbox({
               {phoneError && <div style={{ color: "#FF5C00", fontSize: "11px", marginTop: "4px", fontFamily: "sans-serif" }}>{phoneError}</div>}
             </div>
             <input
-              style={inputStyle}
-              placeholder="Email"
-              type="email"
-              value={form.email}
-              onChange={e => updateForm({ ...form, email: e.target.value })}
-            />
-            <input
               type="date"
               lang="pl"
               style={{ ...inputStyle, colorScheme: "dark" }}
               value={form.event_date}
               onChange={e => updateForm({ ...form, event_date: e.target.value })}
-            />
-            <input
-              style={inputStyle}
-              placeholder="Lokalizacja (np. Warszawa)"
-              value={form.location}
-              onChange={e => updateForm({ ...form, location: e.target.value })}
             />
           </div>
 
@@ -399,8 +386,15 @@ export default function QuoteFormLightbox({
               whiteSpace: "nowrap",
             }}
           >
-            {loading ? "Wysyłanie..." : "Wyślij zapytanie — odpiszemy w 24h"}
+            {loading ? "Wysyłanie..." : "Otrzymaj bezpłatną wycenę w 24h →"}
           </button>
+
+          {/* Trust signals */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "center", marginTop: "10px" }}>
+            {["✓ Bezpłatna wycena", "✓ Odpowiedź w 24h", "✓ Bez zobowiązań"].map(item => (
+              <span key={item} style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontFamily: "sans-serif" }}>{item}</span>
+            ))}
+          </div>
 
           {showDiscount && (
             <div style={{

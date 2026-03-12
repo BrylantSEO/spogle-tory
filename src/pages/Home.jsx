@@ -747,6 +747,65 @@ export default function Home() {
 
       </div>
 
+      {/* Social Proof Bar */}
+      <div style={{ background: "#1a1a1a", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: isMobile ? "16px 16px 0" : "20px 48px 0" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          {/* Stats row */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? "12px 20px" : "0", justifyContent: isMobile ? "center" : "flex-start", marginBottom: "16px" }}>
+            {[
+              { value: "500+", label: "imprez" },
+              { value: "7 lat", label: "doświadczenia" },
+              { value: "⭐ 4.9/5", label: "z 87 opinii Google" },
+            ].map((stat, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px", paddingRight: isMobile ? "0" : "32px", borderRight: (!isMobile && i < 2) ? "1px solid rgba(255,255,255,0.1)" : "none", marginRight: (!isMobile && i < 2) ? "32px" : "0" }}>
+                <span style={{ color: "#FF5C00", fontWeight: 900, fontSize: isMobile ? "18px" : "20px", fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", letterSpacing: "-0.3px" }}>{stat.value}</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "13px", fontFamily: "sans-serif" }}>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+          {/* Mini testimonials — hidden on mobile */}
+          {!isMobile && (
+            <div style={{ display: "flex", gap: "24px", paddingBottom: "20px" }}>
+              {[
+                { text: "Korzystam z usług Spogle od kilku lat i jeszcze nigdy mnie nie zawiedli.", author: "Anna Kautz" },
+                { text: "Całość usługi na najwyższym poziomie, od ustaleń aż po realizację.", author: "Aneta Baj" },
+              ].map((r, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "10px 16px", flex: 1 }}>
+                  <span style={{ color: "#FF5C00", fontSize: "13px", flexShrink: 0 }}>★★★★★</span>
+                  <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "12px", fontFamily: "sans-serif", flex: 1 }}>"{r.text}"</span>
+                  <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontFamily: "sans-serif", flexShrink: 0 }}>— {r.author}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Urgency Banner */}
+      {currentSeasonInfo.type !== "normal" && (
+        <div style={{
+          background: currentSeasonInfo.type === "earlybird" ? "rgba(34,197,94,0.12)" : currentSeasonInfo.type === "highseason" ? "rgba(249,115,22,0.12)" : "rgba(59,130,246,0.12)",
+          borderBottom: `1px solid ${currentSeasonInfo.type === "earlybird" ? "rgba(34,197,94,0.25)" : currentSeasonInfo.type === "highseason" ? "rgba(249,115,22,0.25)" : "rgba(59,130,246,0.25)"}`,
+          padding: "10px 48px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+        }}>
+          <span style={{ fontSize: "16px" }}>{currentSeasonInfo.banner?.icon}</span>
+          <span style={{ color: "#fff", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>
+            {currentSeasonInfo.type === "earlybird" && "Ceny wiosenne Early Bird — 10% rabatu przy rezerwacji teraz"}
+            {currentSeasonInfo.type === "highseason" && "Najbardziej oblegany termin — ograniczona dostępność"}
+          </span>
+        </div>
+      )}
+      {currentSeasonInfo.type === "normal" && (
+        <div style={{ background: "rgba(59,130,246,0.08)", borderBottom: "1px solid rgba(59,130,246,0.2)", padding: "10px 48px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+          <span style={{ fontSize: "16px" }}>⚡</span>
+          <span style={{ color: "#fff", fontSize: "13px", fontFamily: "sans-serif", fontWeight: 600 }}>Najbliższe terminy rozchodzą się szybko — zapytaj już dziś</span>
+        </div>
+      )}
+
       {/* PRESET SETS — full width, outside hero */}
       <div style={{ background: "#0f0f0f", padding: isMobile ? "0 16px 48px" : "0 48px 64px" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
@@ -873,6 +932,77 @@ export default function Home() {
             <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px", fontFamily: "sans-serif", lineHeight: 1.6, margin: 0 }}>
               Oferujemy też <strong style={{ color: "rgba(255,255,255,0.85)" }}>dmuchańce, zamki, piana party</strong> i inne atrakcje, które można łączyć z torem. Napisz o tym w polu komentarza przy zapytaniu.
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mini CTA after configurator */}
+      <div style={{ background: "#0f0f0f", padding: isMobile ? "0 16px 40px" : "0 48px 48px" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          <div style={{
+            background: "linear-gradient(135deg, rgba(255,92,0,0.12) 0%, rgba(255,92,0,0.04) 100%)",
+            border: "1.5px solid rgba(255,92,0,0.3)",
+            borderRadius: "16px",
+            padding: isMobile ? "24px 20px" : "32px 40px",
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: isMobile ? "flex-start" : "center",
+            justifyContent: "space-between",
+            gap: "20px",
+          }}>
+            <div>
+              <div style={{ color: "#fff", fontSize: isMobile ? "20px" : "24px", fontWeight: 900, fontFamily: "'Barlow Condensed', 'Arial Black', sans-serif", marginBottom: "6px" }}>
+                Gotowe z konfiguracją?
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "13px", fontFamily: "sans-serif" }}>
+                Wyślij zapytanie — wycenimy i oddzwonimy w ciągu 24h
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "12px", flexShrink: 0, flexWrap: "wrap" }}>
+              <a
+                href="tel:+48573177098"
+                onClick={() => { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'PhoneClick'); trackClick('PhoneClick', { source: 'mid_page_cta' }); }}
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  color: "#fff",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  borderRadius: "10px",
+                  padding: "14px 22px",
+                  fontWeight: 700,
+                  fontSize: "14px",
+                  fontFamily: "sans-serif",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                📞 Zadzwoń
+              </a>
+              <button
+                onClick={() => {
+                  fbq('track', 'InitiateCheckout');
+                  trackClick('FormOpened', { source: 'mid_page_cta' });
+                  markFormOpened();
+                  setShowForm(true);
+                }}
+                style={{
+                  background: "#FF5C00",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "14px 28px",
+                  fontWeight: 800,
+                  fontSize: "15px",
+                  fontFamily: "sans-serif",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 20px rgba(255,92,0,0.4)",
+                  letterSpacing: "0.2px",
+                }}
+              >
+                Otrzymaj bezpłatną wycenę →
+              </button>
+            </div>
           </div>
         </div>
       </div>
