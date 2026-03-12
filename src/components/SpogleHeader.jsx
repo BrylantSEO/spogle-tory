@@ -33,31 +33,12 @@ export default function SpogleHeader() {
       }}>
 
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            background: "#FF5C00",
-            borderRadius: "6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
-
-          <span style={{ color: "#fff", fontWeight: 900, fontSize: "16px", fontFamily: "sans-serif" }}>S</span>
-        </div>
-        <span
-          style={{
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: "20px",
-            letterSpacing: "-0.5px",
-            fontFamily: "'Arial Black', sans-serif"
-          }}>
-
-          SPOGLE
-        </span>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <img
+          src="https://www.spogle.pl/wp-content/webp-express/webp-images/uploads/2024/12/Spogle_logo.png.webp"
+          alt="Spogle"
+          style={{ height: "36px", width: "auto" }}
+        />
       </div>
 
       {/* Right side */}
