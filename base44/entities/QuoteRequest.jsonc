@@ -1,0 +1,46 @@
+{
+  "name": "QuoteRequest",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Customer first name"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Customer phone number"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the event"
+    },
+    "location": {
+      "type": "string",
+      "description": "Event location"
+    },
+    "selected_segments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Selected segment names"
+    },
+    "total_meters": {
+      "type": "number",
+      "description": "Total combined meters"
+    },
+    "estimated_price": {
+      "type": "string",
+      "description": "Estimated price or 'Wycena indywidualna'"
+    },
+    "total_power": {
+      "type": "string",
+      "description": "Total power requirement"
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ]
+}

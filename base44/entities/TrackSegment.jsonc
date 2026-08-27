@@ -1,0 +1,69 @@
+{
+  "name": "TrackSegment",
+  "type": "object",
+  "properties": {
+    "segment_id": {
+      "type": "string",
+      "description": "ID segmentu np. tor12, tor20, tor27, tor28, atomic-drop, duo"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nazwa wy\u015bwietlana np. Tor 12m"
+    },
+    "description": {
+      "type": "string",
+      "description": "Opis toru widoczny w szczeg\u00f3\u0142ach"
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "URL zdj\u0119cia g\u0142\u00f3wnego (na karcie i w nag\u0142\u00f3wku modala)"
+    },
+    "gallery_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista URL zdj\u0119\u0107 do galerii w modalu szczeg\u00f3\u0142\u00f3w"
+    },
+    "promo_video_url": {
+      "type": "string",
+      "description": "URL YouTube filmu promocyjnego (embed URL lub watch URL)"
+    },
+    "price_3h": {
+      "type": "number",
+      "description": "Cena za 3 godziny (z\u0142 netto)"
+    },
+    "price_4h": {
+      "type": "number",
+      "description": "Cena za 4 godziny (z\u0142 netto)"
+    },
+    "price_5h": {
+      "type": "number",
+      "description": "Cena za 5 godzin (z\u0142 netto)"
+    },
+    "price_6h": {
+      "type": "number",
+      "description": "Cena za 6 godzin (z\u0142 netto)"
+    },
+    "price_8h": {
+      "type": "number",
+      "description": "Cena za 8 godzin (z\u0142 netto)"
+    },
+    "blowers_count": {
+      "type": "number",
+      "description": "Liczba dmuchaw potrzebnych do segmentu"
+    },
+    "blower_power_kw": {
+      "type": "number",
+      "description": "Moc jednej dmuchawy w kW"
+    },
+    "total_power_kw": {
+      "type": "number",
+      "description": "\u0141\u0105czna moc poboru pr\u0105du segmentu w kW"
+    }
+  },
+  "required": [
+    "segment_id",
+    "name"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "GalleryPhoto",
+  "type": "object",
+  "properties": {
+    "src": {
+      "type": "string",
+      "description": "URL zdj\u0119cia (puste je\u015bli to film)"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "URL YouTube (embed) lub plik wideo \u2014 wy\u015bwietlane zamiast zdj\u0119cia"
+    },
+    "alt": {
+      "type": "string",
+      "description": "Tytu\u0142 / opis zdj\u0119cia"
+    },
+    "description": {
+      "type": "string",
+      "description": "Opis zdj\u0119cia widoczny w galerii"
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista segment\u00f3w widocznych na zdj\u0119ciu"
+    },
+    "total_meters": {
+      "type": "string",
+      "description": "\u0141\u0105czna liczba metr\u00f3w np. '97m'"
+    },
+    "price_label": {
+      "type": "string",
+      "description": "Cena setu np. 'od 2 897 z\u0142' lub 'Wycena indywidualna'"
+    },
+    "hotpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Hotpointy na zdj\u0119ciu"
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Kolejno\u015b\u0107 wy\u015bwietlania"
+    }
+  },
+  "required": [
+    "alt"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "name": "PageSession",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Random UUID generated on page load"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session start timestamp"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session end timestamp"
+    },
+    "time_on_page_seconds": {
+      "type": "number",
+      "description": "Total time spent on page in seconds"
+    },
+    "max_scroll_depth": {
+      "type": "number",
+      "description": "Maximum scroll depth as percentage 0-100"
+    },
+    "device_type": {
+      "type": "string",
+      "enum": [
+        "mobile",
+        "desktop",
+        "tablet"
+      ],
+      "description": "Device type detected from screen width or user agent"
+    },
+    "screen_width": {
+      "type": "number",
+      "description": "Screen width in pixels"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "HTTP referrer URL"
+    },
+    "utm_source": {
+      "type": "string",
+      "description": "UTM source parameter"
+    },
+    "utm_campaign": {
+      "type": "string",
+      "description": "UTM campaign parameter"
+    },
+    "is_bot_suspected": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this session is suspected to be a bot"
+    },
+    "bot_reason": {
+      "type": "string",
+      "description": "Reason for bot suspicion"
+    },
+    "total_clicks": {
+      "type": "number",
+      "description": "Total number of clicks during session"
+    },
+    "segments_selected": {
+      "type": "number",
+      "description": "Number of segments selected during session"
+    },
+    "form_opened": {
+      "type": "boolean",
+      "description": "Whether the quote form was opened"
+    },
+    "form_submitted": {
+      "type": "boolean",
+      "description": "Whether the quote form was submitted"
+    }
+  },
+  "required": [
+    "session_id"
+  ]
+}
