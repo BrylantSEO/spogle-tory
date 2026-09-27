@@ -12,31 +12,31 @@
     },
     "image": {
       "type": "string",
-      "description": "URL zdj\u0119cia g\u0142\u00f3wnego"
+      "description": "URL zdjęcia głównego"
     },
     "price_label": {
       "type": "string",
-      "description": "Etykieta ceny domy\u015blnej np. '5000' lub 'Wycena indywidualna'"
+      "description": "Etykieta ceny domyślnej np. '5000' lub 'Wycena indywidualna'"
     },
     "price_5h": {
       "type": "number",
-      "description": "Cena za 5 godzin (z\u0142 netto)"
+      "description": "Cena za 5 godzin (zł netto)"
     },
     "price_6h": {
       "type": "number",
-      "description": "Cena za 6 godzin (z\u0142 netto)"
+      "description": "Cena za 6 godzin (zł netto)"
     },
     "price_8h": {
       "type": "number",
-      "description": "Cena za 8 godzin (z\u0142 netto)"
+      "description": "Cena za 8 godzin (zł netto)"
     },
     "power_kw": {
       "type": "number",
-      "description": "\u0141\u0105czna moc w kilowatach (kW) potrzebna do pod\u0142\u0105czenia setu"
+      "description": "Łączna moc w kilowatach (kW) potrzebna do podłączenia setu"
     },
     "setup_time_minutes": {
       "type": "number",
-      "description": "Czas monta\u017cu setu w minutach"
+      "description": "Czas montażu setu w minutach"
     },
     "blowers_count": {
       "type": "number",
@@ -51,19 +51,37 @@
       "items": {
         "type": "string"
       },
-      "description": "Lista nazw element\u00f3w w secie np. ['Tor 20m', 'Tor 27m']"
+      "description": "Lista nazw elementów w secie np. ['Tor 20m', 'Tor 27m']"
     },
     "animators_included": {
       "type": "number",
-      "description": "Liczba animator\u00f3w wliczona w cen\u0119"
+      "description": "Liczba animatorów wliczona w cenę"
     },
     "sort_order": {
       "type": "number",
-      "description": "Kolejno\u015b\u0107 wy\u015bwietlania"
+      "description": "Kolejność wyświetlania"
     }
   },
   "required": [
     "set_id",
     "name"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": true,
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

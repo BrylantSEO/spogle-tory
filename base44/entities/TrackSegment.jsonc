@@ -8,22 +8,22 @@
     },
     "name": {
       "type": "string",
-      "description": "Nazwa wy\u015bwietlana np. Tor 12m"
+      "description": "Nazwa wyświetlana np. Tor 12m"
     },
     "description": {
       "type": "string",
-      "description": "Opis toru widoczny w szczeg\u00f3\u0142ach"
+      "description": "Opis toru widoczny w szczegółach"
     },
     "cover_image": {
       "type": "string",
-      "description": "URL zdj\u0119cia g\u0142\u00f3wnego (na karcie i w nag\u0142\u00f3wku modala)"
+      "description": "URL zdjęcia głównego (na karcie i w nagłówku modala)"
     },
     "gallery_images": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Lista URL zdj\u0119\u0107 do galerii w modalu szczeg\u00f3\u0142\u00f3w"
+      "description": "Lista URL zdjęć do galerii w modalu szczegółów"
     },
     "promo_video_url": {
       "type": "string",
@@ -31,23 +31,23 @@
     },
     "price_3h": {
       "type": "number",
-      "description": "Cena za 3 godziny (z\u0142 netto)"
+      "description": "Cena za 3 godziny (zł netto)"
     },
     "price_4h": {
       "type": "number",
-      "description": "Cena za 4 godziny (z\u0142 netto)"
+      "description": "Cena za 4 godziny (zł netto)"
     },
     "price_5h": {
       "type": "number",
-      "description": "Cena za 5 godzin (z\u0142 netto)"
+      "description": "Cena za 5 godzin (zł netto)"
     },
     "price_6h": {
       "type": "number",
-      "description": "Cena za 6 godzin (z\u0142 netto)"
+      "description": "Cena za 6 godzin (zł netto)"
     },
     "price_8h": {
       "type": "number",
-      "description": "Cena za 8 godzin (z\u0142 netto)"
+      "description": "Cena za 8 godzin (zł netto)"
     },
     "blowers_count": {
       "type": "number",
@@ -59,11 +59,29 @@
     },
     "total_power_kw": {
       "type": "number",
-      "description": "\u0141\u0105czna moc poboru pr\u0105du segmentu w kW"
+      "description": "Łączna moc poboru prądu segmentu w kW"
     }
   },
   "required": [
     "segment_id",
     "name"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": true,
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }
