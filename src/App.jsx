@@ -6,6 +6,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import AdminOnly from '@/components/AdminOnly';
+
+// Strony tylko dla admina (dane chroni dodatkowo RLS w base44/entities)
+const ADMIN_PAGES = new Set(['AdminSegments', 'AdminGallery', 'Analityka']);
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -52,7 +56,7 @@ const AuthenticatedApp = () => {
           path={`/${path}`}
           element={
             <LayoutWrapper currentPageName={path}>
-              <Page />
+              {ADMIN_PAGES.has(path) ? <AdminOnly><Page /></AdminOnly> : <Page />}
             </LayoutWrapper>
           }
         />
